@@ -90,7 +90,7 @@ public class DataCuller {
 		removeNullReferences(transistionFileName, outFileName, nullReferences);
 	}
 
-	private static void removeNullReferences(String fileName, String outFileName,Set<String> nullReferences) {
+	private static void removeNullReferences(String fileName, String outFileName, Set<String> nullReferences) {
 
 		// Declaring Variables
 		JSONObject obj;
@@ -129,7 +129,7 @@ public class DataCuller {
 						iterator.remove();
 					}
 				}
-				
+
 				// add edited paper node to new file
 				fileWriter.write(obj.toJSONString() + "\n");
 			}
@@ -241,7 +241,7 @@ public class DataCuller {
 
 				Collections.sort(v);
 				for (Paper s : v)
-					sb.append(s.getPaperID() + "::"+ s.getPaperTitle() + ",");
+					sb.append(s.getPaperID() + "::" + s.getPaperTitle() + ",");
 
 				try {
 					fileWriter.write(sb.toString().substring(0, sb.length() - 1) + "]\n");
@@ -317,12 +317,12 @@ public class DataCuller {
 			while ((line = bufferedReader.readLine()) != null) {
 				obj = (JSONObject) new JSONParser().parse(line);
 				id = (String) obj.get("id");
-				title  = (String) obj.get("title");
-				if(title == null || title.contains("???"))
+				title = (String) obj.get("title");
+				if (title == null || title.contains("???"))
 					title = (String) obj.get("venue");
 				try {
 					numCitations = (long) obj.get("n_citation");
-				}catch(NullPointerException e) {
+				} catch (NullPointerException e) {
 					numCitations = 0;
 				}
 				ret.add(new Paper(id, title, numCitations));
@@ -341,21 +341,22 @@ public class DataCuller {
 		}
 		return ret;
 	}
+
 	public static void removeUnusedReferences(String inFileName, String outFileName) {
 		JSONObject obj;
 		JSONArray references;
 		String greatestID = "53e99a0eb7602d9702261faf";
 		String line = null;
-		
+
 		try {
 			FileReader fileReader = new FileReader(inFileName);
 			BufferedReader bufferedReader = new BufferedReader(fileReader);
 			FileWriter fileWriter = new FileWriter(outFileName);
-			
+
 			while ((line = bufferedReader.readLine()) != null) {
 				obj = (JSONObject) new JSONParser().parse(line);
 				references = (JSONArray) obj.get("references");
-				
+
 				// continue to next paper node if it contains no references
 				if (references == null) {
 					fileWriter.write(obj.toJSONString() + "\n");
@@ -371,7 +372,7 @@ public class DataCuller {
 						iterator.remove();
 					}
 				}
-				
+
 				fileWriter.write(obj.toJSONString() + "\n");
 			}
 			bufferedReader.close();
@@ -386,16 +387,16 @@ public class DataCuller {
 		}
 
 	}
-	
+
 	public static void mergeDataSet(String sourceFileName, String appendFileName) {
 		JSONObject obj;
 		String line = null;
-		
+
 		try {
 			FileReader fileReader = new FileReader(appendFileName);
 			BufferedReader bufferedReader = new BufferedReader(fileReader);
 			FileWriter fileWriter = new FileWriter(sourceFileName, true);
-			
+
 			while ((line = bufferedReader.readLine()) != null) {
 				obj = (JSONObject) new JSONParser().parse(line);
 				fileWriter.write(obj.toJSONString() + "\n");
@@ -412,6 +413,7 @@ public class DataCuller {
 		}
 
 	}
+
 	public static void main(String[] args) {
 		// System.out.println(DataCuller.isSorted());\
 		// DataCuller.removeNullReferences();

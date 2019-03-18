@@ -1,7 +1,9 @@
 package com.paperconnect.client;
 
+import java.io.Serializable;
+
 //An ADT used to perform sorting of papers by citation count for the keywordLookup function 
-public class Paper implements Comparable<Paper> {
+public class Paper implements Comparable<Paper>, Serializable {
 	private String paperID;
 	private String paperTitle;
 	private String paperAbstract;
