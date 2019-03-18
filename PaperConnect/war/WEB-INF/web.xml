@@ -7,13 +7,13 @@
 
   <!-- Servlets -->
   <servlet>
-    <servlet-name>greetServlet</servlet-name>
-    <servlet-class>com.paperconnect.server.GreetingServiceImpl</servlet-class>
+    <servlet-name>paperServiceImpl</servlet-name>
+    <servlet-class>com.paperconnect.server.PaperServiceImpl</servlet-class>
   </servlet>
   
   <servlet-mapping>
-    <servlet-name>greetServlet</servlet-name>
-    <url-pattern>/paperconnect/greet</url-pattern>
+    <servlet-name>paperServiceImpl</servlet-name>
+    <url-pattern>/paperconnect/papers</url-pattern>
   </servlet-mapping>
   
   <!-- Default page to serve -->
