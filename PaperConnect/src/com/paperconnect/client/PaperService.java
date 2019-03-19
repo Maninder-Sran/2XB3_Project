@@ -6,4 +6,5 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 @RemoteServiceRelativePath("papers")
 public interface PaperService extends RemoteService {
 
+	Paper[] retrievePapers(String keyword);
 }

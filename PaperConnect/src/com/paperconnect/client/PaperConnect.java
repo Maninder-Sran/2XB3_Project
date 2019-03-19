@@ -3,13 +3,16 @@ package com.paperconnect.client;
 import java.util.ArrayList;
 
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.HTMLTable.Cell;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -21,13 +24,14 @@ import com.google.gwt.user.client.ui.VerticalPanel;
  */
 public class PaperConnect implements EntryPoint {
 
-	private VerticalPanel    mainPanel       = new VerticalPanel();
-	private FlexTable        papersFlexTable = new FlexTable();
-	private HorizontalPanel  addPanel        = new HorizontalPanel();
-	private TextBox          keywordTextBox  = new TextBox();
-	private Button           searchButton    = new Button("Search");
-	private ArrayList<Paper> papers          = new ArrayList<Paper>();
-	private Label            errorMsgLabel   = new Label();
+	private VerticalPanel          mainPanel       = new VerticalPanel();
+	private FlexTable              papersFlexTable = new FlexTable();
+	private HorizontalPanel        addPanel        = new HorizontalPanel();
+	private TextBox                keywordTextBox  = new TextBox();
+	private Button                 searchButton    = new Button("Search");
+	private ArrayList<Paper>       papers          = new ArrayList<Paper>();
+	private PaperServiceAsync      paperSvc        = GWT.create(PaperService.class);
+	private Label                  errorMsgLabel   = new Label();
 
 	public void onModuleLoad() {
 		
@@ -58,10 +62,9 @@ public class PaperConnect implements EntryPoint {
 		keywordTextBox.setFocus(true);
 		
 		searchButton.addClickHandler(new ClickHandler() {
-			
 			@Override
 			public void onClick(ClickEvent event) {
-				searchKeyword();
+				retrievePapers(keywordTextBox.getText());
 			}
 		});
 		
@@ -71,14 +74,71 @@ public class PaperConnect implements EntryPoint {
 			@Override
 			public void onKeyDown(KeyDownEvent event) {
 				if(event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
-					searchKeyword();
+					retrievePapers(keywordTextBox.getText());
 				}
 				
 			}
 		});	
+		
+		//Listen for mouse click on a row in the flex table
+		papersFlexTable.addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				Cell cell = papersFlexTable.getCellForEvent(event);
+				int row = cell.getRowIndex();
+				Paper paperSelected = papers.get(row+1);
+			}
+		});
 	}
 	
-	private void searchKeyword() {
+	private void addPapers(Paper[] paperLs) {
+		for(int i = 0; i < paperLs.length; i++) {
+			//TODO Error checking for correctness of ids
+			
+			
+			if(papers.contains(paperLs[i]))
+				return;
+			
+			//Add the paper to the table
+			int row = papersFlexTable.getRowCount();
+			papers.add(paperLs[i]);
+			papersFlexTable.setText(row, 0, paperLs[i].getPaperTitle());
+			papersFlexTable.setText(row, 1, paperLs[i].getAuthor());
+			papersFlexTable.setText(row, 2, paperLs[i].getPublishDate());
+		}
+	}
+	
+	private void retrievePapers(String keyword) {
+		//Initialize the service proxy
+		if(paperSvc == null) {
+			paperSvc = GWT.create(PaperService.class);
+		}
+		
+		//Set up the callback object.
+		AsyncCallback<Paper[]> callback = new AsyncCallback<Paper[]>() {
+			public void onFailure(Throwable caught) {
+			}
+			public void onSuccess(Paper[] result) {
+				addPapers(result);
+				updateTable(result);
+			}
+		};
+		
+		//Make the call to the paper service
+		paperSvc.retrievePapers(keyword, callback);
+	}
+	
+	private void updateTable(Paper[] papers) {
+		for(int i = 0; i < papers.length; i++) {
+			updateTable(papers[i]);
+		}
+		
+		//Clear any errors
+		errorMsgLabel.setVisible(false);
+	}
+	
+	private void updateTable(Paper paper) {
 		
 	}
 }
