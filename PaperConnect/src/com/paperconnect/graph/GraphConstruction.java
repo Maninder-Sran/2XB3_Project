@@ -8,25 +8,32 @@ import java.util.Hashtable;
 
 import com.google.gwt.core.ext.typeinfo.ParseException;
 import com.google.gwt.json.client.JSONParser;
+import com.google.gwt.json.client.JSONValue;
 import com.google.gwt.thirdparty.json.JSONObject;
 import com.paperconnect.client.Paper;
 
 public class GraphConstruction {
 	
 	public static 	Hashtable<String, Paper> intDataSet(String fileName) {
-		String  line = null, tempID, tempAbstract, tempTitle;
+		String  line = null, tempAbstract;
+		JSONValue tempTitle;
+		JSONValue tempID;
 		long numCitations;
-		JSONObject obj;
+		JSONValue value;
+		com.google.gwt.json.client.JSONObject obj;
 		FileReader fileReader;
 		
 		Hashtable<String, Paper> paperData = new Hashtable<String, Paper>();
 		try {
 			fileReader = new FileReader(fileName);
 			BufferedReader bufferedReader = new BufferedReader(fileReader);
+			
 			while ((line = bufferedReader.readLine()) != null) {
-				obj = (JSONObject) new JSONParser().parse(line);
-				tempID = (String) obj.get("id");
-				tempTitle = (String) obj.get("title");
+				
+				value = JSONParser.parse(line);
+				obj = value.isObject();
+				tempID = obj.get("id");
+				tempTitle = obj.get("title");
 				if(tempTitle == null || tempTitle.contains("???"))
 					tempTitle = (String) obj.get("venue");
 				try {
@@ -36,6 +43,7 @@ public class GraphConstruction {
 					numCitations = 0;
 					tempAbstract = null;
 				}
+				
 				Paper paper = new Paper(tempID, tempTitle, tempAbstract,numCitations);
 				paperData.put(tempID, paper);
 			}
