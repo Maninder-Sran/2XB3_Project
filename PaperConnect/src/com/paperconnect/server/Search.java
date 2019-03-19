@@ -13,7 +13,7 @@ public class Search {
 		String midString = "";
 		while (max >= min) {
 			mid = min + (max - min) / 2;
-			midString = list.get(mid).getPaperID();
+			midString = list.get(mid).getId();
 			if (id.compareTo(midString) == 0) {
 				return list.get(mid);
 			} else if (id.compareTo(midString) > 0) {
@@ -30,7 +30,7 @@ public class Search {
 
 	public static Paper sequentialSearchID(ArrayList<Paper> list, String id) {
 		for(Paper p: list) {
-			if(p.getPaperID().equals(id)) {
+			if(p.getId().equals(id)) {
 				return p;
 			}
 		}

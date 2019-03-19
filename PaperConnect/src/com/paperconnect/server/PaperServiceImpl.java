@@ -12,6 +12,7 @@ public class PaperServiceImpl extends RemoteServiceServlet implements PaperServi
 	}
 	
 	private boolean isValidKeyword(String keyword) {
+		
 		return false;
 	}
 }

@@ -1,9 +1,10 @@
 package com.paperconnect.client;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 //An ADT used to perform sorting of papers by citation count for the keywordLookup
-public class Paper implements Comparable<Paper> {
+public class Paper implements Comparable<Paper>, Serializable{
 	private String id;
 	private String title;
 	private String abst;
@@ -11,6 +12,8 @@ public class Paper implements Comparable<Paper> {
 	private ArrayList<String> references;
 	private String author;
 	private String publishDate;
+	
+	public Paper() {}
 	
 	//Constructor
 	public Paper(String paperID, String paperTitle, long citeNum) {

@@ -103,7 +103,7 @@ public class PaperConnect implements EntryPoint {
 			//Add the paper to the table
 			int row = papersFlexTable.getRowCount();
 			papers.add(paperLs[i]);
-			papersFlexTable.setText(row, 0, paperLs[i].getPaperTitle());
+			papersFlexTable.setText(row, 0, paperLs[i].getTitle());
 			papersFlexTable.setText(row, 1, paperLs[i].getAuthor());
 			papersFlexTable.setText(row, 2, paperLs[i].getPublishDate());
 		}
