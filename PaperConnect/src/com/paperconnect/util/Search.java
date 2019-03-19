@@ -1,4 +1,4 @@
-package com.paperconnect.server;
+package com.paperconnect.util;
 
 import java.util.ArrayList;
 
