@@ -1,7 +1,6 @@
-package com.paperconnect.services;
+package com.paperconnect.client;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.paperconnect.client.Paper;
 
 public interface PaperServiceAsync {
 

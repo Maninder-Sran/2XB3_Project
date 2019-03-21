@@ -1,3 +1,5 @@
+package com.paperconnect.util;
+
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -14,6 +16,10 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+
+import com.paperconnect.client.LookupTableLine;
+import com.paperconnect.client.Paper;
+import com.paperconnect.client.PaperShort;
 
 public class DataCuller {
 
@@ -86,7 +92,7 @@ public class DataCuller {
 		removeNullReferences(transistionFileName, outFileName, nullReferences);
 	}
 
-	private static void removeNullReferences(String fileName, String outFileName,Set<String> nullReferences) {
+	private static void removeNullReferences(String fileName, String outFileName, Set<String> nullReferences) {
 
 		// Declaring Variables
 		JSONObject obj;
@@ -125,7 +131,7 @@ public class DataCuller {
 						iterator.remove();
 					}
 				}
-				
+
 				// add edited paper node to new file
 				fileWriter.write(obj.toJSONString() + "\n");
 			}
@@ -237,7 +243,7 @@ public class DataCuller {
 
 				Collections.sort(v);
 				for (Paper s : v)
-					sb.append(s.getPaperID() + "::"+ s.getPaperTitle() + ",");
+					sb.append(s.getId() + "::" + s.getTitle() + ",");
 
 				try {
 					fileWriter.write(sb.toString().substring(0, sb.length() - 1) + "]\n");
@@ -313,12 +319,12 @@ public class DataCuller {
 			while ((line = bufferedReader.readLine()) != null) {
 				obj = (JSONObject) new JSONParser().parse(line);
 				id = (String) obj.get("id");
-				title  = (String) obj.get("title");
-				if(title == null || title.contains("???"))
+				title = (String) obj.get("title");
+				if (title == null || title.contains("???"))
 					title = (String) obj.get("venue");
 				try {
 					numCitations = (long) obj.get("n_citation");
-				}catch(NullPointerException e) {
+				} catch (NullPointerException e) {
 					numCitations = 0;
 				}
 				ret.add(new Paper(id, title, numCitations));
@@ -337,21 +343,22 @@ public class DataCuller {
 		}
 		return ret;
 	}
+
 	public static void removeUnusedReferences(String inFileName, String outFileName) {
 		JSONObject obj;
 		JSONArray references;
 		String greatestID = "53e99a0eb7602d9702261faf";
 		String line = null;
-		
+
 		try {
 			FileReader fileReader = new FileReader(inFileName);
 			BufferedReader bufferedReader = new BufferedReader(fileReader);
 			FileWriter fileWriter = new FileWriter(outFileName);
-			
+
 			while ((line = bufferedReader.readLine()) != null) {
 				obj = (JSONObject) new JSONParser().parse(line);
 				references = (JSONArray) obj.get("references");
-				
+
 				// continue to next paper node if it contains no references
 				if (references == null) {
 					fileWriter.write(obj.toJSONString() + "\n");
@@ -367,7 +374,7 @@ public class DataCuller {
 						iterator.remove();
 					}
 				}
-				
+
 				fileWriter.write(obj.toJSONString() + "\n");
 			}
 			bufferedReader.close();
@@ -382,16 +389,16 @@ public class DataCuller {
 		}
 
 	}
-	
+
 	public static void mergeDataSet(String sourceFileName, String appendFileName) {
 		JSONObject obj;
 		String line = null;
-		
+
 		try {
 			FileReader fileReader = new FileReader(appendFileName);
 			BufferedReader bufferedReader = new BufferedReader(fileReader);
 			FileWriter fileWriter = new FileWriter(sourceFileName, true);
-			
+
 			while ((line = bufferedReader.readLine()) != null) {
 				obj = (JSONObject) new JSONParser().parse(line);
 				fileWriter.write(obj.toJSONString() + "\n");
@@ -408,6 +415,75 @@ public class DataCuller {
 		}
 
 	}
+
+	public static ArrayList<LookupTableLine> readLookupTable(String fileName) {
+		String line = null;
+		ArrayList<LookupTableLine> ret = new ArrayList<LookupTableLine>();
+		long start = System.nanoTime();
+		int count = 0;
+		// used for splitting by "="
+		String[] lineSplit = null;
+		LookupTableLine paper = null;
+		try {
+			FileReader fileReader = new FileReader(fileName);
+			BufferedReader bufferedReader = new BufferedReader(fileReader);
+			while (true) {
+				try {
+					line = bufferedReader.readLine();
+					if (line == null) {
+						break;
+					}
+					// System.out.println(line);
+					lineSplit = line.split("=");
+					lineSplit[0] = lineSplit[0].trim();
+					lineSplit[1] = lineSplit[1].trim();
+					paper = new LookupTableLine(lineSplit[0], lineSplit[1]);
+					ret.add(paper);
+					count++;
+					System.out.println(count);
+				} catch (Exception f) {
+					continue;
+				}
+			}
+			System.out.println(
+					"Done in " + (System.nanoTime() - start) / 1000000000.0 + " seconds. " + (count) + " nodes.");
+			bufferedReader.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return ret;
+	}
+
+	public static void sortLookupTableKeywords(String inFileName, String outFileName) {
+		String line = null;
+		int count = 0;
+		long start = System.nanoTime();
+		ArrayList<LookupTableLine> papers = readLookupTable(inFileName);
+		Collections.sort(papers);
+		try {
+			FileWriter fileWriter = new FileWriter(outFileName);
+			for (LookupTableLine p : papers) {
+				if (p.getKeyword().length() == 0) {
+					continue;
+				}
+				fileWriter.write(p.getKeyword());
+				fileWriter.write(" = ");
+				fileWriter.write(p.getRightHalf());
+				fileWriter.write("\n");
+				count++;
+
+				// System.out.println(count);
+			}
+			fileWriter.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
 	public static void main(String[] args) {
 		// System.out.println(DataCuller.isSorted());\
 		// DataCuller.removeNullReferences();
