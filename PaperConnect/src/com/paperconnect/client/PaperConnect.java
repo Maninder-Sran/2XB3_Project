@@ -13,8 +13,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTMLTable.Cell;
-import com.paperconnect.services.PaperService;
-import com.paperconnect.services.PaperServiceAsync;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -66,7 +64,8 @@ public class PaperConnect implements EntryPoint {
 		searchButton.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				retrievePapers(keywordTextBox.getText());
+				updateTable(new Paper("Test","Test",132456));
+				//retrievePapers(keywordTextBox.getText());
 			}
 		});
 		
@@ -76,7 +75,8 @@ public class PaperConnect implements EntryPoint {
 			@Override
 			public void onKeyDown(KeyDownEvent event) {
 				if(event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
-					retrievePapers(keywordTextBox.getText());
+					updateTable(new Paper("Test","Test",132456));
+					//retrievePapers(keywordTextBox.getText());
 				}
 				
 			}
@@ -141,6 +141,10 @@ public class PaperConnect implements EntryPoint {
 	}
 	
 	private void updateTable(Paper paper) {
-		
+		int row = papersFlexTable.getRowCount();
+		papers.add(paper);
+		papersFlexTable.setText(row, 0, paper.getTitle());
+		papersFlexTable.setText(row, 1, paper.getId());
+		papersFlexTable.setText(row, 2, paper.getPublishDate());
 	}
 }
