@@ -1,3 +1,5 @@
+package com.paperconnect.util;
+
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -14,6 +16,8 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+
+import com.paperconnect.client.Paper;
 
 public class DataCuller {
 
@@ -237,7 +241,7 @@ public class DataCuller {
 
 				Collections.sort(v);
 				for (Paper s : v)
-					sb.append(s.getPaperID() + "::"+ s.getPaperTitle() + ",");
+					sb.append(s.getId() + "::"+ s.getTitle() + ",");
 
 				try {
 					fileWriter.write(sb.toString().substring(0, sb.length() - 1) + "]\n");
