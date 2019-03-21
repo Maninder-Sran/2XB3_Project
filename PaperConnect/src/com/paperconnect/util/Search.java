@@ -2,7 +2,7 @@ package com.paperconnect.util;
 
 import java.util.ArrayList;
 
-import com.paperconnect.client.LookupTablePaper;
+import com.paperconnect.client.LookupTableLine;
 import com.paperconnect.client.Paper;
 
 public class Search {
@@ -38,7 +38,7 @@ public class Search {
 		return null;
 	}
 
-	public static LookupTablePaper binarySearchKeyword(ArrayList<LookupTablePaper> list, String keyword) {
+	public static LookupTableLine binarySearchKeyword(ArrayList<LookupTableLine> list, String keyword) {
 		int min = 0;
 		int max = list.size() - 1;
 		int mid = 0;
