@@ -1,8 +1,7 @@
-package com.paperconnect.services;
+package com.paperconnect.client;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
-import com.paperconnect.client.Paper;
 
 @RemoteServiceRelativePath("papers")
 public interface PaperService extends RemoteService {
