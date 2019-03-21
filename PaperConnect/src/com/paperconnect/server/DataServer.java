@@ -7,25 +7,29 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import com.paperconnect.client.LookupTableLine;
-import com.paperconnect.client.PaperShort;
 
 public class DataServer {
-	
+
 	public static class LookupTable {
-		ArrayList<LookupTableLine> lookupTable;
-		
-		public void init() {
-			lookupTable = readLookupTable("data/ap_0_lookup_sorted.txt");
+		static ArrayList<LookupTableLine> lookupTable;
+
+		public static void init() {
+			readLookupTable("data/ap_0_lookup_sorted.txt");
+			for(LookupTableLine l: lookupTable) {
+				System.out.println(l);
+			}
 		}
-		
-		public static ArrayList<LookupTableLine> readLookupTable(String fileName) {
+
+		private static void readLookupTable(String fileName) {
 			String line = null;
-			ArrayList<PaperShort> ret = new ArrayList<PaperShort>();
+			lookupTable = new ArrayList<LookupTableLine>();
 			long start = System.nanoTime();
 			int count = 0;
 			// used for splitting by "="
 			String[] lineSplit = null;
-			LookupTableLine paper = null;
+			// used for splitting by ","
+			String[] lineSplit2 = null;
+			LookupTableLine tableLine = null;
 			try {
 				FileReader fileReader = new FileReader(fileName);
 				BufferedReader bufferedReader = new BufferedReader(fileReader);
@@ -35,14 +39,20 @@ public class DataServer {
 						if (line == null) {
 							break;
 						}
-						// System.out.println(line);
 						lineSplit = line.split("=");
 						lineSplit[0] = lineSplit[0].trim();
 						lineSplit[1] = lineSplit[1].trim();
-						paper = new LookupTableLine(lineSplit[0], lineSplit[1]);
-						ret.add(paper);
+						// set the keyword
+						tableLine = new LookupTableLine(lineSplit[0]);
+						// remove []
+						lineSplit[1] = lineSplit[1].substring(1, lineSplit[1].length() - 1);
+						lineSplit = lineSplit[1].split(",");
+						for (int i = 0; i < lineSplit.length; i++) {
+							lineSplit2 = lineSplit[i].split("::");
+							tableLine.addPaperData(new String[] { lineSplit2[0].trim(), lineSplit2[1].trim() });
+						}
+						lookupTable.add(tableLine);
 						count++;
-						System.out.println(count);
 					} catch (Exception f) {
 						continue;
 					}
@@ -55,8 +65,12 @@ public class DataServer {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			return ret;
 		}
+
+	}
+	
+	public static void main(String[] args) {
+		LookupTable.init();
 		
 	}
 }
