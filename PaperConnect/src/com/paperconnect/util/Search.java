@@ -18,12 +18,9 @@ public class Search {
 			if (id.compareTo(midString) == 0) {
 				return list.get(mid);
 			} else if (id.compareTo(midString) > 0) {
-				min = mid;
+				min = mid + 1;
 			} else {
-				max = mid;
-			}
-			if (max == min && !midString.equals(id)) {
-				break;
+				max = mid - 1;
 			}
 		}
 		return null;
@@ -49,12 +46,9 @@ public class Search {
 			if (keyword.compareTo(midString) == 0) {
 				return list.get(mid);
 			} else if (keyword.compareTo(midString) > 0) {
-				min = mid;
+				min = mid + 1;
 			} else {
-				max = mid;
-			}
-			if (max == min && !midString.equals(keyword)) {
-				break;
+				max = mid - 1;
 			}
 		}
 		return null;

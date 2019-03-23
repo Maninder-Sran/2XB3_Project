@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import com.paperconnect.client.LookupTableLine;
+import com.paperconnect.client.PaperShort;
+import com.paperconnect.util.Search;
 
 public class DataServer {
 
@@ -15,9 +17,9 @@ public class DataServer {
 
 		public static void init() {
 			readLookupTable("data/ap_0_lookup_sorted.txt");
-			for(LookupTableLine l: lookupTable) {
+			/*for (LookupTableLine l : lookupTable) {
 				System.out.println(l);
-			}
+			}*/
 		}
 
 		private static void readLookupTable(String fileName) {
@@ -67,10 +69,25 @@ public class DataServer {
 			}
 		}
 
+		public static boolean isKeywordValid(String keyword) {
+			return retrievePapers(keyword) != null;
+		}
+
+		public static ArrayList<PaperShort> retrievePapers(String keyword) {
+			LookupTableLine result = Search.binarySearchKeyword(lookupTable, keyword);
+			if (result == null) {
+				return null;
+			}
+			return result.getData();
+		}
+
 	}
-	
+
 	public static void main(String[] args) {
 		LookupTable.init();
-		
+		// znt2 = 53e997e4b7602d9701fdb48c ZnT2-overexpression represses the cytotoxic
+		//étiologie =  53e99803b7602d970201568f  Fibrose médiastinale idiopathique  53e9982cb7602d970204ee8c  Prostaglandines et aspirine 
+		//System.out.println(LookupTable.isKeywordValid("sdklfjurhieoghuihorgiurehgwro"));
+		//System.out.println(LookupTable.retrievePapers("étiologie"));
 	}
 }
