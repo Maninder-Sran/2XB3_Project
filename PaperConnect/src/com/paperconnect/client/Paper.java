@@ -7,6 +7,7 @@ import java.util.ArrayList;
 public class Paper implements Comparable<Paper>, Serializable {
 
 	private long citeNum;
+	private boolean visited = false;
 	private ArrayList<String> references;
 	private ArrayList<String> fields;
 
@@ -51,6 +52,14 @@ public class Paper implements Comparable<Paper>, Serializable {
 		return references;
 	}
 
+	public boolean getVisited() {
+		return visited;
+	}
+	
+	public void setVisited(boolean A) {
+		visited = A;
+	}
+	
 	public String toString() {
 		return getField(Fields.ID) + ", " + getField(Fields.TITLE) + "\n" + getField(Fields.ABSTRACT);
 	}
