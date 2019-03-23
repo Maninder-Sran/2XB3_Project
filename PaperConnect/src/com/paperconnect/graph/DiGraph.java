@@ -11,21 +11,25 @@ public class DiGraph {
 
 	public DiGraph(Paper root) {
 		this.citeGraph = new Hashtable<String, ArrayList<Paper>>();
-		this.root = root; 
+		this.root = root;
 	}
-	
+
 	public void addVertex(String vertex) {
 		citeGraph.put(vertex, new ArrayList<Paper>());
 	}
-	
+
 	public void addCiteEdge(String vertex, Paper edge) {
 		citeGraph.get(vertex).add(edge);
 	}
-	
+
 	public Hashtable getGraph() {
 		return citeGraph;
 	}
-	
+
+	public ArrayList<Paper> getChildren(String id) {
+		return citeGraph.get(id);
+	}
+
 	public Paper getRoot() {
 		return root;
 	}
