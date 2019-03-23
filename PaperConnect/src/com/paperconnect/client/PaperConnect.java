@@ -18,8 +18,10 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.paperconnect.client.PaperShort.Fields;
 import com.paperconnect.exception.KeywordException;
 import com.paperconnect.server.DataServer;
+import com.paperconnect.shared.Resources;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -37,7 +39,7 @@ public class PaperConnect implements EntryPoint {
 
 	public void onModuleLoad() {
 		
-		DataServer.init();
+		//DataServer.init();
 		
 		//Create table for the list of papers found
 		papersFlexTable.setText(0, 0, "Title");
@@ -93,6 +95,7 @@ public class PaperConnect implements EntryPoint {
 				PaperShort paperSelected = papers.get(row+1);
 			}
 		});
+		errorMsgLabel.setText(Resources.INSTANCE.lookupText().getText().substring(0,100));
 	}
 	
 	private void retrievePapers(String keyword) {
@@ -109,7 +112,7 @@ public class PaperConnect implements EntryPoint {
 			}
 			public void onSuccess(ArrayList<PaperShort> result) {
 				addPapers(result);
-				updateTable(result);
+				errorMsgLabel.setVisible(false);
 			}
 		};
 		
@@ -127,26 +130,9 @@ public class PaperConnect implements EntryPoint {
 			//Add the paper to the table
 			int row = papersFlexTable.getRowCount();
 			papers.add(paperLs.get(i));
-			papersFlexTable.setText(row, 0, paperLs.get(i).getField(0));
+			papersFlexTable.setText(row, 0, paperLs.get(i).getField(Fields.ID));
 			//papersFlexTable.setText(row, 1, paperLs.get(i).getAuthor());
 			//papersFlexTable.setText(row, 2, paperLs.get(i).getPublishDate());
 		}
-	}
-	
-	private void updateTable(ArrayList<PaperShort> papers) {
-		for(int i = 0; i < papers.size(); i++) {
-			updateTable(papers.get(i));
-		}
-		
-		//Clear any errors
-		errorMsgLabel.setVisible(false);
-	}
-	
-	private void updateTable(PaperShort paper) {
-		int row = papersFlexTable.getRowCount();
-		papers.add(paper);
-		papersFlexTable.setText(row, 0, paper.getField(0));
-		//papersFlexTable.setText(row, 1, paper.getId());
-		//papersFlexTable.setText(row, 2, paper.getPublishDate());
 	}
 }
