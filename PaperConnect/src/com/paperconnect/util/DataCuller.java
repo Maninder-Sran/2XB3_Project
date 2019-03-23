@@ -150,7 +150,7 @@ public class DataCuller {
 		}
 	}
 
-	public static void keywordLookup(String inFileName, String outFileName) {
+	private static void keywordLookup(String inFileName, String outFileName) {
 
 		// Declaring variables
 		JSONObject obj;
@@ -270,7 +270,7 @@ public class DataCuller {
 		}
 	}
 
-	public static boolean isSorted(String fileName) {
+	private static boolean isSorted(String fileName) {
 		JSONObject obj, obj2;
 		String id, id2;
 		String line = null;
@@ -303,7 +303,7 @@ public class DataCuller {
 
 	}
 
-	public static ArrayList<Paper> readPaperList(String fileName) {
+	private static ArrayList<Paper> readPaperList(String fileName) {
 		JSONObject obj;
 		String id, title;
 		long numCitations = 0;
@@ -344,7 +344,7 @@ public class DataCuller {
 		return ret;
 	}
 
-	public static void removeUnusedReferences(String inFileName, String outFileName) {
+	private static void removeUnusedReferences(String inFileName, String outFileName) {
 		JSONObject obj;
 		JSONArray references;
 		String greatestID = "53e99a0eb7602d9702261faf";
@@ -390,7 +390,7 @@ public class DataCuller {
 
 	}
 
-	public static void mergeDataSet(String sourceFileName, String appendFileName) {
+	private static void mergeDataSet(String sourceFileName, String appendFileName) {
 		JSONObject obj;
 		String line = null;
 
@@ -416,7 +416,7 @@ public class DataCuller {
 
 	}
 
-	public static ArrayList<LookupTableLine> readLookupTable(String fileName) {
+	private static ArrayList<LookupTableLine> readLookupTable(String fileName) {
 		String line = null;
 		ArrayList<LookupTableLine> ret = new ArrayList<LookupTableLine>();
 		long start = System.nanoTime();
@@ -456,7 +456,7 @@ public class DataCuller {
 		return ret;
 	}
 
-	public static void sortLookupTableKeywords(String inFileName, String outFileName) {
+	private static void sortLookupTableKeywords(String inFileName, String outFileName) {
 		String line = null;
 		int count = 0;
 		long start = System.nanoTime();
@@ -485,33 +485,39 @@ public class DataCuller {
 	}
 
 	public static void main(String[] args) {
-		// System.out.println(DataCuller.isSorted());
-		// DataCuller.removeNullReferences();
-		// DataCuller.references();
-		// DataCuller.keywordFinder();
-//		DataCuller.keywordLookup("data/aminer_papers_0_nr_test.json",
-//		 "data/ap_0_lookup.txt");
-//		Integer[] test = { 1, 2, 3, 4, 4, 5, 6, 7 };
-//		Quick.sortBasicQuick(test);
-//		for (int i : test)
-//			System.out.print(i + " ");
-		// DataCuller.keywordFinder("data/aminer_papers_0.txt",
-		// "data/aminer_papers_0_kw.json");
-		String infile = "../../../Downloads/Compressed/aminer_papers_2.txt";
-		String transistion = "../../../Documents/Software 1/2XB3/final project/data/ap_2/ap_kw_2.txt";
-		String outfile = "../../../Documents/Software 1/2XB3/final project/data/ap_2/ap_nr_2.txt";
-		String outfile2 = "../../../Documents/Software 1/2XB3/final project/data/ap_2/ap_final_2.txt";
-		String sourceFile = "../../../Documents/Software 1/2XB3/final project/data/ap_final.txt";
-		mergeDataSet(sourceFile, outfile2);
-//		keywordFinder(infile, transistion, outfile);
-//		removeUnusedReferences(outfile, outfile2);
-		System.out.println("\nDone");
-//		ArrayList<Paper> list = DataCuller.readPaperList("data/aminer_papers_0_nr.json");
-//		long start = System.nanoTime();
-//		System.out.println(Search.binarySearchID(list, "53e997d1b7602d9701fc90ff"));
-//		System.out.println("Binary search done in " + (System.nanoTime()-start)/1000000000.0 + " seconds.");
-//		start = System.nanoTime();
-//		System.out.println(Search.sequentialSearchID(list, "53e997d1b7602d9701fc90ff"));
-//		System.out.println("Sequential search done in " + (System.nanoTime()-start)/1000000000.0 + " seconds.");
+		String  ap_0 = "data/aminer_papers_0.txt";
+		String  ap_1 = "data/aminer_papers_0.txt";
+		String  ap_2 = "data/aminer_papers_0.txt";
+		
+		String trans0 = "data/ap_kw_0.txt";
+		String trans1 = "data/ap_kw_1.txt";
+		String trans2 = "data/ap_kw_2.txt";
+		
+		String KwOutFile0 = "data/ap_nr_0.txt";
+		String KwOutFile1 = "data/ap_nr_1.txt";
+		String KwOutFile2 = "data/ap_nr_2.txt";
+		
+		String FormattedOutputFile0 = "data/ap_0_final.txt";
+		String FormattedOutputFile1 = "data/ap_1_final.txt";
+		String FormattedOutputFile2 = "data/ap_2_final.txt";
+		
+		String FinalPaperFile = "data/ap_final.txt";
+		String transKeywordFile = "data/ap_translu.txt";
+		String FinalKeywordFile = "data/ap_lookup.txt";
+		
+		keywordFinder(ap_0, trans0, KwOutFile0);
+		keywordFinder(ap_1, trans1, KwOutFile1);
+		keywordFinder(ap_2, trans2, KwOutFile2);
+		
+		removeUnusedReferences(KwOutFile0, FormattedOutputFile0);
+		removeUnusedReferences(KwOutFile1, FormattedOutputFile1);
+		removeUnusedReferences(KwOutFile2, FormattedOutputFile2);
+		
+		mergeDataSet(FinalPaperFile, FormattedOutputFile0);
+		mergeDataSet(FinalPaperFile, FormattedOutputFile1);
+		mergeDataSet(FinalPaperFile, FormattedOutputFile2);
+		
+		keywordLookup(FinalPaperFile, transKeywordFile);
+		sortLookupTableKeywords(transKeywordFile, FinalKeywordFile);
 	}
 }

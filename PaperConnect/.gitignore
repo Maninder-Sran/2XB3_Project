@@ -5,6 +5,7 @@
 # Package Files #
 *.jar
 *.war
+*.txt
 
 # gwt caches and compiled units #
 war/gwt_bree/
