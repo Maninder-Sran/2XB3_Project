@@ -3,7 +3,6 @@ package com.paperconnect.server;
 import java.util.ArrayList;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
-import com.paperconnect.client.Paper;
 import com.paperconnect.client.PaperService;
 import com.paperconnect.client.PaperShort;
 import com.paperconnect.exception.KeywordException;

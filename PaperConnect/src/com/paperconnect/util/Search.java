@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import com.paperconnect.client.LookupTableLine;
 import com.paperconnect.client.Paper;
-
+import com.paperconnect.client.Paper.Fields;
 public class Search {
 
 	public static Paper binarySearchID(ArrayList<Paper> list, String id) {
@@ -14,7 +14,7 @@ public class Search {
 		String midString = "";
 		while (max >= min) {
 			mid = min + (max - min) / 2;
-			midString = list.get(mid).getId();
+			midString = list.get(mid).getField(Fields.ID);
 			if (id.compareTo(midString) == 0) {
 				return list.get(mid);
 			} else if (id.compareTo(midString) > 0) {
@@ -28,7 +28,7 @@ public class Search {
 
 	public static Paper sequentialSearchID(ArrayList<Paper> list, String id) {
 		for (Paper p : list) {
-			if (p.getId().equals(id)) {
+			if (p.getField(Fields.ID).equals(id)) {
 				return p;
 			}
 		}
