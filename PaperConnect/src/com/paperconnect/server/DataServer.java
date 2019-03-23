@@ -6,9 +6,13 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
 import com.google.gwt.json.client.JSONArray;
-import com.google.gwt.json.client.JSONObject;
-import com.google.gwt.json.client.JSONParser;
+//import com.google.gwt.json.client.JSONObject;
+//import com.google.gwt.json.client.JSONParser;
 import com.google.gwt.json.client.JSONValue;
 import com.paperconnect.client.LookupTableLine;
 import com.paperconnect.client.Paper;
@@ -18,7 +22,7 @@ import com.paperconnect.util.Search;
 public class DataServer {
 	
 	public static void init() {
-		PaperLongsList.init();
+		PaperList.init();
 		LookupTable.init();
 	}
 
@@ -46,8 +50,14 @@ public class DataServer {
 				BufferedReader bufferedReader = new BufferedReader(fileReader);
 
 				while ((line = bufferedReader.readLine()) != null) { // Get paper node fromline in input file
-					lineValue = JSONParser.parseStrict(line);
-					obj = lineValue.isObject();
+					try {
+						obj = (JSONObject) new JSONParser().parse(line);
+					} catch (ParseException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					//lineValue = JSONParser.parseStrict(line);
+					/*obj = lineValue.isObject();
 
 					// Get id of paper
 					id = obj.get("id").isString().stringValue();
@@ -85,7 +95,7 @@ public class DataServer {
 
 					// Load paper data into PaperADT and store it in list of PaperADTs
 					paper = new Paper(id, title, abst, references, author, publishDate, citations);
-					papers.add(paper);
+					papers.add(paper);*/
 				}
 			} catch (
 
@@ -97,7 +107,7 @@ public class DataServer {
 		}
 
 		public static ArrayList<Paper> getPaperGraph(PaperShort paper){
-			
+			return null;
 		} 
 	}
 
@@ -105,7 +115,7 @@ public class DataServer {
 		static ArrayList<LookupTableLine> lookupTable;
 
 		public static void init() {
-			readLookupTable("data/ap_0_lookup_sorted.txt");
+			readLookupTable("data/ap_lookup.txt");
 			/*
 			 * for (LookupTableLine l : lookupTable) { System.out.println(l); }
 			 */

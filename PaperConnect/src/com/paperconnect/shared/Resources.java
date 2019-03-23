@@ -1,4 +1,4 @@
-package com.paperconnect.shared;
+/*package com.paperconnect.shared;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.ClientBundle;
@@ -13,3 +13,4 @@ public interface Resources extends ClientBundle{
 	@Source("ap_lookup.txt")
 	public TextResource lookupText();
 }
+*/

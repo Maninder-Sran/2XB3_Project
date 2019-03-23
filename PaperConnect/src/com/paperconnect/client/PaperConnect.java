@@ -20,8 +20,6 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.paperconnect.client.PaperShort.Fields;
 import com.paperconnect.exception.KeywordException;
-import com.paperconnect.server.DataServer;
-import com.paperconnect.shared.Resources;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -95,7 +93,6 @@ public class PaperConnect implements EntryPoint {
 				PaperShort paperSelected = papers.get(row+1);
 			}
 		});
-		errorMsgLabel.setText(Resources.INSTANCE.lookupText().getText().substring(0,100));
 	}
 	
 	private void retrievePapers(String keyword) {

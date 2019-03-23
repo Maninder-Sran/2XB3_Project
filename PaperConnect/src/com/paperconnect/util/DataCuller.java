@@ -1,4 +1,4 @@
-/*package com.paperconnect.util;
+package com.paperconnect.util;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -19,7 +19,7 @@ import org.json.simple.parser.ParseException;
 
 import com.paperconnect.client.LookupTableLine;
 import com.paperconnect.client.Paper;
-import com.paperconnect.client.PaperShort;
+import com.paperconnect.client.Paper.Fields;
 
 public class DataCuller {
 
@@ -153,7 +153,7 @@ public class DataCuller {
 	private static void keywordLookup(String inFileName, String outFileName) {
 
 		// Declaring variables
-		com.google.gwt.thirdparty.json.JSONObject obj;
+		JSONObject obj;
 		String id;
 		long citations;
 		JSONArray keywords, parentPaperKeywords;
@@ -224,8 +224,8 @@ public class DataCuller {
 				} catch (NullPointerException e) {
 					citations = 0;
 				}
-				author = (String) obj.get("author");
-				publishDate = (String) obj.get("publishdate");
+				author = (String) obj.get("authors");
+				publishDate = (String) obj.get("year");
 				// Putting each paper into their respective keyword category
 				Iterator<String> iterator = parentPaperKeywords.iterator();
 				String thiskeyword = "";
@@ -247,7 +247,7 @@ public class DataCuller {
 
 				Collections.sort(v);
 				for (Paper s : v)
-					sb.append(s.getId() + "::" + s.getTitle()  + "::" + s.getauthor() + "::" + s.getPublishDate + ",");
+					sb.append(s.getField(Fields.ID) + "::" + s.getField(Fields.TITLE) + "::" + s.getField(Fields.AUTHOR) + "::" + s.getField(Fields.PUBLISH_DATE) + ",");
 
 				try {
 					fileWriter.write(sb.toString().substring(0, sb.length() - 1) + "]\n");
@@ -525,4 +525,3 @@ public class DataCuller {
 		sortLookupTableKeywords(transKeywordFile, FinalKeywordFile);
 	}
 }
-*/
