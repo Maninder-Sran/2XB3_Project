@@ -23,10 +23,6 @@ public class DataServer {
 		readPaperFile("data/ap_final.txt");
 	}
 
-	public static void main(String[] args) {
-		init();
-	}
-
 	private static void readPaperFile(String fileName) {
 		String line = null, id, title, abst, author, publishDate;
 		long citations;
