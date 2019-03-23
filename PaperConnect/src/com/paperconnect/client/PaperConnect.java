@@ -13,12 +13,13 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTMLTable.Cell;
-import com.paperconnect.exception.KeywordException;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.paperconnect.exception.KeywordException;
+import com.paperconnect.server.DataServer;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -35,6 +36,8 @@ public class PaperConnect implements EntryPoint {
 	private Label                  errorMsgLabel   = new Label();
 
 	public void onModuleLoad() {
+		
+		DataServer.init();
 		
 		//Create table for the list of papers found
 		papersFlexTable.setText(0, 0, "Title");
