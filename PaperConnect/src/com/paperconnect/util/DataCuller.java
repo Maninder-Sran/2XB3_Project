@@ -17,6 +17,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import com.google.gwt.dev.json.JsonObject;
 import com.paperconnect.client.LookupTableLine;
 import com.paperconnect.client.Paper;
 import com.paperconnect.client.Paper.Fields;
@@ -378,6 +379,9 @@ public class DataCuller {
 						iterator.remove();
 					}
 				}
+				
+				String abst = (String) obj.get("abstract");
+				obj.put("abstract", abst.subSequence(0, 499) + "...");
 
 				fileWriter.write(obj.toJSONString() + "\n");
 			}
