@@ -27,6 +27,10 @@ public class LookupTableLine implements Comparable<LookupTableLine> {
 		return this.rightHalf;
 	}
 	
+	public ArrayList<PaperShort> getData(){
+		return this.paperData;
+	}
+	
 	public void addPaperData(String[] data) {
 		paperData.add(new PaperShort(data));
 	}
