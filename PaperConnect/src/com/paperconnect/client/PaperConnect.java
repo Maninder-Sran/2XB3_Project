@@ -13,6 +13,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTMLTable.Cell;
+import com.paperconnect.exception.KeywordException;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -64,8 +65,7 @@ public class PaperConnect implements EntryPoint {
 		searchButton.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				updateTable(new Paper("Test","Test",132456));
-				//retrievePapers(keywordTextBox.getText());
+				retrievePapers(keywordTextBox.getText());
 			}
 		});
 		
@@ -75,8 +75,7 @@ public class PaperConnect implements EntryPoint {
 			@Override
 			public void onKeyDown(KeyDownEvent event) {
 				if(event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
-					updateTable(new Paper("Test","Test",132456));
-					//retrievePapers(keywordTextBox.getText());
+					retrievePapers(keywordTextBox.getText());
 				}
 				
 			}
@@ -120,6 +119,8 @@ public class PaperConnect implements EntryPoint {
 		//Set up the callback object.
 		AsyncCallback<Paper[]> callback = new AsyncCallback<Paper[]>() {
 			public void onFailure(Throwable caught) {
+				errorMsgLabel.setText("Keyword:"+((KeywordException)caught).getKeyword()+"not valid");
+				errorMsgLabel.setVisible(true);
 			}
 			public void onSuccess(Paper[] result) {
 				addPapers(result);
