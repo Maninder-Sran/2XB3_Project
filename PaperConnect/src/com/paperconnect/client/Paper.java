@@ -13,6 +13,7 @@ public class Paper implements Comparable<Paper>, Serializable{
 	private String author;
 	private String publishDate;
 	
+	
 	public Paper() {}
 	
 	//Constructor

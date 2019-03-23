@@ -17,48 +17,6 @@ import com.paperconnect.client.Paper;
 
 public class GraphConstruction {
 	
-	public static 	Hashtable<String, Paper> intDataSet(String fileName) {
-		String  line = null, tempID, tempAbstract, tempTitle;
-		long numCitations;
-		JSONObject obj;
-		FileReader fileReader;
-		
-		Hashtable<String, Paper> paperData = new Hashtable<String, Paper>();
-		try {
-			fileReader = new FileReader(fileName);
-			BufferedReader bufferedReader = new BufferedReader(fileReader);
-			while ((line = bufferedReader.readLine()) != null) {
-				obj = (JSONObject) JSONParser.parse(line);
-				tempID = (String) obj.get("id");
-				tempTitle = (String) obj.get("title");
-				if(tempTitle == null || tempTitle.contains("???"))
-					tempTitle = (String) obj.get("venue");
-				try {
-					tempAbstract = (String) obj.get("abstract");
-					tempAbstract = tempAbstract.substring(0, 499);
-					numCitations = (long) obj.get("n_citation");
-				}catch(NullPointerException e) {
-					numCitations = 0;
-					tempAbstract = null;
-				}
-				Paper paper = new Paper(tempID, tempTitle, tempAbstract,numCitations);
-				paperData.put(tempID, paper);
-			}
-			bufferedReader.close();
-			
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return paperData;
-	}
-
 	public static void buildGraph(String id, int width, int height, DiGraph citeGraph, Hashtable<String, Paper> paperData) {
 		Paper paper = paperData.get(id);
 		int counter = width;
