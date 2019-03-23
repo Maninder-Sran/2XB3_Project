@@ -11,6 +11,7 @@ public class LookupTableLine implements Comparable<LookupTableLine> {
 	public LookupTableLine(String keyword) {
 		this.keyword = keyword;
 		this.rightHalf = "";
+		this.paperData = new ArrayList<PaperShort>();
 	}
 
 	public LookupTableLine(String keyword, String rightHalf) {
@@ -25,11 +26,23 @@ public class LookupTableLine implements Comparable<LookupTableLine> {
 	public String getRightHalf() {
 		return this.rightHalf;
 	}
+	
+	public ArrayList<PaperShort> getData(){
+		return this.paperData;
+	}
+	
+	public void addPaperData(String[] data) {
+		paperData.add(new PaperShort(data));
+	}
 
 	// don't use toString() method. generates strings that are too big for java to
 	// handle
 	public String toString() {
-		return keyword + " = " + rightHalf;
+		StringBuilder x = new StringBuilder(keyword + " = " + rightHalf);
+		for(PaperShort p:paperData) {
+			x.append(p.toString());
+		}
+		return x.toString();
 	}
 
 	@Override

@@ -40,4 +40,12 @@ public class PaperShort {
 	public void removeField(String a) {
 		fields.remove(a);
 	}
+	
+	public String toString() {
+		StringBuilder x = new StringBuilder();
+		for(String s : fields) {
+			x.append(" " + s + " ");
+		}
+		return x.toString();
+	}
 }
