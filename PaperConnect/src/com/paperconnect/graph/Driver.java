@@ -16,7 +16,7 @@ public class Driver {
 		Hashtable<String, ArrayList<Paper>> graph = citeGraph.getGraph();
 		graph.forEach((k, v) -> System.out.println(k + "  " + v));
 		BreadthFirstSearch bfs = new BreadthFirstSearch(citeGraph.getRoot());
-		
+
 		BreadthFirstSearch bfs = new BreadthFirstSearch(root);
 
 //		if (bfs.compute())

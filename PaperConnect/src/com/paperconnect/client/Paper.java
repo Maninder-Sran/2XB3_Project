@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 //An ADT used to perform sorting of papers by citation count for the keywordLookup
-public class Paper implements Comparable<Paper>, Serializable{
+public class Paper implements Comparable<Paper>, Serializable {
 	private String id;
 	private String title;
 	private String abst;
@@ -12,18 +12,21 @@ public class Paper implements Comparable<Paper>, Serializable{
 	private ArrayList<String> references;
 	private String author;
 	private String publishDate;
-	
-	public Paper() {}
-	
-	//Constructor
+	private boolean visited = false;
+
+	public Paper() {
+	}
+
+	// Constructor
 	public Paper(String paperID, String paperTitle, long citeNum) {
 		this.id = paperID;
 		this.title = paperTitle;
 		this.citeNum = citeNum;
 	}
-	
-	//Constructor
-	public Paper(String paperID, String paperTitle, String paperAbstract, ArrayList<String> references, String paperAuthor, String publishDate,long citeNum) {
+
+	// Constructor
+	public Paper(String paperID, String paperTitle, String paperAbstract, ArrayList<String> references,
+			String paperAuthor, String publishDate, long citeNum) {
 		this.id = paperID;
 		this.title = paperTitle;
 		this.abst = paperAbstract;
@@ -32,37 +35,48 @@ public class Paper implements Comparable<Paper>, Serializable{
 		this.author = paperAuthor;
 		this.publishDate = publishDate;
 	}
-	
+
 	public String getId() {
 		return id;
 	}
-	
+
 	public String getTitle() {
 		return title;
 	}
-	
+
 	public String getAbstract() {
 		return abst;
 	}
+
 	public String getPublishDate() {
 		return publishDate;
 	}
-	public ArrayList<String> getReferences(){
+
+	public ArrayList<String> getReferences() {
 		return references;
 	}
-	
+
 	public String toString() {
 		return id + ", " + title + "\n" + abst;
 	}
-	
+
 	public String getAuthor() {
 		return author;
 	}
+
+	public boolean getVisited() {
+		return visited;
+	}
+
+	public void setVisited(boolean A) {
+		visited = A;
+	}
+
 	@Override
 	public int compareTo(Paper j) {
-		if(citeNum > j.citeNum)
+		if (citeNum > j.citeNum)
 			return -1;
-		else if(citeNum < j.citeNum)
+		else if (citeNum < j.citeNum)
 			return 1;
 		return 0;
 	}
