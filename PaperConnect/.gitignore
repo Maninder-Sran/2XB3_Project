@@ -1,4 +1,6 @@
 *.class
+*.cache.js
+*.symbolMap
 
 # Package Files #
 *.jar
@@ -8,6 +10,7 @@
 # gwt caches and compiled units #
 war/gwt_bree/
 gwt-unitCache/
+war/paperconnect
 
 # boilerplate generated classes #
 .apt_generated/

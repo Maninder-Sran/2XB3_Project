@@ -5,60 +5,58 @@ import java.util.ArrayList;
 
 //An ADT used to perform sorting of papers by citation count for the keywordLookup
 public class Paper implements Comparable<Paper>, Serializable{
-	private String id;
-	private String title;
-	private String abst;
+	
 	private long citeNum;
 	private ArrayList<String> references;
-	private String author;
-	private String publishDate;
+	private ArrayList<String> fields;
+
+	
+	public enum Fields {
+		ID,
+		TITLE,
+		AUTHOR,
+		PUBLISH_DATE,
+		REFERENCES,
+		ABSTRACT;
+	}
 	
 	
 	public Paper() {}
 	
 	//Constructor
 	public Paper(String paperID, String paperTitle, long citeNum) {
-		this.id = paperID;
-		this.title = paperTitle;
+		addField(paperID);
+		addField(paperTitle);
 		this.citeNum = citeNum;
 	}
 	
 	//Constructor
 	public Paper(String paperID, String paperTitle, String paperAbstract, ArrayList<String> references, String paperAuthor, String publishDate,long citeNum) {
-		this.id = paperID;
-		this.title = paperTitle;
-		this.abst = paperAbstract;
-		this.citeNum = citeNum;
+		addField(paperID);
+		addField(paperTitle);
+		addField(paperAuthor);
+		addField(publishDate);
+		addField(paperAbstract);
 		this.references = references;
-		this.author = paperAuthor;
-		this.publishDate = publishDate;
+		this.citeNum = citeNum;
 	}
 	
-	public String getId() {
-		return id;
+	public void addField(String a) {
+		fields.add(a);
+	}
+
+	public String getField(Fields field) {
+		return fields.get(field.ordinal());
 	}
 	
-	public String getTitle() {
-		return title;
-	}
-	
-	public String getAbstract() {
-		return abst;
-	}
-	public String getPublishDate() {
-		return publishDate;
-	}
 	public ArrayList<String> getReferences(){
 		return references;
 	}
 	
 	public String toString() {
-		return id + ", " + title + "\n" + abst;
+		return getField(Fields.ID) + ", " + getField(Fields.TITLE) + "\n" + getField(Fields.ABSTRACT);
 	}
 	
-	public String getAuthor() {
-		return author;
-	}
 	@Override
 	public int compareTo(Paper j) {
 		if(citeNum > j.citeNum)

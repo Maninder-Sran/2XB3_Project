@@ -17,6 +17,11 @@ import com.paperconnect.client.PaperShort;
 import com.paperconnect.util.Search;
 
 public class DataServer {
+	
+	public static void init() {
+		PaperLongsList.init();
+		LookupTable.init();
+	}
 
 	public static class PaperList {
 		static ArrayList<Paper> papers;
@@ -171,9 +176,9 @@ public class DataServer {
 	public static void main(String[] args) {
 		LookupTable.init();
 		// znt2 = 53e997e4b7602d9701fdb48c ZnT2-overexpression represses the cytotoxic
-		// étiologie = 53e99803b7602d970201568f Fibrose médiastinale idiopathique
+		// ï¿½tiologie = 53e99803b7602d970201568f Fibrose mï¿½diastinale idiopathique
 		// 53e9982cb7602d970204ee8c Prostaglandines et aspirine
 		// System.out.println(LookupTable.isKeywordValid("sdklfjurhieoghuihorgiurehgwro"));
-		// System.out.println(LookupTable.retrievePapers("étiologie"));
+		// System.out.println(LookupTable.retrievePapers("ï¿½tiologie"));
 	}
 }
