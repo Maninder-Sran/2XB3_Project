@@ -20,6 +20,7 @@ public class Paper implements Comparable<Paper>, Serializable{
 		ABSTRACT;
 	}
 	
+	
 	public Paper() {}
 	
 	//Constructor

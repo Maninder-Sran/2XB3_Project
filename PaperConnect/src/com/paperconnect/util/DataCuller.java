@@ -153,7 +153,7 @@ public class DataCuller {
 	private static void keywordLookup(String inFileName, String outFileName) {
 
 		// Declaring variables
-		JSONObject obj;
+		com.google.gwt.thirdparty.json.JSONObject obj;
 		String id;
 		long citations;
 		JSONArray keywords, parentPaperKeywords;
@@ -163,6 +163,9 @@ public class DataCuller {
 		Set<String> keys = new HashSet<String>();
 
 		String title = "";
+		String abst = "";
+		String author = "";
+		String publishDate = "";
 
 		String line = null, thisElement;
 		long start = System.nanoTime();
@@ -221,7 +224,8 @@ public class DataCuller {
 				} catch (NullPointerException e) {
 					citations = 0;
 				}
-
+				author = (String) obj.get("author");
+				publishDate = (String) obj.get("publishdate");
 				// Putting each paper into their respective keyword category
 				Iterator<String> iterator = parentPaperKeywords.iterator();
 				String thiskeyword = "";
@@ -243,7 +247,7 @@ public class DataCuller {
 
 				Collections.sort(v);
 				for (Paper s : v)
-					sb.append(s.getId() + "::" + s.getTitle() + ",");
+					sb.append(s.getId() + "::" + s.getTitle()  + "::" + s.getauthor() + "::" + s.getPublishDate + ",");
 
 				try {
 					fileWriter.write(sb.toString().substring(0, sb.length() - 1) + "]\n");

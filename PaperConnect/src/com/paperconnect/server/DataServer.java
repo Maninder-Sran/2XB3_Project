@@ -22,8 +22,8 @@ public class DataServer {
 		LookupTable.init();
 	}
 
-	public static class PaperLongsList {
-		static ArrayList<Paper> paperLongs;
+	public static class PaperList {
+		public static ArrayList<Paper> papers;
 
 		public static void init() {
 			readPaperFile("data/ap_final.txt");
@@ -37,7 +37,7 @@ public class DataServer {
 			JSONObject obj;
 			JSONValue tempObj;
 			JSONArray temp;
-			paperLongs = new ArrayList<Paper>();
+			papers = new ArrayList<Paper>();
 			Paper paper;
 			long start = System.nanoTime();
 
@@ -85,7 +85,7 @@ public class DataServer {
 
 					// Load paper data into PaperADT and store it in list of PaperADTs
 					paper = new Paper(id, title, abst, references, author, publishDate, citations);
-					paperLongs.add(paper);
+					papers.add(paper);
 				}
 			} catch (
 
@@ -96,6 +96,9 @@ public class DataServer {
 			}
 		}
 
+		public static ArrayList<Paper> getPaperGraph(PaperShort paper){
+			
+		} 
 	}
 
 	public static class LookupTable {
