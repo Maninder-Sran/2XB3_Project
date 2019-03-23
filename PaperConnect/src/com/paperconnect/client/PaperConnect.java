@@ -31,7 +31,7 @@ public class PaperConnect implements EntryPoint {
 	private HorizontalPanel        addPanel        = new HorizontalPanel();
 	private TextBox                keywordTextBox  = new TextBox();
 	private Button                 searchButton    = new Button("Search");
-	private ArrayList<Paper>       papers          = new ArrayList<Paper>();
+	private ArrayList<PaperShort>  papers          = new ArrayList<PaperShort>();
 	private PaperServiceAsync      paperSvc        = GWT.create(PaperService.class);
 	private Label                  errorMsgLabel   = new Label();
 
@@ -86,31 +86,13 @@ public class PaperConnect implements EntryPoint {
 		
 		//Listen for mouse click on a row in the flex table
 		papersFlexTable.addClickHandler(new ClickHandler() {
-			
 			@Override
 			public void onClick(ClickEvent event) {
 				Cell cell = papersFlexTable.getCellForEvent(event);
 				int row = cell.getRowIndex();
-				Paper paperSelected = papers.get(row+1);
+				PaperShort paperSelected = papers.get(row+1);
 			}
 		});
-	}
-	
-	private void addPapers(Paper[] paperLs) {
-		for(int i = 0; i < paperLs.length; i++) {
-			//TODO Error checking for correctness of ids
-			
-			
-			if(papers.contains(paperLs[i]))
-				return;
-			
-			//Add the paper to the table
-			int row = papersFlexTable.getRowCount();
-			papers.add(paperLs[i]);
-			papersFlexTable.setText(row, 0, paperLs[i].getTitle());
-			papersFlexTable.setText(row, 1, paperLs[i].getAuthor());
-			papersFlexTable.setText(row, 2, paperLs[i].getPublishDate());
-		}
 	}
 	
 	private void retrievePapers(String keyword) {
@@ -120,12 +102,12 @@ public class PaperConnect implements EntryPoint {
 		}
 		
 		//Set up the callback object.
-		AsyncCallback<Paper[]> callback = new AsyncCallback<Paper[]>() {
+		AsyncCallback<ArrayList<PaperShort>> callback = new AsyncCallback<ArrayList<PaperShort>>() {
 			public void onFailure(Throwable caught) {
 				errorMsgLabel.setText("Keyword:"+((KeywordException)caught).getKeyword()+"not valid");
 				errorMsgLabel.setVisible(true);
 			}
-			public void onSuccess(Paper[] result) {
+			public void onSuccess(ArrayList<PaperShort> result) {
 				addPapers(result);
 				updateTable(result);
 			}
@@ -134,21 +116,37 @@ public class PaperConnect implements EntryPoint {
 		//Make the call to the paper service
 		paperSvc.retrievePapers(keyword, callback);
 	}
+
+	private void addPapers(ArrayList<PaperShort> paperLs) {
+		for(int i = 0; i < paperLs.size(); i++) {
+			//TODO Error checking for correctness of ids
+			
+			if(papers.contains(paperLs.get(i)))
+				return;
+			
+			//Add the paper to the table
+			int row = papersFlexTable.getRowCount();
+			papers.add(paperLs.get(i));
+			papersFlexTable.setText(row, 0, paperLs.get(i).getField(0));
+			//papersFlexTable.setText(row, 1, paperLs.get(i).getAuthor());
+			//papersFlexTable.setText(row, 2, paperLs.get(i).getPublishDate());
+		}
+	}
 	
-	private void updateTable(Paper[] papers) {
-		for(int i = 0; i < papers.length; i++) {
-			updateTable(papers[i]);
+	private void updateTable(ArrayList<PaperShort> papers) {
+		for(int i = 0; i < papers.size(); i++) {
+			updateTable(papers.get(i));
 		}
 		
 		//Clear any errors
 		errorMsgLabel.setVisible(false);
 	}
 	
-	private void updateTable(Paper paper) {
+	private void updateTable(PaperShort paper) {
 		int row = papersFlexTable.getRowCount();
 		papers.add(paper);
-		papersFlexTable.setText(row, 0, paper.getTitle());
-		papersFlexTable.setText(row, 1, paper.getId());
-		papersFlexTable.setText(row, 2, paper.getPublishDate());
+		papersFlexTable.setText(row, 0, paper.getField(0));
+		//papersFlexTable.setText(row, 1, paper.getId());
+		//papersFlexTable.setText(row, 2, paper.getPublishDate());
 	}
 }

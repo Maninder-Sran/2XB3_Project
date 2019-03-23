@@ -6,6 +6,13 @@ public class PaperShort {
 
 	private ArrayList<String> fields;
 
+	public enum Fields {
+		ID,
+		TITLE,
+		AUTHOR,
+		PUBLISH_DATE;
+	}
+	
 	public PaperShort() {
 		this.fields = new ArrayList<String>();
 	}
@@ -17,7 +24,7 @@ public class PaperShort {
 	public PaperShort(String[] fields) {
 		this.fields = new ArrayList<String>();
 		for (int i = 0; i < fields.length; i++) {
-			this.fields.add(fields[i]);
+			addField(fields[i]);
 		}
 	}
 
@@ -25,20 +32,8 @@ public class PaperShort {
 		fields.add(a);
 	}
 
-	public String getField(int i) {
-		return fields.get(i);
-	}
-
-	public void setField(int i, String a) {
-		fields.set(i, a);
-	}
-
-	public void removeField(int i) {
-		fields.remove(i);
-	}
-
-	public void removeField(String a) {
-		fields.remove(a);
+	public String getField(Fields field) {
+		return fields.get(field.ordinal());
 	}
 	
 	public String toString() {
