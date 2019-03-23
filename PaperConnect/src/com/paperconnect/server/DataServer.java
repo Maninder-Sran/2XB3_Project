@@ -24,7 +24,7 @@ public class DataServer {
 	}
 
 	public static class PaperList {
-		static ArrayList<Paper> papers;
+		public static ArrayList<Paper> papers;
 
 		public static void init() {
 			readPaperFile("data/ap_final.txt");
