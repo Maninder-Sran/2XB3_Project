@@ -10,14 +10,12 @@ import com.paperconnect.client.Paper.Fields;
 public class BreadthFirstSearch {
 
 	static Paper startNode;
-	static DiGraph graph;
 
 	public BreadthFirstSearch(Paper start) {
 		startNode = start;
-		graph = GraphConstruction.Graph(startNode.getField(Fields.ID), "");
 	}
 
-	public static ArrayList<Paper> compute() {
+	public static ArrayList<Paper> compute(DiGraph graph) {
 
 		ArrayList<Paper> Result = new ArrayList<Paper>();
 		Paper current;
