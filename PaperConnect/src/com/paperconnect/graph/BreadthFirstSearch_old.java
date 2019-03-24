@@ -7,7 +7,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Scanner;
 
-public class BreadthFirstSearch1 {
+public class BreadthFirstSearch_old {
 	public static void main(String[] args) throws FileNotFoundException {
 
 		File file = new File("citeGraph");
