@@ -1,4 +1,33 @@
 *.class
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+
+# Package Files #
+*.jar
+*.war
+
+# gwt caches and compiled units #
+war/gwt_bree/
+gwt-unitCache/
+
+# boilerplate generated classes #
+.apt_generated/
+
+# more caches and things from deploy #
+war/WEB-INF/deploy/
+war/WEB-INF/classes/
+
+#compilation logs
+.gwt/
+
+#gwt junit compilation files
+www-test/
+
+#old GWT (1.5) created this dir
+.gwt-tmp/
+=======
+>>>>>>> refs/heads/vv
 *.cache.js
 *.symbolMap
 
@@ -28,3 +57,7 @@ www-test/
 #old GWT (1.5) created this dir
 .gwt-tmp/
 /test-classes/
+<<<<<<< HEAD
+=======
+>>>>>>> refs/remotes/origin/ms
+>>>>>>> refs/heads/vv

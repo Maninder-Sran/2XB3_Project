@@ -5,11 +5,14 @@ import java.util.ArrayList;
 
 //An ADT used to perform sorting of papers by citation count for the keywordLookup
 public class Paper implements Comparable<Paper>, Serializable {
+	<<<<<<<HEAD
 
+	=======>>>>>>>refs/heads/vv
 	private long citeNum;
 	private boolean visited = false;
 	private ArrayList<String> references;
 	private ArrayList<String> fields;
+	private boolean visited = false;
 
 	public enum Fields implements Serializable {
 		ID, TITLE, AUTHOR, PUBLISH_DATE, REFERENCES, ABSTRACT;
@@ -52,14 +55,18 @@ public class Paper implements Comparable<Paper>, Serializable {
 		return references;
 	}
 
+	<<<<<<<HEAD
+
 	public boolean getVisited() {
 		return visited;
 	}
-	
+
 	public void setVisited(boolean A) {
 		visited = A;
 	}
-	
+
+	=======>>>>>>>refs/heads/vv
+
 	public String toString() {
 		return getField(Fields.ID) + ", " + getField(Fields.TITLE) + "\n" + getField(Fields.ABSTRACT);
 	}

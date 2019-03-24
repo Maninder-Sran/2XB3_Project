@@ -124,7 +124,7 @@ public class DataServer {
 		static ArrayList<LookupTableLine> lookupTable;
 
 		public static void init() {
-			readLookupTable("data/ap_lookup.txt");
+			readLookupTable("data/aminer_papers_2.txt");
 			/*
 			 * for (LookupTableLine l : lookupTable) { System.out.println(l); }
 			 */
@@ -189,5 +189,5 @@ public class DataServer {
 			return result.getData();
 		}
 	}
-
+	
 }
