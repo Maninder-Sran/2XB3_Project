@@ -22,7 +22,6 @@ public class BreadthFirstSearch {
 		ArrayList<Paper> neighbors;
 
 		Queue<Paper> queue = new LinkedList<>();
-		ArrayList<Paper> explored = new ArrayList<>();
 		queue.add(startNode);
 		queue.add(null);
 		Result.add(startNode);
