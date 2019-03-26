@@ -1,4 +1,5 @@
 package com.paperconnect.util;
+
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -156,7 +157,7 @@ public class DataCuller {
 		long citations;
 		JSONArray keywords, parentPaperKeywords;
 
-		// Data structures for storing loop up table info (This is memory heavy)
+		// Data structures for storing look up table info (This is memory heavy)
 		Hashtable<String, ArrayList<Paper>> lookupKey = new Hashtable<String, ArrayList<Paper>>();
 		Set<String> keys = new HashSet<String>();
 		JSONArray authors;
@@ -231,7 +232,7 @@ public class DataCuller {
 				}
 
 				try {
-					publishDate =  String.valueOf((long) obj.get("year"));
+					publishDate = String.valueOf((long) obj.get("year"));
 				} catch (NullPointerException e) {
 					publishDate = "NA";
 				}
@@ -352,7 +353,7 @@ public class DataCuller {
 				}
 
 				try {
-					publishDate =  String.valueOf((long) obj.get("year"));
+					publishDate = String.valueOf((long) obj.get("year"));
 				} catch (NullPointerException e) {
 					publishDate = "NA";
 				}

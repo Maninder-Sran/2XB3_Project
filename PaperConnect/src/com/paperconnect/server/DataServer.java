@@ -21,7 +21,7 @@ public class DataServer {
 
 	public static void init() {
 		LookupTable.init();
-		PaperList.init();
+		//PaperList.init();
 	}
 
 	public static class PaperList {
@@ -117,17 +117,13 @@ public class DataServer {
 				e1.printStackTrace();
 			}
 		}
-
 	}
 
 	public static class LookupTable {
 		static ArrayList<LookupTableLine> lookupTable;
 
 		public static void init() {
-			readLookupTable("data/aminer_papers_2.txt");
-			/*
-			 * for (LookupTableLine l : lookupTable) { System.out.println(l); }
-			 */
+			readLookupTable("data/ap_lookup.txt");
 		}
 
 		private static void readLookupTable(String fileName) {
@@ -177,14 +173,14 @@ public class DataServer {
 			}
 		}
 
-		public static boolean isKeywordValid(String keyword) {
-			return retrievePapers(keyword) != null;
-		}
-
 		public static ArrayList<PaperShort> retrievePapers(String keyword) {
 			LookupTableLine result = Search.binarySearchKeyword(lookupTable, keyword);
 			if (result == null) {
 				return null;
+			}
+			System.out.println(result.getData().size());
+			for(int i = 0; i < result.getData().size(); i++) {
+				System.out.println(result.getData().get(i));
 			}
 			return result.getData();
 		}
