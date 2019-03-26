@@ -225,8 +225,14 @@ public class DataCuller {
 				} catch (NullPointerException e) {
 					citations = 0;
 				}
-				author = (String) obj.get("authors");
-				publishDate = (String) obj.get("year");
+				
+				try {
+				author = (String) obj.get("authors").toString();
+				publishDate = (String) String.valueOf((long) obj.get("year"));
+				} catch(NullPointerException e) {
+					author = "  ";
+					publishDate = "  ";
+				}
 				// Putting each paper into their respective keyword category
 				Iterator<String> iterator = parentPaperKeywords.iterator();
 				String thiskeyword = "";
@@ -380,8 +386,8 @@ public class DataCuller {
 					}
 				}
 				
-				String abst = (String) obj.get("abstract");
-				obj.put("abstract", abst.subSequence(0, 499) + "...");
+				//String abst = (String) obj.get("abstract");
+				//obj.put("abstract", abst.subSequence(0, 499) + "...");
 
 				fileWriter.write(obj.toJSONString() + "\n");
 			}
@@ -493,7 +499,7 @@ public class DataCuller {
 	}
 
 	public static void main(String[] args) {
-		String  ap_0 = "data/aminer_papers_0.txt";
+		String  ap_0 = "../../../Downloads/Compressed/aminer_papers_0.txt";
 		String  ap_1 = "data/aminer_papers_0.txt";
 		String  ap_2 = "data/aminer_papers_0.txt";
 		
@@ -508,24 +514,29 @@ public class DataCuller {
 		String FormattedOutputFile0 = "data/ap_0_final.txt";
 		String FormattedOutputFile1 = "data/ap_1_final.txt";
 		String FormattedOutputFile2 = "data/ap_2_final.txt";
-		
-		String FinalPaperFile = "data/ap_final.txt";
-		String transKeywordFile = "data/ap_translu.txt";
-		String FinalKeywordFile = "data/ap_lookup.txt";
+		String FinalPaperFile = "data/ap_final0.txt";
 		
 		keywordFinder(ap_0, trans0, KwOutFile0);
-		keywordFinder(ap_1, trans1, KwOutFile1);
-		keywordFinder(ap_2, trans2, KwOutFile2);
-		
 		removeUnusedReferences(KwOutFile0, FormattedOutputFile0);
-		removeUnusedReferences(KwOutFile1, FormattedOutputFile1);
-		removeUnusedReferences(KwOutFile2, FormattedOutputFile2);
+		keywordLookup(FormattedOutputFile0, FinalPaperFile);
 		
-		mergeDataSet(FinalPaperFile, FormattedOutputFile0);
-		mergeDataSet(FinalPaperFile, FormattedOutputFile1);
-		mergeDataSet(FinalPaperFile, FormattedOutputFile2);
-		
-		keywordLookup(FinalPaperFile, transKeywordFile);
-		sortLookupTableKeywords(transKeywordFile, FinalKeywordFile);
+		//String FinalPaperFile = "data/ap_final.txt";
+//		String transKeywordFile = "data/ap_translu.txt";
+//		String FinalKeywordFile = "data/ap_lookup.txt";
+//		
+//		keywordFinder(ap_0, trans0, KwOutFile0);
+//		keywordFinder(ap_1, trans1, KwOutFile1);
+//		keywordFinder(ap_2, trans2, KwOutFile2);
+//		
+//		removeUnusedReferences(KwOutFile0, FormattedOutputFile0);
+//		removeUnusedReferences(KwOutFile1, FormattedOutputFile1);
+//		removeUnusedReferences(KwOutFile2, FormattedOutputFile2);
+//		
+//		mergeDataSet(FinalPaperFile, FormattedOutputFile0);
+//		mergeDataSet(FinalPaperFile, FormattedOutputFile1);
+//		mergeDataSet(FinalPaperFile, FormattedOutputFile2);
+//		
+//		keywordLookup(FinalPaperFile, transKeywordFile);
+//		sortLookupTableKeywords(transKeywordFile, FinalKeywordFile);
 	}
 }
