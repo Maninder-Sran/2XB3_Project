@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 
 import org.json.simple.JSONArray;
@@ -54,7 +55,7 @@ public class DataServer {
 					title = obj.get("title").toString();
 					if (title == null || title.contains("??")) {
 						try {
-						title = obj.get("venue").toString();
+							title = obj.get("venue").toString();
 						} catch (NullPointerException e) {
 							title = "Generic paper";
 						}
@@ -149,6 +150,8 @@ public class DataServer {
 						if (line == null) {
 							break;
 						}
+						HashSet<String> uniqueIDs = new HashSet<String>();
+
 						lineSplit = line.split("=");
 						lineSplit[0] = lineSplit[0].trim();
 						lineSplit[1] = lineSplit[1].trim();
@@ -159,7 +162,10 @@ public class DataServer {
 						lineSplit = lineSplit[1].split(",");
 						for (int i = 0; i < lineSplit.length; i++) {
 							lineSplit2 = lineSplit[i].split("::");
-							tableLine.addPaperData(new String[] { lineSplit2[0].trim(), lineSplit2[1].trim() });
+							if (!uniqueIDs.contains(lineSplit2[0].trim())) {
+								tableLine.addPaperData(new String[] { lineSplit2[0].trim(), lineSplit2[1].trim() });
+								uniqueIDs.add(lineSplit[0].trim());
+							}
 						}
 						lookupTable.add(tableLine);
 						count++;
@@ -189,5 +195,5 @@ public class DataServer {
 			return result.getData();
 		}
 	}
-	
+
 }

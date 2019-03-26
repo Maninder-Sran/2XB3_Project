@@ -1,4 +1,5 @@
 package com.paperconnect.util;
+
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -18,6 +19,9 @@ import org.json.simple.parser.ParseException;
 
 import com.paperconnect.client.LookupTableLine;
 import com.paperconnect.client.Paper;
+import com.paperconnect.client.PaperShort;
+import com.paperconnect.client.PaperShort.Fields;
+import com.paperconnect.server.DataServer;
 
 public class DataCuller {
 
@@ -231,7 +235,7 @@ public class DataCuller {
 				}
 
 				try {
-					publishDate =  String.valueOf((long) obj.get("year"));
+					publishDate = String.valueOf((long) obj.get("year"));
 				} catch (NullPointerException e) {
 					publishDate = "NA";
 				}
@@ -352,7 +356,7 @@ public class DataCuller {
 				}
 
 				try {
-					publishDate =  String.valueOf((long) obj.get("year"));
+					publishDate = String.valueOf((long) obj.get("year"));
 				} catch (NullPointerException e) {
 					publishDate = "NA";
 				}
@@ -520,8 +524,61 @@ public class DataCuller {
 		}
 	}
 
+	public static void removeSameIdsFromLookup(String inFileName, String outFileName) {
+		String line = null, lineSplit[];
+		String[] lineSplit2;
+		int count = 0;
+		long start = System.nanoTime();
+		LookupTableLine newKeywordLine;
+
+		ArrayList<LookupTableLine> papers = readLookupTable(inFileName);
+		ArrayList<LookupTableLine> newPapers = new ArrayList<LookupTableLine>();
+
+		try {
+
+			FileWriter fileWriter = new FileWriter(outFileName);
+
+			for (LookupTableLine p : papers) {
+				StringBuilder sb = new StringBuilder();
+				String paperLine;
+				Set<String> ids = new HashSet<String>();
+				newKeywordLine = new LookupTableLine(p.getKeyword());
+				lineSplit = p.getRightHalf().split(",");
+				for (int i = 0; i < lineSplit.length; i++) {
+					lineSplit2 = lineSplit[i].split("::");
+					if (!ids.contains(lineSplit2[0].trim())) {
+						newKeywordLine.addPaperData(new String[] { lineSplit2[0].trim(), lineSplit2[1].trim()});
+						ids.add(lineSplit2[0].trim());
+					}
+				}
+
+				ArrayList<PaperShort> newKeywordPapers = newKeywordLine.getData();
+				sb.append(newKeywordLine.getKeyword() + " = [");
+
+				for (int i = 0; i < newKeywordPapers.size(); i++) {
+					sb.append(newKeywordPapers.get(i).getField(Fields.ID) + "::"
+							+ newKeywordPapers.get(i).getField(Fields.AUTHOR) + "::"
+							+ newKeywordPapers.get(i).getField(Fields.TITLE) + "::"
+							+ newKeywordPapers.get(i).getField(Fields.PUBLISH_DATE) + ",");
+				}
+				paperLine = sb.toString().substring(0, sb.length() - 1);
+				paperLine = paperLine + "]";
+
+				fileWriter.write(paperLine);
+			}
+			fileWriter.close();
+		} catch (FileNotFoundException e) {
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
 	public static void main(String[] args) {
-		String ap_0 = "data/aminer_papers_0.txt";
+		String ap_0 = "../../../Downloads/Compressed/aminer_papers_0.txt";
+		String ap_lu_test = "../../../Documents/Software 1/2XB3/ap_lookup.txt";
+		String ap_lu_testnew = "../../../Documents/Software 1/2XB3/ap_lookup_new.txt";
 		String ap_1 = "data/aminer_papers_0.txt";
 		String ap_2 = "data/aminer_papers_0.txt";
 
@@ -541,19 +598,21 @@ public class DataCuller {
 		String transKeywordFile = "data/ap_translu.txt";
 		String FinalKeywordFile = "data/ap_lookup.txt";
 
-		keywordFinder(ap_0, trans0, KwOutFile0);
-		keywordFinder(ap_1, trans1, KwOutFile1);
-		keywordFinder(ap_2, trans2, KwOutFile2);
+		removeSameIdsFromLookup(ap_lu_test, ap_lu_testnew);
+		// keywordFinder(ap_0, trans0, KwOutFile0);
+		// keywordFinder(ap_1, trans1, KwOutFile1);
+		// keywordFinder(ap_2, trans2, KwOutFile2);
+		//
+		// removeUnusedReferences(KwOutFile0, FormattedOutputFile0);
+		// removeUnusedReferences(KwOutFile1, FormattedOutputFile1);
+		// removeUnusedReferences(KwOutFile2, FormattedOutputFile2);
+		//
+		// mergeDataSet(FinalPaperFile, FormattedOutputFile0);
+		// mergeDataSet(FinalPaperFile, FormattedOutputFile1);
+		// mergeDataSet(FinalPaperFile, FormattedOutputFile2);
 
-		removeUnusedReferences(KwOutFile0, FormattedOutputFile0);
-		removeUnusedReferences(KwOutFile1, FormattedOutputFile1);
-		removeUnusedReferences(KwOutFile2, FormattedOutputFile2);
+		// keywordLookup(KwOutFile0, transKeywordFile);
 
-		mergeDataSet(FinalPaperFile, FormattedOutputFile0);
-		mergeDataSet(FinalPaperFile, FormattedOutputFile1);
-		mergeDataSet(FinalPaperFile, FormattedOutputFile2);
-
-		keywordLookup(FinalPaperFile, transKeywordFile);
-		sortLookupTableKeywords(transKeywordFile, FinalKeywordFile);
+		// sortLookupTableKeywords(transKeywordFile, FinalKeywordFile);
 	}
 }
