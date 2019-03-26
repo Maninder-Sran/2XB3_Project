@@ -26,6 +26,10 @@ public class DiGraph {
 		return citeGraph;
 	}
 	
+	public ArrayList<Paper> getChildren(String id){
+		return citeGraph.get(id);
+	}
+	
 	public Paper getRoot() {
 		return root;
 	}

@@ -1,5 +1,4 @@
 package com.paperconnect.util;
-
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -17,10 +16,8 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import com.google.gwt.dev.json.JsonObject;
 import com.paperconnect.client.LookupTableLine;
 import com.paperconnect.client.Paper;
-import com.paperconnect.client.Paper.Fields;
 
 public class DataCuller {
 
@@ -162,6 +159,7 @@ public class DataCuller {
 		// Data structures for storing loop up table info (This is memory heavy)
 		Hashtable<String, ArrayList<Paper>> lookupKey = new Hashtable<String, ArrayList<Paper>>();
 		Set<String> keys = new HashSet<String>();
+		JSONArray authors;
 
 		String title = "";
 		String abst = "";
@@ -225,13 +223,17 @@ public class DataCuller {
 				} catch (NullPointerException e) {
 					citations = 0;
 				}
-				
 				try {
-				author = (String) obj.get("authors").toString();
-				publishDate = (String) String.valueOf((long) obj.get("year"));
-				} catch(NullPointerException e) {
-					author = "  ";
-					publishDate = "  ";
+					authors = (JSONArray) obj.get("authors");
+					author = authors.get(0).toString();
+				} catch (NullPointerException e) {
+					author = "NA";
+				}
+
+				try {
+					publishDate =  String.valueOf((long) obj.get("year"));
+				} catch (NullPointerException e) {
+					publishDate = "NA";
 				}
 				// Putting each paper into their respective keyword category
 				Iterator<String> iterator = parentPaperKeywords.iterator();
@@ -240,7 +242,7 @@ public class DataCuller {
 					thiskeyword = iterator.next();
 					if (title == null || title.contains("??"))
 						title = (String) obj.get("venue");
-					Paper paper = new Paper(id, title, citations);
+					Paper paper = new Paper(id, title, author, publishDate, citations);
 					lookupKey.get(thiskeyword).add(paper);
 				}
 			}
@@ -254,7 +256,8 @@ public class DataCuller {
 
 				Collections.sort(v);
 				for (Paper s : v)
-					sb.append(s.getField(Fields.ID) + "::" + s.getField(Fields.TITLE) + "::" + s.getField(Fields.AUTHOR) + "::" + s.getField(Fields.PUBLISH_DATE) + ",");
+					sb.append(s.getField(Paper.Fields.ID) + "::" + s.getField(Paper.Fields.TITLE) + "::"
+							+ s.getField(Paper.Fields.AUTHOR) + "::" + s.getField(Paper.Fields.PUBLISH_DATE) + ",");
 
 				try {
 					fileWriter.write(sb.toString().substring(0, sb.length() - 1) + "]\n");
@@ -316,6 +319,9 @@ public class DataCuller {
 
 	private static ArrayList<Paper> readPaperList(String fileName) {
 		JSONObject obj;
+		JSONArray authors;
+		String author;
+		String publishDate;
 		String id, title;
 		long numCitations = 0;
 		String line = null;
@@ -338,7 +344,19 @@ public class DataCuller {
 				} catch (NullPointerException e) {
 					numCitations = 0;
 				}
-				ret.add(new Paper(id, title, numCitations));
+				try {
+					authors = (JSONArray) obj.get("authors");
+					author = authors.get(0).toString();
+				} catch (NullPointerException e) {
+					author = "NA";
+				}
+
+				try {
+					publishDate =  String.valueOf((long) obj.get("year"));
+				} catch (NullPointerException e) {
+					publishDate = "NA";
+				}
+				ret.add(new Paper(id, title, author, publishDate, numCitations));
 				count++;
 			}
 			System.out.println(
@@ -385,10 +403,14 @@ public class DataCuller {
 						iterator.remove();
 					}
 				}
-				
-				//String abst = (String) obj.get("abstract");
-				//obj.put("abstract", abst.subSequence(0, 499) + "...");
 
+				try {
+					String abst = (String) obj.get("abstract");
+					if (abst.length() > 500)
+						obj.put("abstract", abst.substring(0, 500) + "...");
+				} catch (NullPointerException e) {
+
+				}
 				fileWriter.write(obj.toJSONString() + "\n");
 			}
 			bufferedReader.close();
@@ -499,44 +521,39 @@ public class DataCuller {
 	}
 
 	public static void main(String[] args) {
-		String  ap_0 = "../../../Downloads/Compressed/aminer_papers_0.txt";
-		String  ap_1 = "data/aminer_papers_0.txt";
-		String  ap_2 = "data/aminer_papers_0.txt";
-		
+		String ap_0 = "data/aminer_papers_0.txt";
+		String ap_1 = "data/aminer_papers_0.txt";
+		String ap_2 = "data/aminer_papers_0.txt";
+
 		String trans0 = "data/ap_kw_0.txt";
 		String trans1 = "data/ap_kw_1.txt";
 		String trans2 = "data/ap_kw_2.txt";
-		
+
 		String KwOutFile0 = "data/ap_nr_0.txt";
 		String KwOutFile1 = "data/ap_nr_1.txt";
 		String KwOutFile2 = "data/ap_nr_2.txt";
-		
+
 		String FormattedOutputFile0 = "data/ap_0_final.txt";
 		String FormattedOutputFile1 = "data/ap_1_final.txt";
 		String FormattedOutputFile2 = "data/ap_2_final.txt";
-		String FinalPaperFile = "data/ap_final0.txt";
-		
+
+		String FinalPaperFile = "data/ap_final.txt";
+		String transKeywordFile = "data/ap_translu.txt";
+		String FinalKeywordFile = "data/ap_lookup.txt";
+
 		keywordFinder(ap_0, trans0, KwOutFile0);
+		keywordFinder(ap_1, trans1, KwOutFile1);
+		keywordFinder(ap_2, trans2, KwOutFile2);
+
 		removeUnusedReferences(KwOutFile0, FormattedOutputFile0);
-		keywordLookup(FormattedOutputFile0, FinalPaperFile);
-		
-		//String FinalPaperFile = "data/ap_final.txt";
-//		String transKeywordFile = "data/ap_translu.txt";
-//		String FinalKeywordFile = "data/ap_lookup.txt";
-//		
-//		keywordFinder(ap_0, trans0, KwOutFile0);
-//		keywordFinder(ap_1, trans1, KwOutFile1);
-//		keywordFinder(ap_2, trans2, KwOutFile2);
-//		
-//		removeUnusedReferences(KwOutFile0, FormattedOutputFile0);
-//		removeUnusedReferences(KwOutFile1, FormattedOutputFile1);
-//		removeUnusedReferences(KwOutFile2, FormattedOutputFile2);
-//		
-//		mergeDataSet(FinalPaperFile, FormattedOutputFile0);
-//		mergeDataSet(FinalPaperFile, FormattedOutputFile1);
-//		mergeDataSet(FinalPaperFile, FormattedOutputFile2);
-//		
-//		keywordLookup(FinalPaperFile, transKeywordFile);
-//		sortLookupTableKeywords(transKeywordFile, FinalKeywordFile);
+		removeUnusedReferences(KwOutFile1, FormattedOutputFile1);
+		removeUnusedReferences(KwOutFile2, FormattedOutputFile2);
+
+		mergeDataSet(FinalPaperFile, FormattedOutputFile0);
+		mergeDataSet(FinalPaperFile, FormattedOutputFile1);
+		mergeDataSet(FinalPaperFile, FormattedOutputFile2);
+
+		keywordLookup(FinalPaperFile, transKeywordFile);
+		sortLookupTableKeywords(transKeywordFile, FinalKeywordFile);
 	}
 }

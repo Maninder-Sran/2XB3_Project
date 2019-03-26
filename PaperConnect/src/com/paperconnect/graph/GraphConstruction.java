@@ -1,18 +1,10 @@
 package com.paperconnect.graph;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Hashtable;
 import java.util.Iterator;
 
-import com.google.gwt.core.ext.typeinfo.ParseException;
-import com.google.gwt.json.client.JSONParser;
-import com.google.gwt.thirdparty.json.JSONObject;
 import com.paperconnect.client.Paper;
 import com.paperconnect.server.DataServer;
 import com.paperconnect.util.Search;
