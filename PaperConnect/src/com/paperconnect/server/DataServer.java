@@ -20,8 +20,10 @@ import com.paperconnect.util.Search;
 public class DataServer {
 
 	public static void init() {
+		System.out.println("LOOKUP_TABLE INITIALIZATION STARTING");
 		LookupTable.init();
-		//PaperList.init();
+		System.out.println("LOOKUP_TABLE INITIALIZATION COMPLETE");
+		// PaperList.init();
 	}
 
 	public static class PaperList {
@@ -44,7 +46,7 @@ public class DataServer {
 				FileReader fileReader = new FileReader(fileName);
 				BufferedReader bufferedReader = new BufferedReader(fileReader);
 
-				while ((line = bufferedReader.readLine()) != null) { // Get paper node fromline in input file
+				while ((line = bufferedReader.readLine()) != null) { // Get paper node from line in input file
 					obj = (JSONObject) new JSONParser().parse(line);
 
 					// Get id of paper
@@ -54,7 +56,7 @@ public class DataServer {
 					title = obj.get("title").toString();
 					if (title == null || title.contains("??")) {
 						try {
-						title = obj.get("venue").toString();
+							title = obj.get("venue").toString();
 						} catch (NullPointerException e) {
 							title = "Generic paper";
 						}
@@ -178,12 +180,8 @@ public class DataServer {
 			if (result == null) {
 				return null;
 			}
-			System.out.println(result.getData().size());
-			for(int i = 0; i < result.getData().size(); i++) {
-				System.out.println(result.getData().get(i));
-			}
 			return result.getData();
 		}
 	}
-	
+
 }

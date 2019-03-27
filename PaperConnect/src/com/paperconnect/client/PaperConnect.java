@@ -90,6 +90,7 @@ public class PaperConnect implements EntryPoint {
 				Cell cell = papersFlexTable.getCellForEvent(event);
 				int row = cell.getRowIndex();
 				PaperShort paperSelected = papers.get(row+1);
+				
 			}
 		});
 	}
