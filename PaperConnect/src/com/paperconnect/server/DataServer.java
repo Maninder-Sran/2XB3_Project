@@ -131,6 +131,9 @@ public class DataServer {
 
 		private static void readLookupTable(String fileName) {
 			String line = null;
+			JSONObject keywordLine;
+			JSONArray paperList;
+			JSONObject paper;
 			lookupTable = new ArrayList<LookupTableLine>();
 			long start = System.nanoTime();
 			int count = 0;
@@ -149,22 +152,34 @@ public class DataServer {
 							break;
 						}
 						HashSet<String> uniqueIDs = new HashSet<String>();
-
-						lineSplit = line.split("=");
-						lineSplit[0] = lineSplit[0].trim();
-						lineSplit[1] = lineSplit[1].trim();
-						// set the keyword
-						tableLine = new LookupTableLine(lineSplit[0]);
-						// remove []
-						lineSplit[1] = lineSplit[1].substring(1, lineSplit[1].length() - 1);
-						lineSplit = lineSplit[1].split(",");
-						for (int i = 0; i < lineSplit.length; i++) {
-							lineSplit2 = lineSplit[i].split("::");
-							if (!uniqueIDs.contains(lineSplit2[0].trim())) {
-								tableLine.addPaperData(new String[] { lineSplit2[0].trim(), lineSplit2[1].trim() });
-								uniqueIDs.add(lineSplit[0].trim());
+						keywordLine = (JSONObject) new JSONParser().parse(line);
+						paperList = (JSONArray) keywordLine.get("paper_list");
+						
+						for (int i = 0; i < paperList.size(); i++) {
+							paper = (JSONObject) paperList.get(i);
+							if (!uniqueIDs.contains(paper.get("id").toString())) {
+								tableLine.addPaperData(new String[] { paper.get("id").toString(), paper.get("title").toString() 
+										, paper.get("author").toString(), paper.get("year").toString()});
+								uniqueIDs.add(paper.get("id").toString());
 							}
 						}
+
+						//old code for symbol-based lookup table with two fields; id and title
+//						lineSplit = new String[] {line.substring(0, line.indexOf("=")),line.substring(line.indexOf("=") + 1)};
+//						lineSplit[0] = lineSplit[0].trim();
+//						lineSplit[1] = lineSplit[1].trim();
+//						// set the keyword
+//						tableLine = new LookupTableLine(lineSplit[0]);
+//						// remove []
+//						lineSplit[1] = lineSplit[1].substring(1, lineSplit[1].length() - 1);
+//						lineSplit = lineSplit[1].split(",");
+//						for (int i = 0; i < lineSplit.length; i++) {
+//							lineSplit2 = lineSplit[i].split("::");
+//							if (!uniqueIDs.contains(lineSplit2[0].trim())) {
+//								tableLine.addPaperData(new String[] { lineSplit2[0].trim(), lineSplit2[1].trim() });
+//								uniqueIDs.add(lineSplit[0].trim());
+//							}
+//						}
 						lookupTable.add(tableLine);
 						count++;
 					} catch (Exception f) {
