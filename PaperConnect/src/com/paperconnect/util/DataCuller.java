@@ -21,7 +21,6 @@ import com.paperconnect.client.LookupTableLine;
 import com.paperconnect.client.Paper;
 import com.paperconnect.client.PaperShort;
 import com.paperconnect.client.PaperShort.Fields;
-import com.paperconnect.server.DataServer;
 
 public class DataCuller {
 
