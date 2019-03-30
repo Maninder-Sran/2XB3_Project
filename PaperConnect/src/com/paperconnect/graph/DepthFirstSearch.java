@@ -1,6 +1,7 @@
 package com.paperconnect.graph;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Stack;
 
 import org.json.simple.JSONArray;
@@ -27,30 +28,21 @@ public class DepthFirstSearch {
 		JSONObject obj = new JSONObject();
 		Paper v;
 		ArrayList<Paper> neighbors = new ArrayList<Paper>();
+		HashMap<String, JSONObject> objects = new HashMap<String, JSONObject>();
 		Stack<Paper> S = new Stack<Paper>();
 		S.push(startNode);
 		startNode.setVisited(true);
-		obj.put("name", startNode.getField(Fields.ID));
-		obj.put("parent", startNode.getParentID());
-		JSONArray children;
 		while(!S.isEmpty()) {
 			v = S.pop();
 			obj = new JSONObject();
-			obj.put("name", v.getField(Fields.ID));
-			obj.put("parent", v.getParentID());
 			neighbors = graph.getChildren(v.getField(Fields.ID));
 			children = new JSONArray();
 			for(int i=0; i<Math.min(maxChildren, neighbors.size()); i++) {
 				if (neighbors.get(i).getVisited() != true) {
 					S.push(neighbors.get(i));
-					children.add(neighbors.get(i).getField(Fields.ID));
 					neighbors.get(i).setVisited(true);
 				}
 			}
-			if(children.size() > 0) {
-				obj.put("children", children);
-			}
-			arr.add(obj);
 		}
 		return arr.toJSONString();
 	}

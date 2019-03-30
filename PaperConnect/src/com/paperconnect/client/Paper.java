@@ -48,6 +48,10 @@ public class Paper implements Comparable<Paper>, Serializable {
 		this.fields = new ArrayList<String>();
 		addField(paperID);
 		addField(paperTitle);
+		addField("");
+		addField("");
+		addField("");
+		addField("");
 		this.citeNum = citeNum;
 		setParentID(null);
 	}
