@@ -940,6 +940,6 @@ public class DataCuller {
 
 		sortLookupTableKeywordsJSON(transKeywordFile, FinalKeywordFile);*/
 		
-		parseRelevantData(FinalPaperFile, FinalPaperList);
+		//parseRelevantData(FinalPaperFile, FinalPaperList);
 	}
 }

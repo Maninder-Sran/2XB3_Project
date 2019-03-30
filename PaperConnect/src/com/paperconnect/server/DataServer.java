@@ -75,6 +75,8 @@ public class DataServer {
 						temp = (JSONArray) obj.get("references");
 						// get all references of paper
 						Iterator<String> iterator = temp.iterator();
+						if(!iterator.hasNext())
+							references.add("N/A");
 						while (iterator.hasNext()) {
 							references.add(iterator.next());
 						}
@@ -86,14 +88,14 @@ public class DataServer {
 					try {
 						author = obj.get("author").toString();
 					} catch (NullPointerException e) {
-						author = "NA";
+						author = "N/A";
 					}
 
 					// get publish date of paper
 					try {
 						publishDate = obj.get("year").toString();
 					} catch (NullPointerException e) {
-						publishDate = "NA";
+						publishDate = "N/A";
 					}
 					// Load paper data into PaperADT and store it in list of PaperADTs
 					paper = new Paper(id, title, abst, references, author, publishDate, citations);

@@ -16,11 +16,15 @@ public class GraphConstruction {
 		int counter = width;
 		String source = null;
 
-		if (height == 0 || paper.getReferences() == null) {
-			citeGraph.addVertex(id);
+		if (height == 0 || paper == null) {
 			return;
 		}
 
+		if(paper.getReferences().size() == 0) {
+			citeGraph.addVertex(id);
+			return;
+		}
+		
 		ArrayList<String> references = paper.getReferences();
 		Collections.sort(references);
 		Iterator<String> iterator = references.iterator();
