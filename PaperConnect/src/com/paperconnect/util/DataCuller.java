@@ -1,4 +1,5 @@
 package com.paperconnect.util;
+
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -241,7 +242,7 @@ public class DataCuller {
 					if (title == null || title.contains("??"))
 						title = (String) obj.get("venue");
 					Paper paper = new Paper(id, title, author, publishDate, citations);
-					if(!thiskeyword.equals("="))
+					if (!thiskeyword.equals("="))
 						lookupKey.get(thiskeyword).add(paper);
 				}
 			}
@@ -282,8 +283,8 @@ public class DataCuller {
 			e.printStackTrace();
 		}
 	}
-	
-	//function to make a json lookup table from a json dataset input file
+
+	// function to make a json lookup table from a json dataset input file
 	private static void keywordLookupJSON(String inFileName, String outFileName) {
 
 		// Declaring variables
@@ -366,7 +367,7 @@ public class DataCuller {
 					authors = (JSONArray) obj.get("authors");
 					temp = (JSONObject) authors.get(0);
 					author = temp.get("name").toString();
-					if(author == "") {
+					if (author == "") {
 						author = "NA";
 					}
 				} catch (NullPointerException e) {
@@ -391,7 +392,7 @@ public class DataCuller {
 			// writing each keyword category along with all its papers (id and title) into
 			// output file
 			// each line in the output file contains one keyword and all its papers
-			
+
 			lookupKey.forEach((k, v) -> {
 				JSONObject keywordLine = new JSONObject();
 				JSONArray papers = new JSONArray();
@@ -432,7 +433,6 @@ public class DataCuller {
 			e.printStackTrace();
 		}
 	}
-
 
 	private static boolean isSorted(String fileName) {
 		JSONObject obj, obj2;
@@ -576,7 +576,6 @@ public class DataCuller {
 
 	}
 
-	
 	private static void mergeDataSet(String sourceFileName, String appendFileName) {
 		JSONObject obj;
 		String line = null;
@@ -602,8 +601,8 @@ public class DataCuller {
 		}
 
 	}
-	
-	//Function to read in the symbol-based lookup table
+
+	// Function to read in the symbol-based lookup table
 	private static ArrayList<LookupTableLine> readLookupTable(String fileName) {
 		String line = null;
 		JSONObject keywordLine;
@@ -623,7 +622,8 @@ public class DataCuller {
 						break;
 					}
 					// System.out.println(line);
-					lineSplit = new String[] {line.substring(0, line.indexOf("=")),line.substring(line.indexOf("=") + 1)};
+					lineSplit = new String[] { line.substring(0, line.indexOf("=")),
+							line.substring(line.indexOf("=") + 1) };
 					lineSplit[0] = lineSplit[0].trim();
 					lineSplit[1] = lineSplit[1].trim();
 					paper = new LookupTableLine(lineSplit[0], lineSplit[1]);
@@ -633,7 +633,7 @@ public class DataCuller {
 					continue;
 				}
 			}
-			
+
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -641,8 +641,8 @@ public class DataCuller {
 		}
 		return ret;
 	}
-	
-	//Function to read in the JSON keyword lookup table
+
+	// Function to read in the JSON keyword lookup table
 	private static ArrayList<LookupTableLine> readLookupTableJSON(String fileName) {
 		String line = null;
 		JSONObject keywordLine;
@@ -659,13 +659,15 @@ public class DataCuller {
 					}
 					// get json object of stored keyword list in each line of input file
 					keywordLine = (JSONObject) new JSONParser().parse(line);
-					
-					//place the json object in a new LookupTableLine ADT with the keyword and a string representation of the json object
+
+					// place the json object in a new LookupTableLine ADT with the keyword and a
+					// string representation of the json object
 					paper = new LookupTableLine(keywordLine.get("keyword").toString(), keywordLine.toString());
-					
-					//add the initialized LookupTableLine instance to the list of LookupTableLine objects to be returned 
+
+					// add the initialized LookupTableLine instance to the list of LookupTableLine
+					// objects to be returned
 					ret.add(paper);
-				
+
 				} catch (Exception f) {
 					continue;
 				}
@@ -705,20 +707,20 @@ public class DataCuller {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		System.out.println(
-				"LookupTable Sorted in  " + (System.nanoTime() - start) / 1000000000.0 + " seconds. " + (count) + "Keywords.");
+		System.out.println("LookupTable Sorted in  " + (System.nanoTime() - start) / 1000000000.0 + " seconds. "
+				+ (count) + "Keywords.");
 	}
-	
-	//function for sorting the lookup table for the JSON lookup table file
+
+	// function for sorting the lookup table for the JSON lookup table file
 	private static void sortLookupTableKeywordsJSON(String inFileName, String outFileName) {
 		String line = null;
 		int count = 0;
 		long start = System.nanoTime();
-		
-		//Read in all the json lookup table objects
+
+		// Read in all the json lookup table objects
 		ArrayList<LookupTableLine> papers = readLookupTableJSON(inFileName);
-		
-		//sort them using a basic provided collections sort
+
+		// sort them using a basic provided collections sort
 		Collections.sort(papers);
 		try {
 			FileWriter fileWriter = new FileWriter(outFileName);
@@ -736,11 +738,11 @@ public class DataCuller {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		System.out.println(
-				"Lookup Table Sorted in  " + (System.nanoTime() - start) / 1000000000.0 + " seconds. " + (count) + " Keywords.");
+		System.out.println("Lookup Table Sorted in  " + (System.nanoTime() - start) / 1000000000.0 + " seconds. "
+				+ (count) + " Keywords.");
 	}
 
-	//Function still not working for symbol-based look up table
+	// Function still not working for symbol-based look up table
 	public static void removeSameIdsFromLookup(String inFileName, String outFileName) {
 		String line = null, lineSplit[];
 		String[] lineSplit2;
@@ -764,8 +766,8 @@ public class DataCuller {
 					lineSplit2 = lineSplit[i].split("::");
 					System.out.println(lineSplit2.length);
 					if (!ids.contains(lineSplit2[0].trim())) {
-						newKeywordLine.addPaperData(new String[] { lineSplit2[0].trim(), lineSplit2[1].trim()
-								, lineSplit2[2].trim(), lineSplit2[3].trim()});
+						newKeywordLine.addPaperData(new String[] { lineSplit2[0].trim(), lineSplit2[1].trim(),
+								lineSplit2[2].trim(), lineSplit2[3].trim() });
 						ids.add(lineSplit2[0].trim());
 					}
 				}
@@ -793,6 +795,112 @@ public class DataCuller {
 
 	}
 
+	private static void parseRelevantData(String inFileName, String outFileName) {
+		// declaring variables
+		JSONObject obj, newObj, temp;
+		String id, abst, title, author, publishDate;
+		long citations;
+		JSONArray references, authors;
+		Set<String> nullReferences = new HashSet<String>();
+		String line = null;
+		long start = System.nanoTime();
+		int count = 0;
+
+		try {
+
+			// opening files to be be read and written to
+			FileReader fileReader = new FileReader(inFileName);
+			BufferedReader bufferedReader = new BufferedReader(fileReader);
+			FileWriter fileWriter = new FileWriter(outFileName);
+
+			// iterating over each line of file, in other words each paper node
+			while ((line = bufferedReader.readLine()) != null) {
+
+				// Getting relevant data from the paper node
+				id = null;
+				obj = (JSONObject) new JSONParser().parse(line);
+				newObj = new JSONObject();
+				
+				//Get id
+				id = (String) obj.get("id");
+				newObj.put("id", id);
+
+				// Get title of paper
+				title = obj.get("title").toString();
+				if (title == null || title.contains("??")) {
+					try {
+						title = obj.get("venue").toString();
+					} catch (NullPointerException e) {
+						title = "Generic paper";
+					}
+				}
+				newObj.put("title", title);
+
+				// Get abstract of paper
+				try {
+					abst = obj.get("abstract").toString();
+				} catch (NullPointerException e) {
+					abst = "NA";
+				}
+				newObj.put("abstract", abst);
+
+				// Get number of citations of paper
+				try {
+					citations = (long) obj.get("n_citation");
+
+				} catch (NullPointerException e) {
+					citations = 0;
+				}
+				newObj.put("n_citation", citations);
+
+				// get references
+				references = (JSONArray) obj.get("references");
+				if(references == null || references.isEmpty()) {
+					references = new JSONArray();
+				}
+				newObj.put("references", references);
+
+				// Get author of paper
+				try {
+					authors = (JSONArray) obj.get("authors");
+					temp = (JSONObject) authors.get(0);
+					author = temp.get("name").toString();
+					if (author == "" || author == null) {
+						author = "NA";
+					}
+				} catch (NullPointerException e) {
+					author = "NA";
+				}
+				newObj.put("author", author);
+
+				// get publish date of paper
+				try {
+					publishDate = obj.get("year").toString();
+				} catch (NullPointerException e) {
+					publishDate = "NA";
+				}
+				newObj.put("year", publishDate);
+
+				fileWriter.write(newObj.toJSONString() + "\n");
+				count++;
+			}
+
+			// printing out run time of function and number of nodes with keywords in file
+			System.out.println("Done in " + (System.nanoTime() - start) / 1000000000.0 + " seconds. " + (count)
+					+ " nodes with keywords.");
+			bufferedReader.close();
+			fileWriter.flush();
+			fileWriter.close();
+
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+	}
+
 	public static void main(String[] args) {
 		String ap_0 = "data/aminer_papers_0.txt";
 		String ap_1 = "data/aminer_papers_1.txt";
@@ -813,21 +921,25 @@ public class DataCuller {
 		String FinalPaperFile = "data/ap_final.txt";
 		String transKeywordFile = "data/ap_translu.txt";
 		String FinalKeywordFile = "data/ap_lookup.txt";
+		
+		String FinalPaperList = "data/ap_paperList.txt";
 
-		keywordFinder(ap_0, trans0, KwOutFile0);
+/*		keywordFinder(ap_0, trans0, KwOutFile0);
 		keywordFinder(ap_1, trans1, KwOutFile1);
 		keywordFinder(ap_2, trans2, KwOutFile2);
-		
+
 		removeUnusedReferences(KwOutFile0, FormattedOutputFile0);
 		removeUnusedReferences(KwOutFile1, FormattedOutputFile1);
 		removeUnusedReferences(KwOutFile2, FormattedOutputFile2);
-		
+
 		mergeDataSet(FinalPaperFile, FormattedOutputFile0);
 		mergeDataSet(FinalPaperFile, FormattedOutputFile1);
 		mergeDataSet(FinalPaperFile, FormattedOutputFile2);
 
 		keywordLookupJSON(FinalPaperFile, transKeywordFile);
 
-		sortLookupTableKeywordsJSON(transKeywordFile, FinalKeywordFile);
+		sortLookupTableKeywordsJSON(transKeywordFile, FinalKeywordFile);*/
+		
+		parseRelevantData(FinalPaperFile, FinalPaperList);
 	}
 }
