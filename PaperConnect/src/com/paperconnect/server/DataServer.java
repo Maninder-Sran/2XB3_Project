@@ -84,8 +84,7 @@ public class DataServer {
 
 					// Get author of paper
 					try {
-						temp = (JSONArray) obj.get("author");
-						author = temp.get(0).toString();
+						author = obj.get("author").toString();
 					} catch (NullPointerException e) {
 						author = "NA";
 					}
