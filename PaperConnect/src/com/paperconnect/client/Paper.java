@@ -5,39 +5,49 @@ import java.util.ArrayList;
 
 //An ADT used to perform sorting of papers by citation count for the keywordLookup
 public class Paper implements Comparable<Paper>, Serializable {
-	private long citeNum;
+	private int citeNum;
 	private ArrayList<String> references;
 	private ArrayList<String> fields;
 	private boolean visited = false;
-
-	public enum Fields implements Serializable {
-		ID, TITLE, AUTHOR, PUBLISH_DATE, REFERENCES, ABSTRACT;
-	}
 
 	public Paper() {
 		fields = new ArrayList<String>();
 	}
 
 	// Constructor
-	public Paper(String paperID, String paperTitle, String author, String publishDate, long citeNum) {
+	public Paper(String paperID, String paperTitle, String author, String publishDate, int citeNum) {
 		this.fields = new ArrayList<String>();
 		addField(paperID);
 		addField(paperTitle);
 		addField(author);
 		addField(publishDate);
+		addField("");
+		addField("");
 		this.citeNum = citeNum;
 	}
 
 	// Constructor
 	public Paper(String paperID, String paperTitle, String paperAbstract, ArrayList<String> references,
-			String paperAuthor, String publishDate, long citeNum) {
+			String paperAuthor, String publishDate, int citeNum) {
 		fields = new ArrayList<String>();
 		addField(paperID);
 		addField(paperTitle);
 		addField(paperAuthor);
 		addField(publishDate);
 		addField(paperAbstract);
+		addField("");
 		this.references = references;
+		this.citeNum = citeNum;
+	}
+
+	public Paper(String paperID, String paperTitle, int citeNum) {
+		this.fields = new ArrayList<String>();
+		addField(paperID);
+		addField(paperTitle);
+		addField("");
+		addField("");
+		addField("");
+		addField("");
 		this.citeNum = citeNum;
 	}
 
@@ -45,14 +55,17 @@ public class Paper implements Comparable<Paper>, Serializable {
 		fields.add(a);
 	}
 
-	public String getField(Fields field) {
+	public String getField(PaperFields field) {
 		return fields.get(field.ordinal());
+	}
+	
+	public void setField(PaperFields field, String data) {
+		fields.set(field.ordinal(), data);
 	}
 
 	public ArrayList<String> getReferences() {
 		return references;
 	}
-
 
 	public boolean getVisited() {
 		return visited;
@@ -63,7 +76,7 @@ public class Paper implements Comparable<Paper>, Serializable {
 	}
 
 	public String toString() {
-		return getField(Fields.ID) + ", " + getField(Fields.TITLE) + "\n" + getField(Fields.ABSTRACT);
+		return getField(PaperFields.ID) + ", " + getField(PaperFields.TITLE) + "\n" + getField(PaperFields.ABSTRACT);
 	}
 
 	@Override
