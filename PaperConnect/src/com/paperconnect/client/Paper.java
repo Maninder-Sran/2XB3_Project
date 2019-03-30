@@ -5,12 +5,11 @@ import java.util.ArrayList;
 
 //An ADT used to perform sorting of papers by citation count for the keywordLookup
 public class Paper implements Comparable<Paper>, Serializable {
-	private long citeNum;
+	private int citeNum;
 	private ArrayList<String> references;
 	private ArrayList<String> fields;
-	private ArrayList<Paper> tree;
+	private String tree;
 	private boolean visited = false;
-	private String parentID;
 
 	public Paper() {
 		fields = new ArrayList<String>();
@@ -23,8 +22,9 @@ public class Paper implements Comparable<Paper>, Serializable {
 		addField(paperTitle);
 		addField(author);
 		addField(publishDate);
+		addField("");
+		addField("");
 		this.citeNum = citeNum;
-		setParentID(null);
 	}
 
 	// Constructor
@@ -36,9 +36,9 @@ public class Paper implements Comparable<Paper>, Serializable {
 		addField(paperAuthor);
 		addField(publishDate);
 		addField(paperAbstract);
+		addField("");
 		this.references = references;
 		this.citeNum = citeNum;
-		setParentID(null);
 	}
 
 	public Paper(String paperID, String paperTitle, int citeNum) {
@@ -50,7 +50,6 @@ public class Paper implements Comparable<Paper>, Serializable {
 		addField("");
 		addField("");
 		this.citeNum = citeNum;
-		setParentID(null);
 	}
 
 	public void addField(String a) {
@@ -59,6 +58,10 @@ public class Paper implements Comparable<Paper>, Serializable {
 
 	public String getField(PaperFields field) {
 		return fields.get(field.ordinal());
+	}
+	
+	public void setField(PaperFields field, String data) {
+		fields.set(field.ordinal(), data);
 	}
 
 	public ArrayList<String> getReferences() {
@@ -72,21 +75,9 @@ public class Paper implements Comparable<Paper>, Serializable {
 	public void setVisited(boolean A) {
 		visited = A;
 	}
-	
-	public String getParentID() {
-		return parentID;
-	}
-	
-	public void setParentID(String a) {
-		parentID = a;
-	}
 
 	public String toString() {
 		return getField(PaperFields.ID) + ", " + getField(PaperFields.TITLE) + "\n" + getField(PaperFields.ABSTRACT);
-	}
-	
-	public void setTree(ArrayList<Paper> tree) {
-		this.tree = tree;
 	}
 
 	@Override

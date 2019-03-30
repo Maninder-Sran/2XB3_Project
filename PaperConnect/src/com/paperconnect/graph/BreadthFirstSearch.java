@@ -12,17 +12,7 @@ import com.paperconnect.client.PaperFields;
 
 public class BreadthFirstSearch {
 
-	static Paper startNode;
-	static int maxDepth;
-	static int maxChildren;
-
-	public static void init(Paper startNode, int maxDepth, int maxChildren) {
-		BreadthFirstSearch.startNode = startNode;
-		BreadthFirstSearch.maxDepth = maxDepth;
-		BreadthFirstSearch.maxChildren = maxChildren;
-	}
-
-	public static ArrayList<Paper> compute(DiGraph graph) {
+	private static ArrayList<Paper> compute(DiGraph graph, Paper startNode, int maxDepth, int maxChildren) {
 
 		ArrayList<Paper> Result = new ArrayList<Paper>();
 		Paper current;
@@ -66,7 +56,7 @@ public class BreadthFirstSearch {
 		return Result;
 	}
 
-	public static String getGraphJSONString(DiGraph d) {
+	public static String getGraphJSONString(DiGraph graph, Paper startNode, int maxDepth, int maxChildren) {
 		int x = 0;
 		int y = 0;
 		JSONObject obj = new JSONObject();
@@ -74,13 +64,12 @@ public class BreadthFirstSearch {
 		JSONArray nodes = new JSONArray();
 		JSONArray edges = new JSONArray();
 		ArrayList<Paper> children;
-		ArrayList<Paper> ans = compute(d);
+		ArrayList<Paper> ans = compute(graph, startNode, maxDepth, maxChildren);
 		for (Paper p : ans) {
-			if(p == null) {
-				x=0;
+			if (p == null) {
+				x = 0;
 				y++;
-			}
-			else {
+			} else {
 				newObj = new JSONObject();
 				newObj.put("id", p.getField(PaperFields.ID));
 				newObj.put("label", p.getField(PaperFields.TITLE));
@@ -88,9 +77,9 @@ public class BreadthFirstSearch {
 				newObj.put("y", y);
 				newObj.put("size", 3);
 				nodes.add(newObj);
-				children = d.getChildren(p.getField(PaperFields.ID));
-				for(int i = 0; i < children.size(); i++) {
-					if(!children.get(i).getVisited()) {
+				children = graph.getChildren(p.getField(PaperFields.ID));
+				for (int i = 0; i < children.size(); i++) {
+					if (!children.get(i).getVisited()) {
 						continue;
 					}
 					newObj = new JSONObject();
@@ -106,28 +95,4 @@ public class BreadthFirstSearch {
 		obj.put("edges", edges);
 		return obj.toJSONString();
 	}
-	
-	public static void main(String[] args) {
-		Paper root = new Paper("root", "root", 0);
-		Paper p1 = new Paper("p1", "p1", 1);
-		Paper p2 = new Paper("p2", "p2", 2);
-		Paper p3 = new Paper("p3", "p3", 3);
-		Paper p4 = new Paper("p4", "p4", 4);
-		Paper p5 = new Paper("p5", "p5", 5);
-		DiGraph d = new DiGraph(root);
-		d.addVertex("root");
-		d.addVertex("p1");
-		d.addVertex("p2");
-		d.addVertex("p3");
-		d.addVertex("p4");
-		d.addVertex("p5");
-		d.addCiteEdge("root", p1);
-		d.addCiteEdge("root", p2);
-		d.addCiteEdge("root", p3);
-		d.addCiteEdge("root", p4);
-		d.addCiteEdge("p2", p5);
-		init(root, 3, 3);
-		System.out.println(getGraphJSONString(d));
-	}
-
 }

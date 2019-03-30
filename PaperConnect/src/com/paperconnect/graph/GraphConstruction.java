@@ -11,7 +11,7 @@ import com.paperconnect.util.Search;
 
 public class GraphConstruction {
 
-	private static void buildGraph(String id, int width, int height, DiGraph citeGraph) {
+	private static void buildGraph(String id, int height, int width,  DiGraph citeGraph) {
 		Paper paper = Search.binarySearchID(DataServer.PaperList.papers, id);
 		int counter = width;
 		String source = null;
@@ -30,7 +30,7 @@ public class GraphConstruction {
 		Collections.sort(references);
 		citeGraph.addVertex(id);
 
-		for (int i = 0; i < references.size() && counter > 0; i++) {
+		for (int i = 0; i < references.size() || counter > 0; i++) {
 			source = references.get(i);
 			paper = Search.binarySearchID(DataServer.PaperList.papers, source);
 			citeGraph.addCiteEdge(id, paper);
@@ -41,7 +41,7 @@ public class GraphConstruction {
 		return;
 	}
 
-	public static DiGraph Graph(String id, int width, int height) {
+	public static DiGraph Graph(String id, int height, int width) {
 		Paper root = Search.binarySearchID(DataServer.PaperList.papers, id);
 		DiGraph citeGraph = new DiGraph(root);
 		buildGraph(id, width, height, citeGraph);
