@@ -160,7 +160,7 @@ public class PaperConnect implements EntryPoint {
 
 	private void displayPaper(Paper paper){
 		papersFlexTable.removeAllRows();
-		for(int i = 0; i < PaperFields.values().length; i++) {
+		for(int i = 1; i < PaperFields.values().length; i++) {
 			int row = papersFlexTable.getRowCount();
 			papersFlexTable.setText(row, 0, PaperFields.values()[i].toString());
 			papersFlexTable.setText(row, 1, paper.getField(PaperFields.values()[i]));
