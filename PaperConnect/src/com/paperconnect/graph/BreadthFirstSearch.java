@@ -46,7 +46,7 @@ public class BreadthFirstSearch {
 			neighbors = graph.getChildren(current.getField(PaperFields.ID));
 			for (int i = 0; i < Math.min(maxChildren, neighbors.size()); i++) {
 
-				if (neighbors.get(i).getVisited() != true) {
+				if (neighbors != null && neighbors.get(i) != null && neighbors.get(i).getVisited() != true) {
 					queue.add(neighbors.get(i));
 					// Result.add(neighbors.get(i));
 					neighbors.get(i).setVisited(true);
