@@ -5,7 +5,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 import com.paperconnect.client.Paper;
-import com.paperconnect.client.Paper.Fields;
+import com.paperconnect.client.PaperFields;
 
 public class BreadthFirstSearch {
 
@@ -45,7 +45,7 @@ public class BreadthFirstSearch {
 					continue;
 			}
 
-			neighbors = graph.getChildren(current.getField(Fields.ID));
+			neighbors = graph.getChildren(current.getField(PaperFields.ID));
 			for (int i = 0; i < neighbors.size(); i++) {
 
 				if (neighbors.get(i).getVisited() != true) {

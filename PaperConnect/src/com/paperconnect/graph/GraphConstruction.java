@@ -11,8 +11,9 @@ import com.paperconnect.util.Search;
 
 public class GraphConstruction {
 
-	public static void buildGraph(String id, int width, int height, DiGraph citeGraph) {
+	private static void buildGraph(String id, int width, int height, DiGraph citeGraph) {
 		Paper paper = Search.binarySearchID(DataServer.PaperList.papers, id);
+		System.out.println(paper);
 		int counter = width;
 		String source = null;
 
@@ -42,13 +43,5 @@ public class GraphConstruction {
 		DiGraph citeGraph = new DiGraph(root);
 		buildGraph(id, width, height, citeGraph);
 		return citeGraph;
-	}
-
-	public static void main(String[] args) {
-		DiGraph citeGraph = Graph("hello", 2, 5);
-		Hashtable<String, ArrayList<Paper>> graph = citeGraph.getGraph();
-		graph.forEach((k, v) -> System.out.println(k + "  " + v));
-		// citeGraph = Graph("53e99838b7602d970205e7e4", "../../../Documents/Software
-		// 1/2XB3/final project/data/ap_final.txt");
 	}
 }

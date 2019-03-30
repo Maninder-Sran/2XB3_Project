@@ -5,22 +5,18 @@ import java.util.ArrayList;
 
 //An ADT used to perform sorting of papers by citation count for the keywordLookup
 public class Paper implements Comparable<Paper>, Serializable {
-	private long citeNum;
+	private int citeNum;
 	private ArrayList<String> references;
 	private ArrayList<String> fields;
 	private ArrayList<Paper> tree;
 	private boolean visited = false;
-
-	public enum Fields implements Serializable {
-		ID, TITLE, AUTHOR, PUBLISH_DATE, REFERENCES, ABSTRACT;
-	}
 
 	public Paper() {
 		fields = new ArrayList<String>();
 	}
 
 	// Constructor
-	public Paper(String paperID, String paperTitle, String author, String publishDate, long citeNum) {
+	public Paper(String paperID, String paperTitle, String author, String publishDate, int citeNum) {
 		this.fields = new ArrayList<String>();
 		addField(paperID);
 		addField(paperTitle);
@@ -31,7 +27,7 @@ public class Paper implements Comparable<Paper>, Serializable {
 
 	// Constructor
 	public Paper(String paperID, String paperTitle, String paperAbstract, ArrayList<String> references,
-			String paperAuthor, String publishDate, long citeNum) {
+			String paperAuthor, String publishDate, int citeNum) {
 		fields = new ArrayList<String>();
 		addField(paperID);
 		addField(paperTitle);
@@ -46,7 +42,7 @@ public class Paper implements Comparable<Paper>, Serializable {
 		fields.add(a);
 	}
 
-	public String getField(Fields field) {
+	public String getField(PaperFields field) {
 		return fields.get(field.ordinal());
 	}
 
@@ -63,7 +59,7 @@ public class Paper implements Comparable<Paper>, Serializable {
 	}
 
 	public String toString() {
-		return getField(Fields.ID) + ", " + getField(Fields.TITLE) + "\n" + getField(Fields.ABSTRACT);
+		return getField(PaperFields.ID) + ", " + getField(PaperFields.TITLE) + "\n" + getField(PaperFields.ABSTRACT);
 	}
 	
 	public void setTree(ArrayList<Paper> tree) {

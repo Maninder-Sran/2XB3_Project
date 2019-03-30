@@ -81,7 +81,7 @@ public class PaperConnect implements EntryPoint {
 				Cell cell = papersFlexTable.getCellForEvent(event);
 				int row = cell.getRowIndex();
 				PaperShort paperSelected = papers.get(row - 1);
-				retrievePaper(paperSelected.getField(PaperShort.Fields.ID));
+				retrievePaper(paperSelected.getField(PaperFields.ID));
 			}
 		});
 	}
@@ -101,7 +101,6 @@ public class PaperConnect implements EntryPoint {
 	private void addPapers(ArrayList<PaperShort> paperLs) {
 		papers.clear();
 		for (int i = 0; i < paperLs.size(); i++) {
-			// TODO Error checking for correctness of ids
 
 			if (papers.contains(paperLs.get(i)))
 				return;
@@ -161,10 +160,10 @@ public class PaperConnect implements EntryPoint {
 
 	private void displayPaper(Paper paper){
 		papersFlexTable.removeAllRows();
-		for(int i = 0; i < Paper.Fields.values().length; i++) {
+		for(int i = 0; i < PaperFields.values().length; i++) {
 			int row = papersFlexTable.getRowCount();
-			papersFlexTable.setText(row, 0, Paper.Fields.values()[i].toString());
-			papersFlexTable.setText(row, 1, paper.getField(Paper.Fields.values()[i]));
+			papersFlexTable.setText(row, 0, PaperFields.values()[i].toString());
+			papersFlexTable.setText(row, 1, paper.getField(PaperFields.values()[i]));
 		}
 	}
 	
@@ -173,9 +172,9 @@ public class PaperConnect implements EntryPoint {
 		initTable();
 		for (int i = 0; i < papers.size(); i++) {
 			int row = papersFlexTable.getRowCount();
-			papersFlexTable.setText(row, 0, papers.get(i).getField(PaperShort.Fields.TITLE));
-			papersFlexTable.setText(row, 1, papers.get(i).getField(PaperShort.Fields.AUTHOR));
-			papersFlexTable.setText(row, 2, papers.get(i).getField(PaperShort.Fields.PUBLISH_DATE));
+			papersFlexTable.setText(row, 0, papers.get(i).getField(PaperFields.TITLE));
+			papersFlexTable.setText(row, 1, papers.get(i).getField(PaperFields.AUTHOR));
+			papersFlexTable.setText(row, 2, papers.get(i).getField(PaperFields.PUBLISH_DATE));
 		}
 	}
 }

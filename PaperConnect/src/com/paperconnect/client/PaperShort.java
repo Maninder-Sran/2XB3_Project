@@ -7,10 +7,6 @@ public class PaperShort implements Serializable {
 
 	private ArrayList<String> fields;
 
-	public enum Fields {
-		ID, TITLE, AUTHOR, PUBLISH_DATE;
-	}
-
 	public PaperShort() {
 		this.fields = new ArrayList<String>();
 	}
@@ -30,7 +26,7 @@ public class PaperShort implements Serializable {
 		fields.add(a);
 	}
 
-	public String getField(Fields field) {
+	public String getField(PaperFields field) {
 		return fields.get(field.ordinal());
 	}
 

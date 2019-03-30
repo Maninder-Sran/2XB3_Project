@@ -15,7 +15,11 @@ import org.json.simple.parser.ParseException;
 
 import com.paperconnect.client.LookupTableLine;
 import com.paperconnect.client.Paper;
+import com.paperconnect.client.PaperFields;
 import com.paperconnect.client.PaperShort;
+import com.paperconnect.graph.BreadthFirstSearch;
+import com.paperconnect.graph.DiGraph;
+import com.paperconnect.graph.GraphConstruction;
 import com.paperconnect.util.Search;
 
 public class DataServer {
@@ -28,6 +32,7 @@ public class DataServer {
 		System.out.println("PAPER_LIST INITIALIZATION STARTING");
 		PaperList.init();
 		System.out.println("PAPER_LIST INITIALIZATION COMPLETE");
+		System.out.println("-------------------------------------");
 	}
 
 	public static class PaperList {
@@ -39,17 +44,15 @@ public class DataServer {
 
 		private static void readPaperFile(String fileName) {
 			String line = null, id, title, abst, author, publishDate;
-			long citations;
+			int citations;
 			JSONObject obj;
-			JSONArray temp;
-			papers = new ArrayList<Paper>();
-			Paper paper;
 			long start = System.nanoTime();
+			papers = new ArrayList<Paper>();
 
 			try {
 				FileReader fileReader = new FileReader(fileName);
 				BufferedReader bufferedReader = new BufferedReader(fileReader);
-
+				int counter = 0;
 				while ((line = bufferedReader.readLine()) != null) { // Get paper node from line in input file
 					obj = (JSONObject) new JSONParser().parse(line);
 
@@ -63,18 +66,17 @@ public class DataServer {
 					try {
 						abst = obj.get("abstract").toString();
 					} catch (NullPointerException e) {
-						abst = "NA";
+						abst = "N/A";
 					}
 
 					// Get number of citations of paper
-					citations = (long) obj.get("n_citation");
+					citations = (int)((long) obj.get("n_citation"));
 
 					ArrayList<String> references = new ArrayList<String>();
 
 					try {
-						temp = (JSONArray) obj.get("references");
 						// get all references of paper
-						Iterator<String> iterator = temp.iterator();
+						Iterator<String> iterator = ((JSONArray) obj.get("references")).iterator();
 						while (iterator.hasNext()) {
 							references.add(iterator.next());
 						}
@@ -86,31 +88,41 @@ public class DataServer {
 					try {
 						author = obj.get("author").toString();
 					} catch (NullPointerException e) {
-						author = "NA";
+						author = "N/A";
 					}
 
 					// get publish date of paper
 					try {
 						publishDate = obj.get("year").toString();
 					} catch (NullPointerException e) {
-						publishDate = "NA";
+						publishDate = "N/A";
 					}
 					// Load paper data into PaperADT and store it in list of PaperADTs
-					paper = new Paper(id, title, abst, references, author, publishDate, citations);
-					papers.add(paper);
+					papers.add(new Paper(id, title, abst, references, author, publishDate, citations));
 					obj = null;
+					counter++;
+					if(counter % 100000 == 0) {
+						System.out.println(counter + "->" + (System.nanoTime() - start) / 1000000000.0 + " seconds.");
+						System.gc();
+					}
 				}
+				System.out.println("Done in " + (System.nanoTime() - start) / 1000000000.0 + " seconds." + counter +" nodes");
 				bufferedReader.close();
 			} catch (
 
-			FileNotFoundException e) { // TODO Auto-generated catch block
+			FileNotFoundException e) {
 				e.printStackTrace();
-			} catch (IOException e) { // TODO Auto-generated catch block
+			} catch (IOException e) {
 				e.printStackTrace();
 			} catch (ParseException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
+		}
+
+		public static Paper retrievePaper(String id) {
+			DiGraph graph = GraphConstruction.Graph(id, 2, 3);
+			ArrayList<Paper> papers = BreadthFirstSearch.compute(graph);
+			return papers.get(0);
 		}
 	}
 
@@ -129,10 +141,6 @@ public class DataServer {
 			lookupTable = new ArrayList<LookupTableLine>();
 			long start = System.nanoTime();
 			int count = 0;
-			// used for splitting by "="
-			String[] lineSplit = null;
-			// used for splitting by ","
-			String[] lineSplit2 = null;
 			LookupTableLine tableLine = null;
 			try {
 				FileReader fileReader = new FileReader(fileName);
