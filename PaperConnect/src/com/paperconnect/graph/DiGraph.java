@@ -20,7 +20,6 @@ public class DiGraph {
 	
 	public void addCiteEdge(String vertex, Paper edge) {
 		citeGraph.get(vertex).add(edge);
-		edge.setParentID(vertex);
 	}
 	
 	public Hashtable<String, ArrayList<Paper>> getGraph() {
