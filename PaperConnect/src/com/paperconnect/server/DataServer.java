@@ -100,6 +100,7 @@ public class DataServer {
 					papers.add(paper);
 					obj = null;
 				}
+				bufferedReader.close();
 			} catch (
 
 			FileNotFoundException e) { // TODO Auto-generated catch block
