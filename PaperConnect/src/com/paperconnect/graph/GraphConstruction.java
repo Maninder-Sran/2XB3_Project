@@ -30,7 +30,8 @@ public class GraphConstruction {
 			source = iterator.next();
 			paper = Search.binarySearchID(DataServer.PaperList.papers, source);
 			citeGraph.addCiteEdge(id, paper);
-			buildGraph(source, width, height - 1, citeGraph);
+			if(!citeGraph.checkVertices(source))
+				buildGraph(source, width, height - 1, citeGraph);
 			counter--;
 		}
 
