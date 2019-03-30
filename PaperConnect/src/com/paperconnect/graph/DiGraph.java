@@ -12,7 +12,6 @@ public class DiGraph {
 	public DiGraph(Paper root) {
 		this.citeGraph = new Hashtable<String, ArrayList<Paper>>();
 		this.root = root; 
-		this.vertices = new ArrayList<String>();
 	}
 	
 	public void addVertex(String vertex) {
@@ -21,6 +20,7 @@ public class DiGraph {
 	
 	public void addCiteEdge(String vertex, Paper edge) {
 		citeGraph.get(vertex).add(edge);
+		edge.setParentID(vertex);
 	}
 	
 	public Hashtable<String, ArrayList<Paper>> getGraph() {

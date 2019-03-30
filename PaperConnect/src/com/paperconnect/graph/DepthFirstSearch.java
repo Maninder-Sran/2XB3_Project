@@ -3,6 +3,9 @@ package com.paperconnect.graph;
 import java.util.ArrayList;
 import java.util.Stack;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
 import com.paperconnect.client.Paper;
 import com.paperconnect.client.Paper.Fields;
 
@@ -20,35 +23,36 @@ public class DepthFirstSearch {
 	}
 
 	public static String compute(DiGraph graph) {
+		JSONArray arr = new JSONArray();
+		JSONObject obj = new JSONObject();
 		Paper v;
 		ArrayList<Paper> neighbors = new ArrayList<Paper>();
-		String results = "[";
 		Stack<Paper> S = new Stack<Paper>();
 		S.push(startNode);
 		startNode.setVisited(true);
-		results += "[\n{";
-		boolean isDeadEnd = true;
+		obj.put("name", startNode.getField(Fields.ID));
+		obj.put("parent", startNode.getParentID());
+		JSONArray children;
 		while(!S.isEmpty()) {
 			v = S.pop();
-			//System.out.println(v.getField(Fields.ID));
+			obj = new JSONObject();
+			obj.put("name", v.getField(Fields.ID));
+			obj.put("parent", v.getParentID());
 			neighbors = graph.getChildren(v.getField(Fields.ID));
-			isDeadEnd = true;
-			
+			children = new JSONArray();
 			for(int i=0; i<Math.min(maxChildren, neighbors.size()); i++) {
 				if (neighbors.get(i).getVisited() != true) {
-					isDeadEnd = false;
 					S.push(neighbors.get(i));
+					children.add(neighbors.get(i).getField(Fields.ID));
 					neighbors.get(i).setVisited(true);
-					//System.out.println(neighbors.get(i).getField(Fields.ID));
 				}
 			}
-			if(isDeadEnd) {
-				results += "\n}";
+			if(children.size() > 0) {
+				obj.put("children", children);
 			}
+			arr.add(obj);
 		}
-		
-		results += "\n}\n]";
-		return results;
+		return arr.toJSONString();
 	}
 
 	public static void main(String[] args) {
@@ -60,6 +64,7 @@ public class DepthFirstSearch {
 		Paper p4 = new Paper("p4", "p4", 4);
 		Paper p5 = new Paper("p5", "p5", 5);
 		Paper p6 = new Paper("p6", "p6", 6);
+		Paper p7 = new Paper("p7", "p7", 7);
 		DiGraph d = new DiGraph(root);
 		d.addVertex("root");
 		d.addVertex("p1");
@@ -68,13 +73,16 @@ public class DepthFirstSearch {
 		d.addVertex("p4");
 		d.addVertex("p5");
 		d.addVertex("p6");
+		d.addVertex("p7");
 		d.addCiteEdge("root", p1);
 		d.addCiteEdge("root", p2);
 		d.addCiteEdge("root", p3);
 		d.addCiteEdge("root", p4);
 		d.addCiteEdge("p2", p5);
-		d.addCiteEdge("root", p6);
+		d.addCiteEdge("p3", p6);
+		d.addCiteEdge("p6", p7);
 		init(root, 3, 3);
+		//System.out.println(p5.getParentID());
 		String ans = compute(d);
 		System.out.println(ans);
 	}

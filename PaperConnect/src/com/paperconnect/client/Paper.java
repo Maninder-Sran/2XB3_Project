@@ -9,6 +9,7 @@ public class Paper implements Comparable<Paper>, Serializable {
 	private ArrayList<String> references;
 	private ArrayList<String> fields;
 	private boolean visited = false;
+	private String parentID;
 
 	public enum Fields implements Serializable {
 		ID, TITLE, AUTHOR, PUBLISH_DATE, REFERENCES, ABSTRACT;
@@ -26,6 +27,7 @@ public class Paper implements Comparable<Paper>, Serializable {
 		addField(author);
 		addField(publishDate);
 		this.citeNum = citeNum;
+		setParentID(null);
 	}
 
 	// Constructor
@@ -39,6 +41,7 @@ public class Paper implements Comparable<Paper>, Serializable {
 		addField(paperAbstract);
 		this.references = references;
 		this.citeNum = citeNum;
+		setParentID(null);
 	}
 
 	public Paper(String paperID, String paperTitle, long citeNum) {
@@ -46,6 +49,7 @@ public class Paper implements Comparable<Paper>, Serializable {
 		addField(paperID);
 		addField(paperTitle);
 		this.citeNum = citeNum;
+		setParentID(null);
 	}
 
 	public void addField(String a) {
@@ -67,6 +71,14 @@ public class Paper implements Comparable<Paper>, Serializable {
 
 	public void setVisited(boolean A) {
 		visited = A;
+	}
+	
+	public String getParentID() {
+		return parentID;
+	}
+	
+	public void setParentID(String a) {
+		parentID = a;
 	}
 
 	public String toString() {
