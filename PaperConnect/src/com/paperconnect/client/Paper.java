@@ -8,7 +8,6 @@ public class Paper implements Comparable<Paper>, Serializable {
 	private int citeNum;
 	private ArrayList<String> references;
 	private ArrayList<String> fields;
-	private String tree;
 	private boolean visited = false;
 
 	public Paper() {

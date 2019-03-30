@@ -12,17 +12,7 @@ import com.paperconnect.client.PaperFields;
 
 public class BreadthFirstSearch {
 
-	static Paper startNode;
-	static int maxDepth;
-	static int maxChildren;
-
-	public static void init(Paper startNode, int maxDepth, int maxChildren) {
-		BreadthFirstSearch.startNode = startNode;
-		BreadthFirstSearch.maxDepth = maxDepth;
-		BreadthFirstSearch.maxChildren = maxChildren;
-	}
-
-	public static ArrayList<Paper> compute(DiGraph graph) {
+	public static ArrayList<Paper> compute(DiGraph graph, Paper startNode, int maxDepth, int maxChildren) {
 
 		ArrayList<Paper> Result = new ArrayList<Paper>();
 		Paper current;
@@ -66,7 +56,7 @@ public class BreadthFirstSearch {
 		return Result;
 	}
 
-	public static String getGraphJSONString(DiGraph d) {
+	public static String getGraphJSONString(DiGraph graph, Paper startNode, int maxDepth, int maxChildren) {
 		int x = 0;
 		int y = 0;
 		JSONObject obj = new JSONObject();
@@ -74,7 +64,7 @@ public class BreadthFirstSearch {
 		JSONArray nodes = new JSONArray();
 		JSONArray edges = new JSONArray();
 		ArrayList<Paper> children;
-		ArrayList<Paper> ans = compute(d);
+		ArrayList<Paper> ans = compute(graph, startNode, maxDepth, maxChildren);
 		for (Paper p : ans) {
 			if (p == null) {
 				x = 0;
@@ -87,9 +77,11 @@ public class BreadthFirstSearch {
 				newObj.put("y", y);
 				newObj.put("size", 3);
 				nodes.add(newObj);
-				children = d.getChildren(p.getField(PaperFields.ID));
+				children = graph.getChildren(p.getField(PaperFields.ID));
 				if (children != null) {
 					for (int i = 0; i < children.size(); i++) {
+						System.out.println(children.isEmpty());
+						System.out.println((children.get(i) == null) +" "+ i);
 						if (!children.get(i).getVisited()) {
 							continue;
 						}

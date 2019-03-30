@@ -30,7 +30,7 @@ public class GraphConstruction {
 		Collections.sort(references);
 		citeGraph.addVertex(id);
 
-		for (int i = 0; i < references.size() || counter > 0; i++) {
+		for (int i = 0; i < references.size() && counter > 0; i++) {
 			source = references.get(i);
 			paper = Search.binarySearchID(DataServer.PaperList.papers, source);
 			citeGraph.addCiteEdge(id, paper);
