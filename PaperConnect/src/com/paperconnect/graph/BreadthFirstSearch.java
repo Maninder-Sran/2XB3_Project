@@ -76,11 +76,10 @@ public class BreadthFirstSearch {
 		ArrayList<Paper> children;
 		ArrayList<Paper> ans = compute(d);
 		for (Paper p : ans) {
-			if(p == null) {
-				x=0;
+			if (p == null) {
+				x = 0;
 				y++;
-			}
-			else {
+			} else {
 				newObj = new JSONObject();
 				newObj.put("id", p.getField(PaperFields.ID));
 				newObj.put("label", p.getField(PaperFields.TITLE));
@@ -89,15 +88,17 @@ public class BreadthFirstSearch {
 				newObj.put("size", 3);
 				nodes.add(newObj);
 				children = d.getChildren(p.getField(PaperFields.ID));
-				for(int i = 0; i < children.size(); i++) {
-					if(!children.get(i).getVisited()) {
-						continue;
+				if (children != null) {
+					for (int i = 0; i < children.size(); i++) {
+						if (!children.get(i).getVisited()) {
+							continue;
+						}
+						newObj = new JSONObject();
+						newObj.put("id", "");
+						newObj.put("source", p.getField(PaperFields.ID));
+						newObj.put("target", children.get(i).getField(PaperFields.ID));
+						edges.add(newObj);
 					}
-					newObj = new JSONObject();
-					newObj.put("id", "");
-					newObj.put("source", p.getField(PaperFields.ID));
-					newObj.put("target", children.get(i).getField(PaperFields.ID));
-					edges.add(newObj);
 				}
 				x++;
 			}
@@ -106,7 +107,7 @@ public class BreadthFirstSearch {
 		obj.put("edges", edges);
 		return obj.toJSONString();
 	}
-	
+
 	public static void main(String[] args) {
 		Paper root = new Paper("root", "root", 0);
 		Paper p1 = new Paper("p1", "p1", 1);
