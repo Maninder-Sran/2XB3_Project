@@ -34,7 +34,7 @@ public class DataServer {
 		public static ArrayList<Paper> papers;
 
 		public static void init() {
-			readPaperFile("data/ap_final.txt");
+			readPaperFile("data/ap_paperList.txt");
 		}
 
 		private static void readPaperFile(String fileName) {
@@ -58,13 +58,7 @@ public class DataServer {
 
 					// Get title of paper
 					title = obj.get("title").toString();
-					if (title == null || title.contains("??")) {
-						try {
-							title = obj.get("venue").toString();
-						} catch (NullPointerException e) {
-							title = "Generic paper";
-						}
-					}
+					
 					// Get abstract of paper
 					try {
 						abst = obj.get("abstract").toString();
@@ -73,12 +67,7 @@ public class DataServer {
 					}
 
 					// Get number of citations of paper
-					try {
-						citations = (long) obj.get("n_citation");
-
-					} catch (NullPointerException e) {
-						citations = 0;
-					}
+					citations = (long) obj.get("n_citation");
 
 					ArrayList<String> references = new ArrayList<String>();
 
