@@ -58,7 +58,7 @@ public class DataServer {
 
 					// Get title of paper
 					title = obj.get("title").toString();
-					
+
 					// Get abstract of paper
 					try {
 						abst = obj.get("abstract").toString();
@@ -147,12 +147,13 @@ public class DataServer {
 						keywordLine = (JSONObject) new JSONParser().parse(line);
 						paperList = (JSONArray) keywordLine.get("paper_list");
 						tableLine = new LookupTableLine(keywordLine.get("keyword").toString());
-						
+
 						for (int i = 0; i < paperList.size(); i++) {
 							paper = (JSONObject) paperList.get(i);
 							if (!uniqueIDs.contains(paper.get("id").toString())) {
-								tableLine.addPaperData(new String[] { paper.get("id").toString(), paper.get("title").toString() 
-										, paper.get("author").toString(), paper.get("year").toString()});
+								tableLine.addPaperData(
+										new String[] { paper.get("id").toString(), paper.get("title").toString(),
+												paper.get("author").toString(), paper.get("year").toString() });
 								uniqueIDs.add(paper.get("id").toString());
 							}
 						}
