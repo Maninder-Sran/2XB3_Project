@@ -121,8 +121,9 @@ public class DataServer {
 
 		public static Paper retrievePaper(String id) {
 			DiGraph graph = GraphConstruction.Graph(id, 2, 3);
-			ArrayList<Paper> papers = BreadthFirstSearch.compute(graph);
-			return papers.get(0);
+			BreadthFirstSearch bfs = new BreadthFirstSearch(graph);
+			//ArrayList<Paper> papers = bfs.compute();
+			return Search.binarySearchID(papers, id);
 		}
 	}
 

@@ -9,13 +9,15 @@ import com.paperconnect.client.PaperFields;
 
 public class BreadthFirstSearch {
 
-	static Paper startNode;
+	private Paper startNode;
+	private DiGraph graph;
 
-	public BreadthFirstSearch(Paper start) {
-		startNode = start;
+	public BreadthFirstSearch(DiGraph graph) {
+		startNode  = graph.getRoot();
+		this.graph = graph;
 	}
 
-	public static ArrayList<Paper> compute(DiGraph graph) {
+	public ArrayList<Paper> compute() {
 
 		ArrayList<Paper> Result = new ArrayList<Paper>();
 		Paper current;

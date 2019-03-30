@@ -27,7 +27,5 @@ public class PaperServiceImpl extends RemoteServiceServlet implements PaperServi
 			throw new InvalidIdException(id);
 		
 		return result;
-		//return new Paper("id", "paperTitle", "author", "publishDate", 123456);
 	}
-
 }
