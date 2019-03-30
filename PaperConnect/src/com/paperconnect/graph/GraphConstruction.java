@@ -17,7 +17,6 @@ public class GraphConstruction {
 		String source = null;
 
 		if (height == 0 || paper == null) {
-			citeGraph.addVertex(id);
 			return;
 		}
 		
