@@ -4,17 +4,33 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
 import com.paperconnect.client.Paper;
 import com.paperconnect.client.PaperFields;
 
 public class BreadthFirstSearch {
 
+<<<<<<< HEAD
+	static Paper startNode;
+	static int maxDepth;
+	static int maxChildren;
+=======
 	private Paper startNode;
 	private DiGraph graph;
+>>>>>>> refs/remotes/origin/ms
 
+<<<<<<< HEAD
+	public static void init(Paper startNode, int maxDepth, int maxChildren) {
+		BreadthFirstSearch.startNode = startNode;
+		BreadthFirstSearch.maxDepth = maxDepth;
+		BreadthFirstSearch.maxChildren = maxChildren;
+=======
 	public BreadthFirstSearch(DiGraph graph) {
 		startNode  = graph.getRoot();
 		this.graph = graph;
+>>>>>>> refs/remotes/origin/ms
 	}
 
 	public ArrayList<Paper> compute() {
@@ -24,10 +40,8 @@ public class BreadthFirstSearch {
 		ArrayList<Paper> neighbors;
 
 		Queue<Paper> queue = new LinkedList<>();
-		ArrayList<Paper> explored = new ArrayList<>();
 		queue.add(startNode);
 		queue.add(null);
-		Result.add(startNode);
 
 		startNode.setVisited(true);
 		int level = 0;
@@ -38,6 +52,9 @@ public class BreadthFirstSearch {
 
 			if (current == null) {
 				level++;
+				if (level >= maxDepth) {
+					break;
+				}
 
 				queue.add(null);
 				if (queue.peek() == null)
@@ -47,8 +64,13 @@ public class BreadthFirstSearch {
 					continue;
 			}
 
+<<<<<<< HEAD
+			neighbors = graph.getChildren(current.getField(Fields.ID));
+			for (int i = 0; i < Math.min(maxChildren, neighbors.size()); i++) {
+=======
 			neighbors = graph.getChildren(current.getField(PaperFields.ID));
 			for (int i = 0; i < neighbors.size(); i++) {
+>>>>>>> refs/remotes/origin/ms
 
 				if (neighbors.get(i).getVisited() != true) {
 					queue.add(neighbors.get(i));
@@ -58,6 +80,70 @@ public class BreadthFirstSearch {
 			}
 		}
 		return Result;
+	}
+
+	public static String getGraphJSONString(DiGraph d) {
+		int x = 0;
+		int y = 0;
+		JSONObject obj = new JSONObject();
+		JSONObject newObj;
+		JSONArray nodes = new JSONArray();
+		JSONArray edges = new JSONArray();
+		ArrayList<Paper> children;
+		ArrayList<Paper> ans = compute(d);
+		for (Paper p : ans) {
+			if(p == null) {
+				x=0;
+				y++;
+			}
+			else {
+				newObj = new JSONObject();
+				newObj.put("id", p.getField(Fields.ID));
+				newObj.put("label", p.getField(Fields.TITLE));
+				newObj.put("x", x);
+				newObj.put("y", y);
+				newObj.put("size", 3);
+				nodes.add(newObj);
+				children = d.getChildren(p.getField(Fields.ID));
+				for(int i = 0; i < children.size(); i++) {
+					if(!children.get(i).getVisited()) {
+						continue;
+					}
+					newObj = new JSONObject();
+					newObj.put("id", "");
+					newObj.put("source", p.getField(Fields.ID));
+					newObj.put("target", children.get(i).getField(Fields.ID));
+					edges.add(newObj);
+				}
+				x++;
+			}
+		}
+		obj.put("nodes", nodes);
+		obj.put("edges", edges);
+		return obj.toJSONString();
+	}
+	
+	public static void main(String[] args) {
+		Paper root = new Paper("root", "root", 0);
+		Paper p1 = new Paper("p1", "p1", 1);
+		Paper p2 = new Paper("p2", "p2", 2);
+		Paper p3 = new Paper("p3", "p3", 3);
+		Paper p4 = new Paper("p4", "p4", 4);
+		Paper p5 = new Paper("p5", "p5", 5);
+		DiGraph d = new DiGraph(root);
+		d.addVertex("root");
+		d.addVertex("p1");
+		d.addVertex("p2");
+		d.addVertex("p3");
+		d.addVertex("p4");
+		d.addVertex("p5");
+		d.addCiteEdge("root", p1);
+		d.addCiteEdge("root", p2);
+		d.addCiteEdge("root", p3);
+		d.addCiteEdge("root", p4);
+		d.addCiteEdge("p2", p5);
+		init(root, 3, 3);
+		System.out.println(getGraphJSONString(d));
 	}
 
 }
