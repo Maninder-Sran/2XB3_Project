@@ -24,7 +24,6 @@ public class Node {
 			if (this.Children.get(i) != null) {
 				childNodes.add(this.Children.get(i));
 			}
-
 		}
 		return childNodes;
 	}

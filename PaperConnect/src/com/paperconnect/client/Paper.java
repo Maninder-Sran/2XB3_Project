@@ -8,6 +8,7 @@ public class Paper implements Comparable<Paper>, Serializable {
 	private long citeNum;
 	private ArrayList<String> references;
 	private ArrayList<String> fields;
+	private ArrayList<Paper> tree;
 	private boolean visited = false;
 
 	public enum Fields implements Serializable {
@@ -53,7 +54,6 @@ public class Paper implements Comparable<Paper>, Serializable {
 		return references;
 	}
 
-
 	public boolean getVisited() {
 		return visited;
 	}
@@ -64,6 +64,10 @@ public class Paper implements Comparable<Paper>, Serializable {
 
 	public String toString() {
 		return getField(Fields.ID) + ", " + getField(Fields.TITLE) + "\n" + getField(Fields.ABSTRACT);
+	}
+	
+	public void setTree(ArrayList<Paper> tree) {
+		this.tree = tree;
 	}
 
 	@Override

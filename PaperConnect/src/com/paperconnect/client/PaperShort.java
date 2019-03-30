@@ -3,17 +3,14 @@ package com.paperconnect.client;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class PaperShort implements Serializable{
+public class PaperShort implements Serializable {
 
 	private ArrayList<String> fields;
 
 	public enum Fields {
-		ID,
-		TITLE,
-		AUTHOR,
-		PUBLISH_DATE;
+		ID, TITLE, AUTHOR, PUBLISH_DATE;
 	}
-	
+
 	public PaperShort() {
 		this.fields = new ArrayList<String>();
 	}
@@ -36,10 +33,10 @@ public class PaperShort implements Serializable{
 	public String getField(Fields field) {
 		return fields.get(field.ordinal());
 	}
-	
+
 	public String toString() {
 		StringBuilder x = new StringBuilder();
-		for(String s : fields) {
+		for (String s : fields) {
 			x.append(" " + s + " ");
 		}
 		return x.toString();
