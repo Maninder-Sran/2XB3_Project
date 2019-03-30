@@ -6,9 +6,7 @@ public class KeywordException extends Exception implements Serializable {
 	
 	private String keyword;
 	
-	public KeywordException() {
-
-	}
+	public KeywordException() {}
 	
 	public KeywordException(String keyword) {
 		this.keyword = keyword;

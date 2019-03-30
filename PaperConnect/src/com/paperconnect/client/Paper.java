@@ -5,7 +5,6 @@ import java.util.ArrayList;
 
 //An ADT used to perform sorting of papers by citation count for the keywordLookup
 public class Paper implements Comparable<Paper>, Serializable {
-
 	private long citeNum;
 	private ArrayList<String> references;
 	private ArrayList<String> fields;
@@ -20,10 +19,12 @@ public class Paper implements Comparable<Paper>, Serializable {
 	}
 
 	// Constructor
-	public Paper(String paperID, String paperTitle, long citeNum) {
-		fields = new ArrayList<String>();
+	public Paper(String paperID, String paperTitle, String author, String publishDate, long citeNum) {
+		this.fields = new ArrayList<String>();
 		addField(paperID);
 		addField(paperTitle);
+		addField(author);
+		addField(publishDate);
 		this.citeNum = citeNum;
 	}
 
@@ -51,6 +52,7 @@ public class Paper implements Comparable<Paper>, Serializable {
 	public ArrayList<String> getReferences() {
 		return references;
 	}
+
 
 	public boolean getVisited() {
 		return visited;

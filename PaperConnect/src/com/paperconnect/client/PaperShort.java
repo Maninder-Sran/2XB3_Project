@@ -1,8 +1,9 @@
 package com.paperconnect.client;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class PaperShort {
+public class PaperShort implements Serializable{
 
 	private ArrayList<String> fields;
 

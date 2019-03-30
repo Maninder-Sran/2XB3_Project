@@ -10,4 +10,5 @@ import com.paperconnect.exception.KeywordException;
 public interface PaperService extends RemoteService {
 
 	ArrayList<PaperShort> retrievePapers(String keyword) throws KeywordException;
+	
 }

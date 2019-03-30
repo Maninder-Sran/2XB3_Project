@@ -7,6 +7,7 @@ import com.paperconnect.client.Paper;
 
 public class DiGraph {
 	private Hashtable<String, ArrayList<Paper>> citeGraph;
+	private ArrayList<String> vertices;
 	private Paper root;
 
 	public DiGraph(Paper root) {
@@ -16,13 +17,14 @@ public class DiGraph {
 	
 	public void addVertex(String vertex) {
 		citeGraph.put(vertex, new ArrayList<Paper>());
+		vertices.add(vertex);
 	}
 	
 	public void addCiteEdge(String vertex, Paper edge) {
 		citeGraph.get(vertex).add(edge);
 	}
 	
-	public Hashtable getGraph() {
+	public Hashtable<String, ArrayList<Paper>> getGraph() {
 		return citeGraph;
 	}
 	
@@ -30,6 +32,9 @@ public class DiGraph {
 		return citeGraph.get(id);
 	}
 	
+	public boolean checkVertices(String vertex) {
+		return citeGraph.containsKey(vertex);
+	}
 	public Paper getRoot() {
 		return root;
 	}

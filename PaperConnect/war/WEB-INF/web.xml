@@ -16,6 +16,12 @@
     <url-pattern>/paperconnect/papers</url-pattern>
   </servlet-mapping>
   
+  <listener>
+  	<listener-class>
+  		com.paperconnect.server.DataServerContextListener
+  	</listener-class>
+  </listener>
+  
   <!-- Default page to serve -->
   <welcome-file-list>
     <welcome-file>PaperConnect.html</welcome-file>

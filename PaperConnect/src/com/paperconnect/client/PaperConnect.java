@@ -20,6 +20,7 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.paperconnect.client.PaperShort.Fields;
 import com.paperconnect.exception.KeywordException;
+import com.paperconnect.server.DataServer;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -36,9 +37,7 @@ public class PaperConnect implements EntryPoint {
 	private Label                  errorMsgLabel   = new Label();
 
 	public void onModuleLoad() {
-		
-		//DataServer.init();
-		
+				
 		//Create table for the list of papers found
 		papersFlexTable.setText(0, 0, "Title");
 		papersFlexTable.setText(0, 1, "Author");
@@ -91,6 +90,7 @@ public class PaperConnect implements EntryPoint {
 				Cell cell = papersFlexTable.getCellForEvent(event);
 				int row = cell.getRowIndex();
 				PaperShort paperSelected = papers.get(row+1);
+				
 			}
 		});
 	}
@@ -104,7 +104,7 @@ public class PaperConnect implements EntryPoint {
 		//Set up the callback object.
 		AsyncCallback<ArrayList<PaperShort>> callback = new AsyncCallback<ArrayList<PaperShort>>() {
 			public void onFailure(Throwable caught) {
-				errorMsgLabel.setText("Keyword:"+((KeywordException)caught).getKeyword()+"not valid");
+				errorMsgLabel.setText("Keyword:"+((KeywordException)caught).getKeyword()+" not valid");
 				errorMsgLabel.setVisible(true);
 			}
 			public void onSuccess(ArrayList<PaperShort> result) {
@@ -118,6 +118,7 @@ public class PaperConnect implements EntryPoint {
 	}
 
 	private void addPapers(ArrayList<PaperShort> paperLs) {
+		papers.clear();
 		for(int i = 0; i < paperLs.size(); i++) {
 			//TODO Error checking for correctness of ids
 			
@@ -125,11 +126,21 @@ public class PaperConnect implements EntryPoint {
 				return;
 			
 			//Add the paper to the table
-			int row = papersFlexTable.getRowCount();
 			papers.add(paperLs.get(i));
-			papersFlexTable.setText(row, 0, paperLs.get(i).getField(Fields.ID));
-			//papersFlexTable.setText(row, 1, paperLs.get(i).getAuthor());
-			//papersFlexTable.setText(row, 2, paperLs.get(i).getPublishDate());
+		}
+		updateTable();
+	}
+	
+	private void updateTable() {
+		papersFlexTable.removeAllRows();
+		papersFlexTable.setText(0, 0, "Title");
+		papersFlexTable.setText(0, 1, "Author");
+		papersFlexTable.setText(0, 2, "Date Published");
+		for(int i = 0; i < papers.size(); i++) {
+			int row = papersFlexTable.getRowCount();
+			papersFlexTable.setText(row, 0, papers.get(i).getField(Fields.TITLE));
+			papersFlexTable.setText(row, 1, papers.get(i).getField(Fields.AUTHOR));
+			papersFlexTable.setText(row, 2, papers.get(i).getField(Fields.PUBLISH_DATE));
 		}
 	}
 }

@@ -11,10 +11,10 @@ public class PaperServiceImpl extends RemoteServiceServlet implements PaperServi
 
 	@Override
 	public ArrayList<PaperShort> retrievePapers(String keyword) throws KeywordException {
-		DataServer.init();
-		if(!DataServer.LookupTable.isKeywordValid(keyword))
+		ArrayList<PaperShort> result = DataServer.LookupTable.retrievePapers(keyword);
+		if(result == null)
 			throw new KeywordException(keyword);
 		
-		return DataServer.LookupTable.retrievePapers(keyword);
+		return result;
 	}
 }
