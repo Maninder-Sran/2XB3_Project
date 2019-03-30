@@ -25,9 +25,9 @@ public class DataServer {
 		LookupTable.init();
 		System.out.println("LOOKUP_TABLE INITIALIZATION COMPLETE");
 		System.out.println("-------------------------------------");
-		//System.out.println("PAPER_LIST INITIALIZATION STARTING");
-		//PaperList.init();
-		//System.out.println("PAPER_LIST INITIALIZATION COMPLETE");
+		System.out.println("PAPER_LIST INITIALIZATION STARTING");
+		PaperList.init();
+		System.out.println("PAPER_LIST INITIALIZATION COMPLETE");
 	}
 
 	public static class PaperList {
@@ -156,23 +156,6 @@ public class DataServer {
 								uniqueIDs.add(paper.get("id").toString());
 							}
 						}
-
-						//old code for symbol-based lookup table with two fields; id and title
-//						lineSplit = new String[] {line.substring(0, line.indexOf("=")),line.substring(line.indexOf("=") + 1)};
-//						lineSplit[0] = lineSplit[0].trim();
-//						lineSplit[1] = lineSplit[1].trim();
-//						// set the keyword
-//						tableLine = new LookupTableLine(lineSplit[0]);
-//						// remove []
-//						lineSplit[1] = lineSplit[1].substring(1, lineSplit[1].length() - 1);
-//						lineSplit = lineSplit[1].split(",");
-//						for (int i = 0; i < lineSplit.length; i++) {
-//							lineSplit2 = lineSplit[i].split("::");
-//							if (!uniqueIDs.contains(lineSplit2[0].trim())) {
-//								tableLine.addPaperData(new String[] { lineSplit2[0].trim(), lineSplit2[1].trim() });
-//								uniqueIDs.add(lineSplit[0].trim());
-//							}
-//						}
 						lookupTable.add(tableLine);
 						count++;
 					} catch (Exception f) {
