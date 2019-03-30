@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 //An ADT used to perform sorting of papers by citation count for the keywordLookup
 public class Paper implements Comparable<Paper>, Serializable {
-	private int citeNum;
+	private long citeNum;
 	private ArrayList<String> references;
 	private ArrayList<String> fields;
 	private ArrayList<Paper> tree;

@@ -12,28 +12,17 @@ import com.paperconnect.client.PaperFields;
 
 public class BreadthFirstSearch {
 
-<<<<<<< HEAD
 	static Paper startNode;
 	static int maxDepth;
 	static int maxChildren;
-=======
-	private Paper startNode;
-	private DiGraph graph;
->>>>>>> refs/remotes/origin/ms
 
-<<<<<<< HEAD
 	public static void init(Paper startNode, int maxDepth, int maxChildren) {
 		BreadthFirstSearch.startNode = startNode;
 		BreadthFirstSearch.maxDepth = maxDepth;
 		BreadthFirstSearch.maxChildren = maxChildren;
-=======
-	public BreadthFirstSearch(DiGraph graph) {
-		startNode  = graph.getRoot();
-		this.graph = graph;
->>>>>>> refs/remotes/origin/ms
 	}
 
-	public ArrayList<Paper> compute() {
+	public static ArrayList<Paper> compute(DiGraph graph) {
 
 		ArrayList<Paper> Result = new ArrayList<Paper>();
 		Paper current;
@@ -64,13 +53,8 @@ public class BreadthFirstSearch {
 					continue;
 			}
 
-<<<<<<< HEAD
-			neighbors = graph.getChildren(current.getField(Fields.ID));
-			for (int i = 0; i < Math.min(maxChildren, neighbors.size()); i++) {
-=======
 			neighbors = graph.getChildren(current.getField(PaperFields.ID));
-			for (int i = 0; i < neighbors.size(); i++) {
->>>>>>> refs/remotes/origin/ms
+			for (int i = 0; i < Math.min(maxChildren, neighbors.size()); i++) {
 
 				if (neighbors.get(i).getVisited() != true) {
 					queue.add(neighbors.get(i));
@@ -98,21 +82,21 @@ public class BreadthFirstSearch {
 			}
 			else {
 				newObj = new JSONObject();
-				newObj.put("id", p.getField(Fields.ID));
-				newObj.put("label", p.getField(Fields.TITLE));
+				newObj.put("id", p.getField(PaperFields.ID));
+				newObj.put("label", p.getField(PaperFields.TITLE));
 				newObj.put("x", x);
 				newObj.put("y", y);
 				newObj.put("size", 3);
 				nodes.add(newObj);
-				children = d.getChildren(p.getField(Fields.ID));
+				children = d.getChildren(p.getField(PaperFields.ID));
 				for(int i = 0; i < children.size(); i++) {
 					if(!children.get(i).getVisited()) {
 						continue;
 					}
 					newObj = new JSONObject();
 					newObj.put("id", "");
-					newObj.put("source", p.getField(Fields.ID));
-					newObj.put("target", children.get(i).getField(Fields.ID));
+					newObj.put("source", p.getField(PaperFields.ID));
+					newObj.put("target", children.get(i).getField(PaperFields.ID));
 					edges.add(newObj);
 				}
 				x++;
