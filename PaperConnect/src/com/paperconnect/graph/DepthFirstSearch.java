@@ -1,6 +1,10 @@
 package com.paperconnect.graph;
 
+import java.util.ArrayList;
+import java.util.Stack;
+
 import com.paperconnect.client.Paper;
+import com.paperconnect.client.Paper.Fields;
 
 public class DepthFirstSearch {
 
@@ -9,16 +13,38 @@ public class DepthFirstSearch {
 	static int maxChildren;
 
 	public static void init(Paper startNode, int maxDepth, int maxChildren) {
+
 		DepthFirstSearch.startNode = startNode;
 		DepthFirstSearch.maxDepth = maxDepth;
 		DepthFirstSearch.maxChildren = maxChildren;
 	}
 
 	public static String compute(DiGraph graph) {
-		return null;
+		Paper v;
+		ArrayList<Paper> neighbors = new ArrayList<Paper>();
+		String results = "";
+		Stack<Paper> S = new Stack<Paper>();
+		S.push(startNode);
+		startNode.setVisited(true);
+		while(!S.isEmpty()) {
+			v = S.pop();
+			System.out.println(v.getField(Fields.ID));
+			neighbors = graph.getChildren(v.getField(Fields.ID));
+			for(int i=0; i<neighbors.size(); i++) {
+				if (neighbors.get(i).getVisited() != true) {
+					S.push(neighbors.get(i));
+					neighbors.get(i).setVisited(true);
+					
+				}
+			}
+		}
+		
+		
+		return results;
 	}
 
 	public static void main(String[] args) {
+
 		Paper root = new Paper("root", "root", 0);
 		Paper p1 = new Paper("p1", "p1", 1);
 		Paper p2 = new Paper("p2", "p2", 2);
