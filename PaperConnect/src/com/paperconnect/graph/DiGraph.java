@@ -13,6 +13,7 @@ public class DiGraph {
 	public DiGraph(Paper root) {
 		this.citeGraph = new Hashtable<String, ArrayList<Paper>>();
 		this.root = root; 
+		this.vertices = new ArrayList<String>();
 	}
 	
 	public void addVertex(String vertex) {

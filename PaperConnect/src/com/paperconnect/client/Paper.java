@@ -41,6 +41,13 @@ public class Paper implements Comparable<Paper>, Serializable {
 		this.citeNum = citeNum;
 	}
 
+	public Paper(String paperID, String paperTitle, long citeNum) {
+		this.fields = new ArrayList<String>();
+		addField(paperID);
+		addField(paperTitle);
+		this.citeNum = citeNum;
+	}
+
 	public void addField(String a) {
 		fields.add(a);
 	}
