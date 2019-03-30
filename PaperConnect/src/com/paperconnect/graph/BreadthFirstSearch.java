@@ -10,9 +10,13 @@ import com.paperconnect.client.Paper.Fields;
 public class BreadthFirstSearch {
 
 	static Paper startNode;
+	static int maxDepth;
+	static int maxChildren;
 
-	public BreadthFirstSearch(Paper start) {
-		startNode = start;
+	public static void init(Paper startNode, int maxDepth, int maxChildren) {
+		BreadthFirstSearch.startNode = startNode;
+		BreadthFirstSearch.maxDepth = maxDepth;
+		BreadthFirstSearch.maxChildren = maxChildren;
 	}
 
 	public static ArrayList<Paper> compute(DiGraph graph) {
@@ -24,7 +28,6 @@ public class BreadthFirstSearch {
 		Queue<Paper> queue = new LinkedList<>();
 		queue.add(startNode);
 		queue.add(null);
-		Result.add(startNode);
 
 		startNode.setVisited(true);
 		int level = 0;
@@ -35,6 +38,9 @@ public class BreadthFirstSearch {
 
 			if (current == null) {
 				level++;
+				if (level >= maxDepth) {
+					break;
+				}
 
 				queue.add(null);
 				if (queue.peek() == null)
@@ -45,7 +51,7 @@ public class BreadthFirstSearch {
 			}
 
 			neighbors = graph.getChildren(current.getField(Fields.ID));
-			for (int i = 0; i < neighbors.size(); i++) {
+			for (int i = 0; i < Math.min(maxChildren, neighbors.size()); i++) {
 
 				if (neighbors.get(i).getVisited() != true) {
 					queue.add(neighbors.get(i));
@@ -55,6 +61,37 @@ public class BreadthFirstSearch {
 			}
 		}
 		return Result;
+	}
+
+	public static void main(String[] args) {
+		Paper root = new Paper("root", "root", 0);
+		Paper p1 = new Paper("p1", "p1", 1);
+		Paper p2 = new Paper("p2", "p2", 2);
+		Paper p3 = new Paper("p3", "p3", 3);
+		Paper p4 = new Paper("p4", "p4", 4);
+		Paper p5 = new Paper("p5", "p5", 5);
+		DiGraph d = new DiGraph(root);
+		d.addVertex("root");
+		d.addVertex("p1");
+		d.addVertex("p2");
+		d.addVertex("p3");
+		d.addVertex("p4");
+		d.addVertex("p5");
+		d.addCiteEdge("root", p1);
+		d.addCiteEdge("root", p2);
+		d.addCiteEdge("root", p3);
+		d.addCiteEdge("root", p4);
+		d.addCiteEdge("p2", p5);
+		init(root, 3, 3);
+		ArrayList<Paper> ans = compute(d);
+		for (Paper p : ans) {
+			if (p != null) {
+				System.out.print(p.getField(Fields.ID) + " ");
+			}
+			else {
+				System.out.println();
+			}
+		}
 	}
 
 }
