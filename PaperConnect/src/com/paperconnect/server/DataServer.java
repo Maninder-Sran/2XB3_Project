@@ -34,7 +34,7 @@ public class DataServer {
 		public static ArrayList<Paper> papers;
 
 		public static void init() {
-			readPaperFile("data/ap_final.txt");
+			readPaperFile("data/ap_paperList.txt");
 		}
 
 		private static void readPaperFile(String fileName) {
