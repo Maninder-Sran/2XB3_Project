@@ -84,8 +84,7 @@ public class DataServer {
 
 					// Get author of paper
 					try {
-						temp = (JSONArray) obj.get("author");
-						author = temp.get(0).toString();
+						author = obj.get("author").toString();
 					} catch (NullPointerException e) {
 						author = "NA";
 					}
@@ -101,6 +100,7 @@ public class DataServer {
 					papers.add(paper);
 					obj = null;
 				}
+				bufferedReader.close();
 			} catch (
 
 			FileNotFoundException e) { // TODO Auto-generated catch block
