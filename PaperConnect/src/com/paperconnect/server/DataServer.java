@@ -24,7 +24,10 @@ public class DataServer {
 		System.out.println("LOOKUP_TABLE INITIALIZATION STARTING");
 		LookupTable.init();
 		System.out.println("LOOKUP_TABLE INITIALIZATION COMPLETE");
-		// PaperList.init();
+		System.out.println("-------------------------------------");
+		//System.out.println("PAPER_LIST INITIALIZATION STARTING");
+		//PaperList.init();
+		//System.out.println("PAPER_LIST INITIALIZATION COMPLETE");
 	}
 
 	public static class PaperList {
@@ -154,6 +157,7 @@ public class DataServer {
 						HashSet<String> uniqueIDs = new HashSet<String>();
 						keywordLine = (JSONObject) new JSONParser().parse(line);
 						paperList = (JSONArray) keywordLine.get("paper_list");
+						tableLine = new LookupTableLine(keywordLine.get("keyword").toString());
 						
 						for (int i = 0; i < paperList.size(); i++) {
 							paper = (JSONObject) paperList.get(i);

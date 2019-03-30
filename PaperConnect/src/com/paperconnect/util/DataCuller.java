@@ -1,5 +1,4 @@
 package com.paperconnect.util;
-
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -23,10 +22,6 @@ import com.paperconnect.client.PaperShort;
 import com.paperconnect.client.PaperShort.Fields;
 
 public class DataCuller {
-
-	public DataCuller() {
-
-	}
 
 	public static void keywordFinder(String inFileName, String transistionFileName, String outFileName) {
 
@@ -799,11 +794,9 @@ public class DataCuller {
 	}
 
 	public static void main(String[] args) {
-		String ap_0 = "../../../Downloads/Compressed/aminer_papers_0.txt";
-//		String ap_lu_test = "../../../Documents/Software 1/2XB3/ap_lookup.txt";
-//		String ap_lu_testnew = "../../../Documents/Software 1/2XB3/ap_lookup_new.txt";
-		String ap_1 = "../../../Downloads/Compressed/aminer_papers_1.txt";
-		String ap_2 = "../../../Downloads/Compressed/aminer_papers_2.txt";
+		String ap_0 = "data/aminer_papers_0.txt";
+		String ap_1 = "data/aminer_papers_1.txt";
+		String ap_2 = "data/aminer_papers_2.txt";
 
 		String trans0 = "data/ap_kw_0.txt";
 		String trans1 = "data/ap_kw_1.txt";
@@ -814,9 +807,6 @@ public class DataCuller {
 		String KwOutFile2 = "data/ap_nr_2.txt";
 
 		String FormattedOutputFile0 = "data/ap_0_final.txt";
-//		String keywordluTest = "data/ap_0_newlu.txt";
-//		String sortedLu = "data/ap_0_sortedlu.txt";
-//		String finalLu = "data/ap_0_finalLu.txt";
 		String FormattedOutputFile1 = "data/ap_1_final.txt";
 		String FormattedOutputFile2 = "data/ap_2_final.txt";
 
@@ -824,27 +814,19 @@ public class DataCuller {
 		String transKeywordFile = "data/ap_translu.txt";
 		String FinalKeywordFile = "data/ap_lookup.txt";
 
-//		keywordFinder(ap_0, trans0, KwOutFile0);
-//		removeUnusedReferences(KwOutFile0, FormattedOutputFile0);
-//		keywordLookup(FormattedOutputFile0, keywordluTest);
-//		sortLookupTableKeywords(keywordluTest, sortedLu);
+		keywordFinder(ap_0, trans0, KwOutFile0);
+		keywordFinder(ap_1, trans1, KwOutFile1);
+		keywordFinder(ap_2, trans2, KwOutFile2);
 		
-//		keywordLookupJSON(FormattedOutputFile0, "data/ap_0_luJSON.txt");
-//		sortLookupTableKeywords("data/ap_0_luJSON.txt", "data/ap_0_sortedluJSON.txt");
-//		removeSameIdsFromLookup(sortedLu, finalLu);
-//		 keywordFinder(ap_0, trans0, KwOutFile0);
-//		 keywordFinder(ap_1, trans1, KwOutFile1);
-//		 keywordFinder(ap_2, trans2, KwOutFile2);
-//		
-//		 removeUnusedReferences(KwOutFile0, FormattedOutputFile0);
-//		 removeUnusedReferences(KwOutFile1, FormattedOutputFile1);
-//		 removeUnusedReferences(KwOutFile2, FormattedOutputFile2);
-//		
-//		 mergeDataSet(FinalPaperFile, FormattedOutputFile0);
-//		 mergeDataSet(FinalPaperFile, FormattedOutputFile1);
-//		 mergeDataSet(FinalPaperFile, FormattedOutputFile2);
+		removeUnusedReferences(KwOutFile0, FormattedOutputFile0);
+		removeUnusedReferences(KwOutFile1, FormattedOutputFile1);
+		removeUnusedReferences(KwOutFile2, FormattedOutputFile2);
+		
+		mergeDataSet(FinalPaperFile, FormattedOutputFile0);
+		mergeDataSet(FinalPaperFile, FormattedOutputFile1);
+		mergeDataSet(FinalPaperFile, FormattedOutputFile2);
 
-		 keywordLookupJSON(FinalPaperFile, transKeywordFile);
+		keywordLookupJSON(FinalPaperFile, transKeywordFile);
 
 		sortLookupTableKeywordsJSON(transKeywordFile, FinalKeywordFile);
 	}
