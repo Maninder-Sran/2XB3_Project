@@ -1,6 +1,7 @@
 package com.paperconnect.util;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -326,10 +327,14 @@ public class DataCuller {
 		}
 		return true;
 	}
-
+	
+	
+	
 	private static void removeUnusedReferences(String inFileName, String outFileName) {
 		JSONObject obj;
 		JSONArray references;
+		
+		//Last id of aminer papers_2 as we are only using three aminer data files
 		String greatestID = "53e99a0eb7602d9702261faf";
 		String line = null;
 
@@ -342,6 +347,14 @@ public class DataCuller {
 				obj = (JSONObject) new JSONParser().parse(line);
 				references = (JSONArray) obj.get("references");
 
+				try {
+					String abst = (String) obj.get("abstract");
+					if (abst.length() > 500)
+						obj.put("abstract", abst.substring(0, 500) + "...");
+				} catch (NullPointerException e) {
+
+				}
+				
 				// continue to next paper node if it contains no references
 				if (references == null) {
 					fileWriter.write(obj.toJSONString() + "\n");
@@ -358,13 +371,7 @@ public class DataCuller {
 					}
 				}
 
-				try {
-					String abst = (String) obj.get("abstract");
-					if (abst.length() > 500)
-						obj.put("abstract", abst.substring(0, 500) + "...");
-				} catch (NullPointerException e) {
-
-				}
+				
 				fileWriter.write(obj.toJSONString() + "\n");
 			}
 			bufferedReader.close();
@@ -380,6 +387,7 @@ public class DataCuller {
 
 	}
 
+	
 	private static void mergeDataSet(String sourceFileName, String appendFileName) {
 		JSONObject obj;
 		String line = null;
@@ -582,10 +590,131 @@ public class DataCuller {
 		}
 	}
 
+	//function to remove all the remaining null references from final dataset
+		private static void removeNullReferencesFromFinal(String inFileName, String outFileName) {
+			JSONObject obj;
+			JSONArray references;
+			String id = "";
+			String line = null;
+			Set<String> allIDs = new HashSet<String>();
+
+			try {
+				FileReader fileReader = new FileReader(inFileName);
+				BufferedReader bufferedReader = new BufferedReader(fileReader);
+				
+
+				while ((line = bufferedReader.readLine()) != null) {
+					obj = (JSONObject) new JSONParser().parse(line);
+					id = (String) obj.get("id");
+					allIDs.add(id);
+				}
+				bufferedReader.close();
+				
+				bufferedReader = new BufferedReader(new FileReader(inFileName));
+				BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(outFileName));
+				line = null;
+				
+				while ((line = bufferedReader.readLine()) != null) {
+					obj = (JSONObject) new JSONParser().parse(line);
+					references = (JSONArray) obj.get("references");
+
+					// write to outfile and continue to next paper node if it contains no references
+					if (references == null) {
+						bufferedWriter.write(obj.toJSONString() + "\n");
+						continue;
+					}
+
+					// checking all references of the paper node to find and remove null references
+					Iterator<String> iterator = references.iterator();
+					String thisElement = "";
+					while (iterator.hasNext()) {
+						thisElement = iterator.next();
+						if (!allIDs.contains(thisElement)) {
+							iterator.remove();
+						}
+					}
+					
+					//write to outfile
+					bufferedWriter.write(obj.toJSONString() + "\n");
+				}
+				bufferedWriter.close();
+				bufferedReader.close();
+
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+		}
+		
+	private static boolean finalNullReferenceCheck(String fileName) {
+		JSONObject obj;
+		JSONArray references;
+		String id = "";
+		String line = null;
+		int counter = 0;
+		Set<String> allIDs = new HashSet<String>();
+
+		try {
+			FileReader fileReader = new FileReader(fileName);
+			BufferedReader bufferedReader = new BufferedReader(fileReader);
+			
+
+			while ((line = bufferedReader.readLine()) != null) {
+				counter++;
+				System.out.println(counter);
+				obj = (JSONObject) new JSONParser().parse(line);
+				id = (String) obj.get("id");
+				allIDs.add(id);
+			}
+			bufferedReader.close();
+			
+			bufferedReader = new BufferedReader(new FileReader(fileName));
+			line = null;
+			counter = 0;
+			
+			while ((line = bufferedReader.readLine()) != null) {
+				counter++;
+				System.out.println(counter);
+				obj = (JSONObject) new JSONParser().parse(line);
+				
+				references = (JSONArray) obj.get("references");
+
+				// continue to next paper node if it contains no references
+				if (references == null) {
+					continue;
+				}
+
+				// checking all references of the paper node to find and remove null references
+				Iterator<String> iterator = references.iterator();
+				String thisElement = "";
+				while (iterator.hasNext()) {
+					thisElement = iterator.next();
+					if (!allIDs.contains(thisElement)) {
+						bufferedReader.close();
+						return false;
+					}
+				}
+				
+			}
+			bufferedReader.close();
+
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return true;
+	}
+	
 	public static void main(String[] args) {
-		String ap_0 = "data/aminer_papers_0.txt";
-		String ap_1 = "data/aminer_papers_1.txt";
-		String ap_2 = "data/aminer_papers_2.txt";
+		String ap_0 = "../../../Downloads/Compressed/aminer_papers_0.txt";
+		String ap_1 = "../../../Downloads/Compressed/aminer_papers_1.txt";
+		String ap_2 = "../../../Downloads/Compressed/aminer_papers_2.txt";
 
 		String trans0 = "data/ap_kw_0.txt";
 		String trans1 = "data/ap_kw_1.txt";
@@ -603,24 +732,39 @@ public class DataCuller {
 		String transKeywordFile = "data/ap_translu.txt";
 		String FinalKeywordFile = "data/ap_lookup.txt";
 		
+		String transPaperList = "data/ap_paperlist_trans.txt";
 		String FinalPaperList = "data/ap_paperList.txt";
-
+		
+		/*parse paper nodes with keywords while also removing all references
+		to paper nodes with no keywords in each file*/
 		keywordFinder(ap_0, trans0, KwOutFile0);
 		keywordFinder(ap_1, trans1, KwOutFile1);
 		keywordFinder(ap_2, trans2, KwOutFile2);
-
+		
+		/*remove all references that point to a paper node outside of the three selected data set
+		files we are working with. Also limits all abstracts to a 500 char maximum limit.*/
 		removeUnusedReferences(KwOutFile0, FormattedOutputFile0);
 		removeUnusedReferences(KwOutFile1, FormattedOutputFile1);
 		removeUnusedReferences(KwOutFile2, FormattedOutputFile2);
 
+		
+		//combine all data sets into one file
 		mergeDataSet(FinalPaperFile, FormattedOutputFile0);
 		mergeDataSet(FinalPaperFile, FormattedOutputFile1);
 		mergeDataSet(FinalPaperFile, FormattedOutputFile2);
-
+		
+		
+		//create lookup from merged paper list
 		keywordLookupJSON(FinalPaperFile, transKeywordFile);
-
 		sortLookupTableKeywordsJSON(transKeywordFile, FinalKeywordFile);
 		
-		//parseRelevantData(FinalPaperFile, FinalPaperList);
+		//parse all relevant fields from paper nodes (ie no need for keyword list anymore because of lookup table)
+		parseRelevantData(FinalPaperFile, transPaperList);
+		
+		/*Get rid of all remaining null references, ie a reference that was in a different file whose paper node
+		did not have a keyword so it was removed*/
+		removeNullReferencesFromFinal(transPaperList, FinalPaperList);
+		
+		//System.out.println(finalNullReferenceCheck(FinalPaperList));
 	}
 }
