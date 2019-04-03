@@ -3,6 +3,8 @@ package com.paperconnect.client;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import com.google.gwt.core.client.JavaScriptObject;
+
 public class PaperShort implements Serializable {
 
 	private ArrayList<String> fields;
@@ -28,13 +30,5 @@ public class PaperShort implements Serializable {
 
 	public String getField(PaperFields field) {
 		return fields.get(field.ordinal());
-	}
-
-	public String toString() {
-		StringBuilder x = new StringBuilder();
-		for (String s : fields) {
-			x.append(" " + s + " ");
-		}
-		return x.toString();
 	}
 }
