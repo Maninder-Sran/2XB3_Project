@@ -81,8 +81,6 @@ public class BreadthFirstSearch {
 				children = graph.getChildren(p.getField(PaperFields.ID));
 				if (children != null) {
 					for (int i = 0; i < children.size(); i++) {
-						System.out.println(children.isEmpty());
-						System.out.println((children.get(i) == null) +" "+ i);
 						if (!children.get(i).getVisited()) {
 							continue;
 						}
