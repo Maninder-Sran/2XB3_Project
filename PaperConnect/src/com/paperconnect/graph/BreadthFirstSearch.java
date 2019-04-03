@@ -93,6 +93,7 @@ public class BreadthFirstSearch {
 				}
 				x++;
 			}
+			p.setVisited(false);
 		}
 		obj.put("nodes", nodes);
 		obj.put("edges", edges);
