@@ -125,7 +125,7 @@ public class DataServer {
 			System.out.println(tree);
 			Paper result = graph.getRoot();
 			result.setField(PaperFields.TREE, tree);
-			return Search.binarySearchID(papers, id);
+			return result;
 		}
 	}
 

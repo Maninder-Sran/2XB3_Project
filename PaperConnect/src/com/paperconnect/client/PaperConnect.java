@@ -9,6 +9,9 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
+import com.google.gwt.json.client.JSONObject;
+import com.google.gwt.json.client.JSONParser;
+import com.google.gwt.json.client.JSONValue;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlexTable;
@@ -34,12 +37,12 @@ public class PaperConnect implements EntryPoint {
 	private ArrayList<PaperShort> papers = new ArrayList<PaperShort>();
 	private PaperServiceAsync paperSvc = GWT.create(PaperService.class);
 	private Label errorMsgLabel = new Label();
-	
+
 	public void onModuleLoad() {
-		
+
 		// Create table to hold the query of papers found
 		initTable();
-		
+
 		// Assemble Keyword Search Panel
 		addPanel.add(keywordTextBox);
 		addPanel.add(searchButton);
@@ -49,10 +52,10 @@ public class PaperConnect implements EntryPoint {
 		mainPanel.add(addPanel);
 		mainPanel.add(errorMsgLabel);
 		mainPanel.add(papersFlexTable);
-
+		
 		// Associate the Main panel with the HTML host page
 		RootPanel.get("paperList").add(mainPanel);
-
+		
 		// Move Cursor focus to the input box
 		keywordTextBox.setFocus(true);
 
@@ -85,8 +88,10 @@ public class PaperConnect implements EntryPoint {
 			}
 		});
 	}
-	
+
 	private void initTable() {
+		RootPanel.get("graphContainer").setVisible(false);
+		
 		// Create table for the list of papers found
 		papersFlexTable.setText(0, 0, "Title");
 		papersFlexTable.setText(0, 1, "Author");
@@ -97,7 +102,7 @@ public class PaperConnect implements EntryPoint {
 		papersFlexTable.getRowFormatter().addStyleName(0, "paperListHeader");
 		papersFlexTable.addStyleName("paperList");
 	}
-	
+
 	private void addPapers(ArrayList<PaperShort> paperLs) {
 		papers.clear();
 		for (int i = 0; i < paperLs.size(); i++) {
@@ -110,7 +115,7 @@ public class PaperConnect implements EntryPoint {
 		}
 		updateTable();
 	}
-	
+
 	private void retrievePaper(String id) {
 		// Initialize the service proxy
 		if (paperSvc == null) {
@@ -123,7 +128,7 @@ public class PaperConnect implements EntryPoint {
 				errorMsgLabel.setText("Id:" + ((InvalidIdException) caught).getId() + " not found");
 				errorMsgLabel.setVisible(true);
 			}
-			
+
 			@Override
 			public void onSuccess(Paper result) {
 				displayPaper(result);
@@ -132,7 +137,7 @@ public class PaperConnect implements EntryPoint {
 		};
 
 		// Make the call to the paper service
-		paperSvc.retrievePaper(id, callback);		
+		paperSvc.retrievePaper(id, callback);
 	}
 
 	private void retrievePaperLs(String keyword) {
@@ -158,15 +163,26 @@ public class PaperConnect implements EntryPoint {
 		paperSvc.retrievePaperLs(keyword, callback);
 	}
 
-	private void displayPaper(Paper paper){
+	private void displayPaper(Paper paper) {
 		papersFlexTable.removeAllRows();
-		for(int i = 1; i < PaperFields.values().length; i++) {
+		for (int i = 1; i < PaperFields.values().length; i++) {
 			int row = papersFlexTable.getRowCount();
 			papersFlexTable.setText(row, 0, PaperFields.values()[i].toString());
-			papersFlexTable.setText(row, 1, paper.getField(PaperFields.values()[i]));
+			if (PaperFields.values()[i].equals(PaperFields.TREE)) {
+				JSONValue val = JSONParser.parseStrict(paper.getField(PaperFields.TREE)); 
+				JSONObject obj = val.isObject();
+				RootPanel.get("graphContainer").setVisible(true);
+				displayGraph(obj);
+			} else {
+				papersFlexTable.setText(row, 1, paper.getField(PaperFields.values()[i]));
+			}
 		}
 	}
-	
+
+	public native void displayGraph(JSONObject obj) /*-{
+		$wnd.drawGraph(obj);
+	}-*/;
+
 	private void updateTable() {
 		papersFlexTable.removeAllRows();
 		initTable();

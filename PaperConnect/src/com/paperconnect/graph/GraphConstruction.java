@@ -2,10 +2,8 @@ package com.paperconnect.graph;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 
 import com.paperconnect.client.Paper;
-import com.paperconnect.client.PaperFields;
 import com.paperconnect.server.DataServer;
 import com.paperconnect.util.Search;
 
@@ -32,6 +30,8 @@ public class GraphConstruction {
 		for (int i = 0; i < references.size() && counter > 0; i++) {
 			source = references.get(i);
 			paper = Search.binarySearchID(DataServer.PaperList.papers, source);
+			if(paper == null)
+				continue;
 			citeGraph.addCiteEdge(id, paper);
 			buildGraph(source, width, height - 1, citeGraph);
 			counter--;
