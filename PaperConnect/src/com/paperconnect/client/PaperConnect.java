@@ -180,7 +180,7 @@ public class PaperConnect implements EntryPoint {
 	}
 
 	public native void displayGraph(JSONObject obj) /*-{
-		$wnd.drawGraph(obj);
+		$wnd.drawGraph(obj, "graphContainer");
 	}-*/;
 
 	private void updateTable() {

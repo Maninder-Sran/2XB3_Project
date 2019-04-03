@@ -1,8 +1,8 @@
-function drawGraph(obj) {
-	document.getElementById('graphContainer').innerHTML = "";	// Initialize sigma:
+function drawGraph(obj, elementId) {
+	document.getElementById(elementId).innerHTML = "";	// Initialize sigma:
 	var s = new sigma({
 		renderer : {
-			container : document.getElementById('graphContainer'),
+			container : document.getElementById(elementId),
 			type : 'canvas'
 		},
 		settings : {}

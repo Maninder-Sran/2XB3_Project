@@ -122,7 +122,6 @@ public class DataServer {
 		public static Paper retrievePaper(String id) {
 			DiGraph graph = GraphConstruction.Graph(id, 3, 2);
 			String tree = BreadthFirstSearch.getGraphJSONString(graph, graph.getRoot(), 3, 2);
-			System.out.println(tree);
 			Paper result = graph.getRoot();
 			result.setField(PaperFields.TREE, tree);
 			return result;

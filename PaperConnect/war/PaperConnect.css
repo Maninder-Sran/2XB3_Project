@@ -30,12 +30,8 @@ h1 {
 
 #graphContainer {
 	position: absolute;
-	width: 50%;
-	height: 50%;
-	background-color: #E1E1E1
-}
-
-/** Set ids using widget.getElement().setId("idOfElement") */
-#closeButton {
-  margin: 15px 6px 6px;
+	width: 75%;
+	height: 75%;
+	background: orange;
+	margin-left: 10%;
 }

@@ -65,6 +65,7 @@ public class BreadthFirstSearch {
 		JSONArray edges = new JSONArray();
 		ArrayList<Paper> children;
 		ArrayList<Paper> ans = compute(graph, startNode, maxDepth, maxChildren);
+		int counter = 0;
 		for (Paper p : ans) {
 			if (p == null) {
 				x = 0;
@@ -86,7 +87,7 @@ public class BreadthFirstSearch {
 							continue;
 						}
 						newObj = new JSONObject();
-						newObj.put("id", "");
+						newObj.put("id", String.valueOf(counter++));
 						newObj.put("source", p.getField(PaperFields.ID));
 						newObj.put("target", children.get(i).getField(PaperFields.ID));
 						edges.add(newObj);
