@@ -74,6 +74,7 @@ public class BreadthFirstSearch {
 				newObj = new JSONObject();
 				newObj.put("id", p.getField(PaperFields.ID));
 				newObj.put("label", p.getField(PaperFields.TITLE));
+				newObj.put("color", "#008cc2");
 				newObj.put("x", x);
 				newObj.put("y", y);
 				newObj.put("size", 3);
@@ -87,12 +88,14 @@ public class BreadthFirstSearch {
 						newObj = new JSONObject();
 						newObj.put("id", String.valueOf(counter++));
 						newObj.put("source", p.getField(PaperFields.ID));
+						newObj.put("color", "#dc143c");
 						newObj.put("target", children.get(i).getField(PaperFields.ID));
 						edges.add(newObj);
 					}
 				}
 				x++;
 			}
+			p.setVisited(false);
 		}
 		obj.put("nodes", nodes);
 		obj.put("edges", edges);
