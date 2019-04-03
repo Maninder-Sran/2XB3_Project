@@ -22,8 +22,12 @@ public class DiGraph {
 		citeGraph.get(vertex).add(edge);
 	}
 	
-	public Hashtable getGraph() {
+	public Hashtable<String, ArrayList<Paper>> getGraph() {
 		return citeGraph;
+	}
+	
+	public ArrayList<Paper> getChildren(String id){
+		return citeGraph.get(id);
 	}
 	
 	public Paper getRoot() {
