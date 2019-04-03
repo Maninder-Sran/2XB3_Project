@@ -51,9 +51,11 @@ public class PaperConnect implements EntryPoint {
 		for(PaperShort paper : papers) {
 			if(paper.getField(PaperFields.TITLE).equals(title)) {
 				id = paper.getField(PaperFields.ID);
+				System.out.println(id+" "+paper.getField(PaperFields.TITLE));
 				break;
 			}
 		}
+		
 		// Initialize the service proxy
 		if (paperSvc == null) {
 			paperSvc = GWT.create(PaperService.class);
