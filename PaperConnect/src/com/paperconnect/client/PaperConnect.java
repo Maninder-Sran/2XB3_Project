@@ -26,7 +26,8 @@ public class PaperConnect implements EntryPoint {
 	public void onModuleLoad() {
 
 		// Associate the Main panel with the HTML host page
-		RootPanel.get("paperList").add(errorMsgLabel);
+		RootPanel.get("graphContainer").setVisible(false);
+		RootPanel.get("errorMessage").add(errorMsgLabel);
 
 		searchListener(this);
 		tableListener(this);
