@@ -121,7 +121,7 @@ function drawGraph(obj, elementId) {
 			x : jsonGraph.nodes[i].x,
 			y : jsonGraph.nodes[i].y,
 			size : jsonGraph.nodes[i].size,
-			color: '#EE651D'
+			color: '#008CC2'
 		});
 	}
 	for (i = 0; i < jsonGraph.edges.length; i++) {
@@ -131,8 +131,7 @@ function drawGraph(obj, elementId) {
 			id : jsonGraph.edges[i].id,
 			source : jsonGraph.edges[i].source,
 			target : jsonGraph.edges[i].target,
-			 color: '#202020',
-			 type: 'curvedArrow'
+			 color: '#DC143C',
 		});
 	}
 
