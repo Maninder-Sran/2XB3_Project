@@ -14,17 +14,21 @@ public class BreadthFirstSearch {
 
 	public static ArrayList<Paper> compute(DiGraph graph, Paper startNode, int maxDepth, int maxChildren) {
 
+		//Defining paper lists
 		ArrayList<Paper> Result = new ArrayList<Paper>();
 		Paper current;
 		ArrayList<Paper> neighbors;
 
+		//Initializing Queue for keeping the record for the elements
 		Queue<Paper> queue = new LinkedList<>();
 		queue.add(startNode);
 		queue.add(null);
 
+		//Defining the parameters for each nodes if they have been visited or not.
 		startNode.setVisited(true);
 		int level = 0;
 
+		//Loop for checking the depth and adding the elements to the queue accordingly
 		while (!queue.isEmpty()) {
 			current = queue.poll();
 			Result.add(current);
@@ -42,7 +46,8 @@ public class BreadthFirstSearch {
 				else
 					continue;
 			}
-
+			
+			//Conditional loop for going through the child nodes and its neighbours.
 			neighbors = graph.getChildren(current.getField(PaperFields.ID));
 			for (int i = 0; i < Math.min(maxChildren, neighbors.size()); i++) {
 
@@ -56,6 +61,7 @@ public class BreadthFirstSearch {
 		return Result;
 	}
 
+	//Graphing algorithm for structuring the graph for the JSON objects.
 	public static String getGraphJSONString(DiGraph graph, Paper startNode, int maxDepth, int maxChildren) {
 		int x = 0;
 		int y = 0;
