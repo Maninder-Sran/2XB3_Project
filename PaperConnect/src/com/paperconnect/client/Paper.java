@@ -4,40 +4,33 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
- * Represents a Paper object, which models an academic paper
+ * Represents a {@link Paper} object, which models an academic paper
  */
 public class Paper implements Comparable<Paper>, Serializable {
-	/**
-	 * Number of times this academic paper has been cited
-	 */
+	
+	//Number of times this academic paper has been cited
 	private int citeNum;
-	/**
-	 * List of paper IDs of the papers this paper references
-	 */
+	//List of paper IDs of the papers this paper references
 	private ArrayList<String> references;
-	/**
-	 * List of information about the paper
-	 */
+	//List of information about the paper
 	private ArrayList<String> fields;
-	/**
-	 * Boolean value used by the Breadth-First Search to determine which nodes have already been visited
-	 */
+	//Boolean value used by the Breadth-First Search to determine which nodes have already been visited
 	private boolean visited = false;
 
 	/**
-	 * Paper constructor
+	 * {@link Paper} constructor
 	 */
 	public Paper() {
 		fields = new ArrayList<String>();
 	}
 
 	/**
-	 * Paper constructor
-	 * @param paperID ID of the paper
-	 * @param paperTitle title of the paper
-	 * @param author author of the paper
-	 * @param publishDate date the paper was published
-	 * @param citeNum number of times this paper has been cited
+	 * {@link Paper} constructor
+	 * @param paperID - ID of the paper
+	 * @param paperTitle - title of the paper
+	 * @param author - author of the paper
+	 * @param publishDate - date the paper was published
+	 * @param citeNum - number of times this paper has been cited
 	 */
 	public Paper(String paperID, String paperTitle, String author, String publishDate, int citeNum) {
 		this.fields = new ArrayList<String>();
@@ -51,14 +44,14 @@ public class Paper implements Comparable<Paper>, Serializable {
 	}
 
 	/**
-	 * Paper constructor
-	 * @param paperID ID of the paper
-	 * @param paperTitle title of the paper
-	 * @param paperAbstract this paper's abstract section
-	 * @param references list of papers this paper cites
-	 * @param author author of the paper
-	 * @param publishDate date the paper was published
-	 * @param citeNum number of times this paper has been cited
+	 * {@link Paper} constructor
+	 * @param paperID - ID of the paper
+	 * @param paperTitle - title of the paper
+	 * @param paperAbstract - this paper's abstract section
+	 * @param references - list of papers this paper cites
+	 * @param author - author of the paper
+	 * @param publishDate - date the paper was published
+	 * @param citeNum - number of times this paper has been cited
 	 */
 	public Paper(String paperID, String paperTitle, String paperAbstract, ArrayList<String> references,
 			String paperAuthor, String publishDate, int citeNum) {
@@ -74,10 +67,10 @@ public class Paper implements Comparable<Paper>, Serializable {
 	}
 
 	/**
-	 * Paper constructor
-	 * @param paperID ID of the paper
-	 * @param paperTitle title of the paper
-	 * @param citeNum number of times this paper has been cited
+	 * {@link Paper} constructor
+	 * @param paperID - ID of the paper
+	 * @param paperTitle - title of the paper
+	 * @param citeNum - number of times this paper has been cited
 	 */
 	public Paper(String paperID, String paperTitle, int citeNum) {
 		this.fields = new ArrayList<String>();
@@ -91,8 +84,8 @@ public class Paper implements Comparable<Paper>, Serializable {
 	}
 
 	/**
-	 * Adds a string to the list of fields
-	 * @param a String to be added to the list of fields
+	 * Adds a String to the list of fields
+	 * @param a - String to be added to the list of fields
 	 */
 	public void addField(String a) {
 		fields.add(a);
@@ -100,7 +93,7 @@ public class Paper implements Comparable<Paper>, Serializable {
 
 	/**
 	 * Getter for any field in the list of fields
-	 * @param field PaperFields enumerated type to specify a field
+	 * @param field - {@link PaperFields} enumerated type to specify a field
 	 * @return the specified field for this object
 	 */
 	public String getField(PaperFields field) {
@@ -109,8 +102,8 @@ public class Paper implements Comparable<Paper>, Serializable {
 	
 	/**
 	 * Setter for any field in the list of fields
-	 * @param field PaperFields enumerated type to specify a field
-	 * @param data new value to set this field to
+	 * @param field - {@link PaperFields} enumerated type to specify a field
+	 * @param data - new value to set this field to
 	 */
 	public void setField(PaperFields field, String data) {
 		fields.set(field.ordinal(), data);

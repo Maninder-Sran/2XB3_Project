@@ -3,26 +3,20 @@ package com.paperconnect.client;
 import java.util.ArrayList;
 
 /**
- * Represents a line in a lookup table, where the keys are keywords, and the values are PaperShort's
+ * Represents a line in a lookup table, where the keys are keywords, and the values are {@link PaperShort}'s
  */
 public class LookupTableLine implements Comparable<LookupTableLine> {
 	
-	/**
-	 * Represents the keyword for this line
-	 */
+	//Represents the keyword for this line
 	private String keyword;
-	/**
-	 * Represents everything to the right of '=' on a given line of the input file. Used only when sorting.
-	 */
+	//Represents everything to the right of '=' on a given line of the input file. Used only when sorting.
 	private String rightHalf;
-	/**
-	 * Represents all papers related to this keyword
-	 */
+	//Represents all papers related to this keyword
 	private ArrayList<PaperShort> paperData;
 
 	/**
 	 * Constructor for LookupTableLine
-	 * @param keyword String representing the keyword for this line
+	 * @param keyword - {@link String} representing the keyword for this line
 	 */
 	public LookupTableLine(String keyword) {
 		this.keyword = keyword;
@@ -32,8 +26,8 @@ public class LookupTableLine implements Comparable<LookupTableLine> {
 
 	/**
 	 * Constructor for LookupTableLine
-	 * @param keyword String representing the keyword for this line
-	 * @param rightHalf String representing everything to the right of '=' in the input file
+	 * @param keyword - String representing the keyword for this line
+	 * @param rightHalf - String representing everything to the right of '=' in the input file
 	 */
 	public LookupTableLine(String keyword, String rightHalf) {
 		this.keyword = keyword;
