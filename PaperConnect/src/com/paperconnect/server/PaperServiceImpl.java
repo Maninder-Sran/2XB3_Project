@@ -15,7 +15,7 @@ public class PaperServiceImpl extends RemoteServiceServlet implements PaperServi
 	public ArrayList<PaperShort> retrievePaperLs(String keyword) throws KeywordException {
 		ArrayList<PaperShort> result = DataServer.LookupTable.retrievePapers(keyword);
 		if (result == null)
-			throw new KeywordException(keyword);
+			throw new KeywordException(keyword, "Keyword "+ keyword + "not found");
 
 		return result;
 	}
@@ -24,7 +24,7 @@ public class PaperServiceImpl extends RemoteServiceServlet implements PaperServi
 	public Paper retrievePaper(String id) throws InvalidIdException {
 		Paper result = DataServer.PaperList.retrievePaper(id);
 		if (result == null)
-			throw new InvalidIdException(id);
+			throw new InvalidIdException(id, "Id "+ id +" not found");
 		
 		return result;
 	}
