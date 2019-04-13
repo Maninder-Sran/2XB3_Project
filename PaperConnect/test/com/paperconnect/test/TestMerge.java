@@ -10,7 +10,7 @@ import org.junit.Test;
 import com.paperconnect.client.Paper;
 import com.paperconnect.util.Merge;
 
-public class MergeTest {
+public class TestMerge {
 	ArrayList<Paper> paperObjects_10;
 	ArrayList<Paper> paperObjects_100;
 	ArrayList<Paper> paperObjects_1000;
@@ -59,5 +59,4 @@ public class MergeTest {
 		assert(Merge.isSorted(paperObjects_1000, 1000));
 		
 	}
-
 }
