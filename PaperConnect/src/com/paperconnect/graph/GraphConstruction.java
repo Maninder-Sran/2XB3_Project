@@ -7,8 +7,18 @@ import com.paperconnect.client.Paper;
 import com.paperconnect.server.DataServer;
 import com.paperconnect.util.Search;
 
+/**
+ * Builds an object that represents the graph
+ */
 public class GraphConstruction {
 
+	/**
+	 * Recursive function to build the graph
+	 * @param id - String ID of the root node
+	 * @param height - height of the graph (maximum depth)
+	 * @param width - width of the graph (maximum number of children a single node can have)
+	 * @param citeGraph - {@link DiGraph} object to store the graph into
+	 */
 	private static void buildGraph(String id, int height, int width,  DiGraph citeGraph) {
 		Paper paper = Search.binarySearchID(DataServer.PaperList.papers, id);
 		int counter = width;
@@ -40,6 +50,13 @@ public class GraphConstruction {
 		return;
 	}
 
+	/**
+	 * Helper function to call the recursive buildGraph function
+	 * @param id - String ID of the root node
+	 * @param height - height of the graph (maximum depth)
+	 * @param width - width of the graph (maximum number of children a single node can have)
+	 * @return the constructed {@link DiGraph}
+	 */
 	public static DiGraph Graph(String id, int height, int width) {
 		Paper root = Search.binarySearchID(DataServer.PaperList.papers, id);
 		DiGraph citeGraph = new DiGraph(root);
