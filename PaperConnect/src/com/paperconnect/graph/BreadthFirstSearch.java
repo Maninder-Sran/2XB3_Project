@@ -10,8 +10,29 @@ import org.json.simple.JSONObject;
 import com.paperconnect.client.Paper;
 import com.paperconnect.client.PaperFields;
 
+/**
+ * 
+ * a Graphing algorithm to go though the nodes of the cited papers and create a
+ * graphical representation of its connections with other academic papers
+ *
+ */
 public class BreadthFirstSearch {
 
+	/**
+	 * @param graph       Its an object containing the {@link DiGraph} class and its
+	 *                    methods so it could be used in this algorithm.
+	 * @param startNode   The initial node that we would be providing to the
+	 *                    {@link BreadthFirstSearch} for it to go through the nodes
+	 *                    and generate the graph.
+	 * @param maxDepth    An integer for taking care of the max depth we want the
+	 *                    {@link BreadthFirstSearch} to go through into startnode's
+	 *                    connections.
+	 * @param maxChildren An integral value of the maximum number of child nodes to
+	 *                    look at a time.
+	 * @return An ArrayList of {@link Paper} as an output to the further algorithm
+	 *         so to implement the graph acknowledging the neighboring nodes and the
+	 *         child ones.
+	 */
 	public static ArrayList<Paper> compute(DiGraph graph, Paper startNode, int maxDepth, int maxChildren) {
 
 		ArrayList<Paper> Result = new ArrayList<Paper>();
@@ -37,8 +58,7 @@ public class BreadthFirstSearch {
 
 				queue.add(null);
 				if (queue.peek() == null)
-					break; // when you have two consecutive null in the queue, this means you are at the
-							// end of the queue.
+					break;
 				else
 					continue;
 			}
@@ -56,6 +76,18 @@ public class BreadthFirstSearch {
 		return Result;
 	}
 
+	/**
+	 * 
+	 * @param graph       It takes in a {@link DiGraph} object for using its defined
+	 *                    methods to make them work in this algorithm.
+	 * @param startNode   Initial node to start forming the graph for the output.
+	 * @param maxDepth    Maximum depth to be achieved while implementing the graph
+	 *                    based on the data we would be inputing.
+	 * @param maxChildren Maximum number of child nodes the graph would be
+	 *                    implementing of a particular parent node.
+	 * @return A string of JSON objects containing the parent nodes with their
+	 *         children and neighbors.
+	 */
 	public static String getGraphJSONString(DiGraph graph, Paper startNode, int maxDepth, int maxChildren) {
 		int x = 0;
 		int y = 0;
