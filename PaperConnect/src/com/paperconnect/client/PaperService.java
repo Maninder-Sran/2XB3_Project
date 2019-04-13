@@ -16,17 +16,17 @@ import com.paperconnect.exception.KeywordException;
 public interface PaperService extends RemoteService {
 
 	/**
-	 * Method prototype for retrieving a list of papers given an input keyword
-	 * @param keyword
-	 * @return ArrayList<PaperShort>
+	 * Method for retrieving a ArrayList<{@link PaperShort}> given an input keyword
+	 * @param keyword - The keyword input from the user
+	 * @return ArrayList<{@link PaperShort}>
 	 * @throws KeywordException
 	 */
 	ArrayList<PaperShort> retrievePaperLs(String keyword) throws KeywordException;
 	
 	/**
-	 * 
-	 * @param id
-	 * @return
+	 * Method for retrieving a {@link Paper} given an id
+	 * @param id - The id selected from the table list
+	 * @return {@link Paper}
 	 * @throws InvalidIdException
 	 */
 	Paper retrievePaper(String id) throws InvalidIdException;
