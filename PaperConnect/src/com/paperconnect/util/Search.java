@@ -5,8 +5,18 @@ import java.util.ArrayList;
 import com.paperconnect.client.LookupTableLine;
 import com.paperconnect.client.Paper;
 import com.paperconnect.client.PaperFields;
+
+/**
+ * @author Jordan Levy
+ * Allows for data to be searched through
+ */
 public class Search {
 
+	/**
+	 * @param list ArrayList<Paper> representing the list of papers to be searched through
+	 * @param id String representing the paper ID to look for
+	 * @return Paper object representing the Paper within list with a matching ID, or null if not found
+	 */
 	public static Paper binarySearchID(ArrayList<Paper> list, String id) {
 		int min = 0;
 		int max = list.size() - 1;
