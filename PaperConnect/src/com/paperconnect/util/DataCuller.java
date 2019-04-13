@@ -24,7 +24,22 @@ import com.paperconnect.client.PaperFields;
 
 public class DataCuller {
 
-	public static void keywordFinder(String inFileName, String transistionFileName, String outFileName) {
+	/**
+	 * This method reads the one of the raw json text file data sets, gets all paper
+	 * nodes with atleast one keyword, and writes those nodes in the same format in
+	 * another file. It also calls removeNullReferences to remove references (ie
+	 * edges) to papers that had no keywords.
+	 * 
+	 * @param inFileName
+	 *            File path of the aminer raw dataset json text file
+	 * @param transistionFileName
+	 *            File path of transition file that will hold paper nodes without
+	 *            keywords
+	 * @param outFileName
+	 *            File path of final outfile file that will hold paper nodes without
+	 *            keywords and with no references to removed nodes.
+	 */
+	private static void keywordFinder(String inFileName, String transistionFileName, String outFileName) {
 
 		// declaring variables
 		JSONObject obj;
@@ -89,6 +104,19 @@ public class DataCuller {
 		removeNullReferences(transistionFileName, outFileName, nullReferences);
 	}
 
+	/**
+	 * This method parses a json text file containing paper nodes and screens out
+	 * all paper nodes specified by the input parameter. It puts the remaining paper
+	 * nodes into a new json object text file.
+	 * 
+	 * @param fileName
+	 *            File path of the json object text file containing the paper nodes
+	 * @param outFileName
+	 *            File path for the new outfile json object text file
+	 * @param nullReferences
+	 *            A hash set containing string ids of all the paper nodes to be
+	 *            screened out
+	 */
 	private static void removeNullReferences(String fileName, String outFileName, Set<String> nullReferences) {
 
 		// Declaring Variables
@@ -147,6 +175,21 @@ public class DataCuller {
 		}
 	}
 
+	/**
+	 * This method takes in json object text file containing paper nodes. From this
+	 * data, it creates a set of all unique keywords found in the file. Then, the
+	 * method assigns all the paper nodes to all the keyword categories they
+	 * contain. In the end, a json object text file is the result, each json object
+	 * containing the keyword category and identifying information for all paper
+	 * nodes in sorted citation count order (descending) associated with that
+	 * keyword.
+	 * 
+	 * @param inFileName
+	 *            File path of json object text file containing paper nodes
+	 * @param outFileName
+	 *            File path of outfile containing keywords and all its related
+	 *            papers
+	 */
 	// function to make a json lookup table from a json dataset input file
 	private static void keywordLookupJSON(String inFileName, String outFileName) {
 
@@ -217,14 +260,18 @@ public class DataCuller {
 				obj = (JSONObject) new JSONParser().parse(line);
 				parentPaperKeywords = (JSONArray) obj.get("keywords");
 				title = (String) obj.get("title");
+				
 				if (title == null || title.contains("??"))
 					title = (String) obj.get("venue");
+				
 				id = (String) obj.get("id");
+				
 				try {
-					citations = (int)((long) obj.get("n_citation"));
+					citations = (int) ((long) obj.get("n_citation"));
 				} catch (NullPointerException e) {
 					citations = 0;
 				}
+				
 				try {
 					authors = (JSONArray) obj.get("authors");
 					temp = (JSONObject) authors.get(0);
@@ -260,7 +307,9 @@ public class DataCuller {
 				JSONArray papers = new JSONArray();
 				String keyword = k.trim();
 
-				Collections.sort(v);
+				//sort papers in descending citation count order
+				Merge.sortMergeTD(v, v.size());
+				
 				for (Paper s : v) {
 					JSONObject papershort = new JSONObject();
 					papershort.put("id", s.getField(PaperFields.ID));
@@ -296,6 +345,14 @@ public class DataCuller {
 		}
 	}
 
+	/**
+	 * A method to check that each raw aminer data set file is sorted
+	 * lexicographically with its id key.
+	 * 
+	 * @param fileName
+	 *            File path of raw aminer data set file
+	 * @return A boolean value indicating whether file is sorted
+	 */
 	private static boolean isSorted(String fileName) {
 		JSONObject obj, obj2;
 		String id, id2;
@@ -327,14 +384,27 @@ public class DataCuller {
 		}
 		return true;
 	}
-	
-	
-	
+
+	/**
+	 * This method takes out all references (ids) in the paper nodes that are not
+	 * part of the three file data sets we chose to use. It does so by taking out
+	 * all references that are greater than the id of the last paper in the third
+	 * aminer data set file, since all ids are sorted in file, and in relation to
+	 * each file (aminer_0 has ids are lexicographically less than aminer_1 ids).
+	 * Also, shortens the abstract fields of all paper nodes to 500 characters so as
+	 * to decrease file size of data set.
+	 * 
+	 * @param inFileName
+	 *            File path of aminer data set input file
+	 * @param outFileName
+	 *            File path of the outfile containing no references from anywhere
+	 *            outside the three data set files being used.
+	 */
 	private static void removeUnusedReferences(String inFileName, String outFileName) {
 		JSONObject obj;
 		JSONArray references;
-		
-		//Last id of aminer papers_2 as we are only using three aminer data files
+
+		// Last id of aminer papers_2 as we are only using three aminer data files
 		String greatestID = "53e99a0eb7602d9702261faf";
 		String line = null;
 
@@ -347,6 +417,7 @@ public class DataCuller {
 				obj = (JSONObject) new JSONParser().parse(line);
 				references = (JSONArray) obj.get("references");
 
+				//shorten abstract early on so the rest of the functions have better performance
 				try {
 					String abst = (String) obj.get("abstract");
 					if (abst.length() > 500)
@@ -354,7 +425,7 @@ public class DataCuller {
 				} catch (NullPointerException e) {
 
 				}
-				
+
 				// continue to next paper node if it contains no references
 				if (references == null) {
 					fileWriter.write(obj.toJSONString() + "\n");
@@ -371,7 +442,6 @@ public class DataCuller {
 					}
 				}
 
-				
 				fileWriter.write(obj.toJSONString() + "\n");
 			}
 			bufferedReader.close();
@@ -387,7 +457,15 @@ public class DataCuller {
 
 	}
 
-	
+	/**
+	 * This method merges two json object data set files into one. More
+	 * specifically, it appends the contents of one file with the other.
+	 * 
+	 * @param sourceFileName
+	 *            File path of the json object data set being appended to
+	 * @param appendFileName
+	 *            File path of the json object data set being added
+	 */
 	private static void mergeDataSet(String sourceFileName, String appendFileName) {
 		JSONObject obj;
 		String line = null;
@@ -414,7 +492,15 @@ public class DataCuller {
 
 	}
 
-	// Function to read in the JSON keyword lookup table
+	/**
+	 * A parser method to read in the json object look up table generated by
+	 * keywordLookupJSON.
+	 * 
+	 * @param fileName
+	 *            File path of lookup table
+	 * @return ret An ArrayList of {@link LookupTableLine} objects containing all
+	 *         keywords and its related categories
+	 */
 	private static ArrayList<LookupTableLine> readLookupTableJSON(String fileName) {
 		String line = null;
 		JSONObject keywordLine;
@@ -453,7 +539,14 @@ public class DataCuller {
 		return ret;
 	}
 
-	// function for sorting the lookup table for the JSON lookup table file
+	/**
+	 * Sort Keyword Lookup table lexicographically based on the keyword string.
+	 * 
+	 * @param inFileName
+	 *            File path of unsorted look up table
+	 * @param outFileName
+	 *            File path of sorted output look up table
+	 */
 	private static void sortLookupTableKeywordsJSON(String inFileName, String outFileName) {
 		String line = null;
 		int count = 0;
@@ -462,8 +555,8 @@ public class DataCuller {
 		// Read in all the json lookup table objects
 		ArrayList<LookupTableLine> papers = readLookupTableJSON(inFileName);
 
-		// sort them using a basic provided collections sort
-		Collections.sort(papers);
+		// sort them using Merge sort
+		Merge.sortMergeTD(papers, papers.size());
 		try {
 			FileWriter fileWriter = new FileWriter(outFileName);
 			for (LookupTableLine p : papers) {
@@ -484,6 +577,15 @@ public class DataCuller {
 				+ (count) + " Keywords.");
 	}
 
+	/**
+	 * Final parsing of the final paper nodes list (final formatted dataset).
+	 * Parsing all data needed for {@link Paper} objects only.
+	 * 
+	 * @param inFileName
+	 *            File path of final paper node data set
+	 * @param outFileName
+	 *            File path of final formatted json object paper nodes data set
+	 */
 	private static void parseRelevantData(String inFileName, String outFileName) {
 		// declaring variables
 		JSONObject obj, newObj, temp;
@@ -509,8 +611,8 @@ public class DataCuller {
 				id = null;
 				obj = (JSONObject) new JSONParser().parse(line);
 				newObj = new JSONObject();
-				
-				//Get id
+
+				// Get id
 				id = (String) obj.get("id");
 				newObj.put("id", id);
 
@@ -535,7 +637,7 @@ public class DataCuller {
 
 				// Get number of citations of paper
 				try {
-					citations = (int)((long) obj.get("n_citation"));
+					citations = (int) ((long) obj.get("n_citation"));
 
 				} catch (NullPointerException e) {
 					citations = 0;
@@ -544,7 +646,7 @@ public class DataCuller {
 
 				// get references
 				references = (JSONArray) obj.get("references");
-				if(references == null || references.isEmpty()) {
+				if (references == null || references.isEmpty()) {
 					references = new JSONArray();
 				}
 				newObj.put("references", references);
@@ -590,65 +692,83 @@ public class DataCuller {
 		}
 	}
 
-	//function to remove all the remaining null references from final dataset
-		private static void removeNullReferencesFromFinal(String inFileName, String outFileName) {
-			JSONObject obj;
-			JSONArray references;
-			String id = "";
-			String line = null;
-			Set<String> allIDs = new HashSet<String>();
+	/**
+	 * Removes all null references (edges that point to non-existent nodes in the
+	 * data set) from the final data set.
+	 * 
+	 * @param inFileName
+	 *            File path of final data set
+	 * @param outFileName
+	 *            File path of final complete data set
+	 */
+	private static void removeNullReferencesFromFinal(String inFileName, String outFileName) {
+		JSONObject obj;
+		JSONArray references;
+		String id = "";
+		String line = null;
+		Set<String> allIDs = new HashSet<String>();
 
-			try {
-				FileReader fileReader = new FileReader(inFileName);
-				BufferedReader bufferedReader = new BufferedReader(fileReader);
-				
+		try {
+			
+			//open input file
+			FileReader fileReader = new FileReader(inFileName);
+			BufferedReader bufferedReader = new BufferedReader(fileReader);
 
-				while ((line = bufferedReader.readLine()) != null) {
-					obj = (JSONObject) new JSONParser().parse(line);
-					id = (String) obj.get("id");
-					allIDs.add(id);
-				}
-				bufferedReader.close();
-				
-				bufferedReader = new BufferedReader(new FileReader(inFileName));
-				BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(outFileName));
-				line = null;
-				
-				while ((line = bufferedReader.readLine()) != null) {
-					obj = (JSONObject) new JSONParser().parse(line);
-					references = (JSONArray) obj.get("references");
-
-					// write to outfile and continue to next paper node if it contains no references
-					if (references == null) {
-						bufferedWriter.write(obj.toJSONString() + "\n");
-						continue;
-					}
-
-					// checking all references of the paper node to find and remove null references
-					Iterator<String> iterator = references.iterator();
-					String thisElement = "";
-					while (iterator.hasNext()) {
-						thisElement = iterator.next();
-						if (!allIDs.contains(thisElement)) {
-							iterator.remove();
-						}
-					}
-					
-					//write to outfile
-					bufferedWriter.write(obj.toJSONString() + "\n");
-				}
-				bufferedWriter.close();
-				bufferedReader.close();
-
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			} catch (ParseException e) {
-				e.printStackTrace();
+			//add all paper ids from input into hash set
+			while ((line = bufferedReader.readLine()) != null) {
+				obj = (JSONObject) new JSONParser().parse(line);
+				id = (String) obj.get("id");
+				allIDs.add(id);
 			}
+			bufferedReader.close();
+
+			//open input file again to remove all null references
+			bufferedReader = new BufferedReader(new FileReader(inFileName));
+			BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(outFileName));
+			line = null;
+
+			while ((line = bufferedReader.readLine()) != null) {
+				obj = (JSONObject) new JSONParser().parse(line);
+				references = (JSONArray) obj.get("references");
+
+				// write to outfile and continue to next paper node if it contains no references
+				if (references == null) {
+					bufferedWriter.write(obj.toJSONString() + "\n");
+					continue;
+				}
+
+				// checking all references of the paper node to find and remove null references
+				Iterator<String> iterator = references.iterator();
+				String thisElement = "";
+				while (iterator.hasNext()) {
+					thisElement = iterator.next();
+					if (!allIDs.contains(thisElement)) {
+						iterator.remove();
+					}
+				}
+
+				// write to outfile
+				bufferedWriter.write(obj.toJSONString() + "\n");
+			}
+			bufferedWriter.close();
+			bufferedReader.close();
+
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (ParseException e) {
+			e.printStackTrace();
 		}
-		
+	}
+
+	/**
+	 * A method to check that the final data set graph is completely free of all null references
+	 * (edges to non-existent paper nodes).
+	 *  
+	 * @param fileName File path of final formatted data set
+	 * @return A boolean value indicating that the final network graph has no null edges
+	 */
 	private static boolean finalNullReferenceCheck(String fileName) {
 		JSONObject obj;
 		JSONArray references;
@@ -660,7 +780,6 @@ public class DataCuller {
 		try {
 			FileReader fileReader = new FileReader(fileName);
 			BufferedReader bufferedReader = new BufferedReader(fileReader);
-			
 
 			while ((line = bufferedReader.readLine()) != null) {
 				counter++;
@@ -670,16 +789,16 @@ public class DataCuller {
 				allIDs.add(id);
 			}
 			bufferedReader.close();
-			
+
 			bufferedReader = new BufferedReader(new FileReader(fileName));
 			line = null;
 			counter = 0;
-			
+
 			while ((line = bufferedReader.readLine()) != null) {
 				counter++;
 				System.out.println(counter);
 				obj = (JSONObject) new JSONParser().parse(line);
-				
+
 				references = (JSONArray) obj.get("references");
 
 				// continue to next paper node if it contains no references
@@ -697,7 +816,7 @@ public class DataCuller {
 						return false;
 					}
 				}
-				
+
 			}
 			bufferedReader.close();
 
@@ -710,11 +829,18 @@ public class DataCuller {
 		}
 		return true;
 	}
-	
+
+	/**
+	 * Dirver for data culler, the function that makes the final paper list dataset and sorted lookup table
+	 * from the three raw aminer data sets (aminer_0, aminer_1, aminer_2)
+	 * 
+	 */
 	public static void main(String[] args) {
-		String ap_0 = "../../../Downloads/Compressed/aminer_papers_0.txt";
-		String ap_1 = "../../../Downloads/Compressed/aminer_papers_1.txt";
-		String ap_2 = "../../../Downloads/Compressed/aminer_papers_2.txt";
+		
+		//file paths of all input, transistion, and outfiles
+		String ap_0 = "data/aminer_papers_0.txt";
+		String ap_1 = "data/aminer_papers_1.txt";
+		String ap_2 = "data/aminer_papers_2.txt";
 
 		String trans0 = "data/ap_kw_0.txt";
 		String trans1 = "data/ap_kw_1.txt";
@@ -731,40 +857,46 @@ public class DataCuller {
 		String FinalPaperFile = "data/ap_final.txt";
 		String transKeywordFile = "data/ap_translu.txt";
 		String FinalKeywordFile = "data/ap_lookup.txt";
-		
+
 		String transPaperList = "data/ap_paperlist_trans.txt";
 		String FinalPaperList = "data/ap_paperList.txt";
-		
-		/*parse paper nodes with keywords while also removing all references
-		to paper nodes with no keywords in each file*/
+
+		/*
+		 * parse paper nodes with keywords while also removing all references to paper
+		 * nodes with no keywords in each file
+		 */
 		keywordFinder(ap_0, trans0, KwOutFile0);
 		keywordFinder(ap_1, trans1, KwOutFile1);
 		keywordFinder(ap_2, trans2, KwOutFile2);
-		
-		/*remove all references that point to a paper node outside of the three selected data set
-		files we are working with. Also limits all abstracts to a 500 char maximum limit.*/
+
+		/*
+		 * remove all references that point to a paper node outside of the three
+		 * selected data set files we are working with. Also limits all abstracts to a
+		 * 500 char maximum limit.
+		 */
 		removeUnusedReferences(KwOutFile0, FormattedOutputFile0);
 		removeUnusedReferences(KwOutFile1, FormattedOutputFile1);
 		removeUnusedReferences(KwOutFile2, FormattedOutputFile2);
 
-		
-		//combine all data sets into one file
+		// combine all data sets into one file
 		mergeDataSet(FinalPaperFile, FormattedOutputFile0);
 		mergeDataSet(FinalPaperFile, FormattedOutputFile1);
 		mergeDataSet(FinalPaperFile, FormattedOutputFile2);
-		
-		
-		//create lookup from merged paper list
+
+		// create lookup from merged paper list
 		keywordLookupJSON(FinalPaperFile, transKeywordFile);
 		sortLookupTableKeywordsJSON(transKeywordFile, FinalKeywordFile);
-		
-		//parse all relevant fields from paper nodes (ie no need for keyword list anymore because of lookup table)
+
+		// parse all relevant fields from paper nodes (ie no need for keyword list
+		// anymore because of lookup table)
 		parseRelevantData(FinalPaperFile, transPaperList);
+
 		
-		/*Get rid of all remaining null references, ie a reference that was in a different file whose paper node
-		did not have a keyword so it was removed*/
+		// Get rid of all remaining null references, ie a reference that was in a
+		// different input file whose paper node did not have a keyword so it was removed
+		
 		removeNullReferencesFromFinal(transPaperList, FinalPaperList);
-		
-		//System.out.println(finalNullReferenceCheck(FinalPaperList));
+
+		// System.out.println(finalNullReferenceCheck(FinalPaperList));
 	}
 }
