@@ -16,6 +16,7 @@ public class Search {
 	 * @param list ArrayList<Paper> representing the list of papers to be searched through
 	 * @param id String representing the paper ID to look for
 	 * @return Paper object representing the Paper within list with a matching ID, or null if not found
+	 * Searches through a list of papers for an ID using binary search
 	 */
 	public static Paper binarySearchID(ArrayList<Paper> list, String id) {
 		int min = 0;
