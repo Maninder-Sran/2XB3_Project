@@ -37,21 +37,6 @@ public class Search {
 	}
 
 	/**
-	 * Searches through a list of papers for an ID using sequential search
-	 * @param list ArrayList<Paper> representing the list of papers to be searched through
-	 * @param id String representing the paper ID to look for
-	 * @return Paper object representing the Paper within list with a matching ID, or null if not found
-	 */
-	public static Paper sequentialSearchID(ArrayList<Paper> list, String id) {
-		for (Paper p : list) {
-			if (p.getField(PaperFields.ID).equals(id)) {
-				return p;
-			}
-		}
-		return null;
-	}
-
-	/**
 	 * Searches through a lookup table for a keyword using binary search
 	 * @param list ArrayList<LookupTableLine> representing the lookup table to be searched through
 	 * @param keyword String representing the key
