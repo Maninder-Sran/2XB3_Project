@@ -5,6 +5,7 @@ import java.util.Collections;
 
 import com.paperconnect.client.Paper;
 import com.paperconnect.server.DataServer;
+import com.paperconnect.util.Merge;
 import com.paperconnect.util.Search;
 
 /**
@@ -34,7 +35,7 @@ public class GraphConstruction {
 		}
 		
 		ArrayList<String> references = paper.getReferences();
-		Collections.sort(references);
+		Merge.sortMergeTD(references, references.size());
 		citeGraph.addVertex(id);
 
 		for (int i = 0; i < references.size() && counter > 0; i++) {
@@ -46,7 +47,6 @@ public class GraphConstruction {
 			buildGraph(source, width, height - 1, citeGraph);
 			counter--;
 		}
-
 		return;
 	}
 

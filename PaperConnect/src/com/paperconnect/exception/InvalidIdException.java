@@ -12,6 +12,12 @@ public class InvalidIdException extends Exception implements Serializable {
 
 	private String id;
 	private String message;
+	
+	/**
+	 * Default constructor required for serializing
+	 */
+	public InvalidIdException() {
+	}
 
 	/**
 	 * Constructor taking in the invalid id and the error message you want to display

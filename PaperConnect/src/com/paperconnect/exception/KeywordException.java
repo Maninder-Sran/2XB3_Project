@@ -12,6 +12,12 @@ public class KeywordException extends Exception implements Serializable {
 
 	private String keyword;
 	private String message;
+	
+	/**
+	 * Default constructor required for serializing
+	 */
+	public KeywordException() {
+	}
 
 	/**
 	 * Constructor taking in the invalid keyword and the error message you want to display

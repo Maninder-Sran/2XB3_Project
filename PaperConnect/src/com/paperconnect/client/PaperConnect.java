@@ -208,7 +208,7 @@ public class PaperConnect implements EntryPoint {
 	 * JSNI method for calling the JavaScript method to add clickHandlers for all the rows of the table
 	 */
 	public native void addClickHandlersToTable(String elementId) /*-{
-		$wnd.addRowHandlers();
+		$wnd.addRowHandlers(elementId);
 	}-*/;
 
 	/**

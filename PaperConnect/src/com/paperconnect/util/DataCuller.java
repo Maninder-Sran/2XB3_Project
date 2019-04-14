@@ -2,12 +2,12 @@ package com.paperconnect.util;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -22,6 +22,12 @@ import com.paperconnect.client.LookupTableLine;
 import com.paperconnect.client.Paper;
 import com.paperconnect.client.PaperFields;
 
+/**
+ * 
+ * Class for pre-processing the data to remove papers without keywords and create a file
+ * representation of a lookupTable
+ *
+ */
 public class DataCuller {
 
 	/**
@@ -466,7 +472,7 @@ public class DataCuller {
 	 * @param appendFileName
 	 *            File path of the json object data set being added
 	 */
-	private static void mergeDataSet(String sourceFileName, String appendFileName) {
+	private static void mergeDataSet(String appendFileName, String sourceFileName) {
 		JSONObject obj;
 		String line = null;
 
@@ -829,37 +835,47 @@ public class DataCuller {
 		}
 		return true;
 	}
+	
+	private static void deleteFile(String filename) {
+		File file = new File(filename);
+		if(file.exists()) {
+			file.delete();
+		}
+	}
 
 	/**
-	 * Dirver for data culler, the function that makes the final paper list dataset and sorted lookup table
+	 * Driver for data culler, the function that makes the final paper list dataset and sorted lookup table
 	 * from the three raw aminer data sets (aminer_0, aminer_1, aminer_2)
 	 * 
 	 */
 	public static void main(String[] args) {
 		
 		//file paths of all input, transistion, and outfiles
-		String ap_0 = "data/aminer_papers_0.txt";
-		String ap_1 = "data/aminer_papers_1.txt";
-		String ap_2 = "data/aminer_papers_2.txt";
+		String ap_0 = "war/data/aminer_papers_0.txt";
+		String ap_1 = "war/data/aminer_papers_1.txt";
+		String ap_2 = "war/data/aminer_papers_2.txt";
 
-		String trans0 = "data/ap_kw_0.txt";
-		String trans1 = "data/ap_kw_1.txt";
-		String trans2 = "data/ap_kw_2.txt";
+		String trans0 = "war/data/ap_kw_0.txt";
+		String trans1 = "war/data/ap_kw_1.txt";
+		String trans2 = "war/data/ap_kw_2.txt";
 
-		String KwOutFile0 = "data/ap_nr_0.txt";
-		String KwOutFile1 = "data/ap_nr_1.txt";
-		String KwOutFile2 = "data/ap_nr_2.txt";
+		String KwOutFile0 = "war/data/ap_nr_0.txt";
+		String KwOutFile1 = "war/data/ap_nr_1.txt";
+		String KwOutFile2 = "war/data/ap_nr_2.txt";
 
-		String FormattedOutputFile0 = "data/ap_0_final.txt";
-		String FormattedOutputFile1 = "data/ap_1_final.txt";
-		String FormattedOutputFile2 = "data/ap_2_final.txt";
+		String FormattedOutputFile0 = "war/data/ap_0_final.txt";
+		String FormattedOutputFile1 = "war/data/ap_1_final.txt";
+		String FormattedOutputFile2 = "war/data/ap_2_final.txt";
 
-		String FinalPaperFile = "data/ap_final.txt";
-		String transKeywordFile = "data/ap_translu.txt";
-		String FinalKeywordFile = "data/ap_lookup.txt";
-
-		String transPaperList = "data/ap_paperlist_trans.txt";
-		String FinalPaperList = "data/ap_paperList.txt";
+		String AggregatePaperList = "war/data/aggregate_paperList.txt";
+		String transKeywordFile = "war/data/ap_translu.txt";
+		String transPaperList = "war/data/ap_paperlist_trans.txt";
+		
+		String FinalKeywordFile = "war/data/ap_lookup.txt";
+		String FinalPaperList = "war/data/ap_paperList.txt";
+		
+		deleteFile(FinalKeywordFile);
+		deleteFile(FinalPaperList);
 
 		/*
 		 * parse paper nodes with keywords while also removing all references to paper
@@ -879,24 +895,38 @@ public class DataCuller {
 		removeUnusedReferences(KwOutFile2, FormattedOutputFile2);
 
 		// combine all data sets into one file
-		mergeDataSet(FinalPaperFile, FormattedOutputFile0);
-		mergeDataSet(FinalPaperFile, FormattedOutputFile1);
-		mergeDataSet(FinalPaperFile, FormattedOutputFile2);
+		mergeDataSet(FormattedOutputFile0, AggregatePaperList);
+		mergeDataSet(FormattedOutputFile1, AggregatePaperList);
+		mergeDataSet(FormattedOutputFile2, AggregatePaperList);
 
 		// create lookup from merged paper list
-		keywordLookupJSON(FinalPaperFile, transKeywordFile);
+		keywordLookupJSON(AggregatePaperList, transKeywordFile);
 		sortLookupTableKeywordsJSON(transKeywordFile, FinalKeywordFile);
 
 		// parse all relevant fields from paper nodes (ie no need for keyword list
 		// anymore because of lookup table)
-		parseRelevantData(FinalPaperFile, transPaperList);
+		parseRelevantData(AggregatePaperList, transPaperList);
 
 		
 		// Get rid of all remaining null references, ie a reference that was in a
-		// different input file whose paper node did not have a keyword so it was removed
-		
+		// different input file whose paper node did not have a keyword so it was removed		
 		removeNullReferencesFromFinal(transPaperList, FinalPaperList);
-
-		// System.out.println(finalNullReferenceCheck(FinalPaperList));
+		
+		deleteFile(trans0);
+		deleteFile(trans1);
+		deleteFile(trans2);
+		
+		deleteFile(KwOutFile0);
+		deleteFile(KwOutFile1);
+		deleteFile(KwOutFile2);
+		
+		deleteFile(FormattedOutputFile0);
+		deleteFile(FormattedOutputFile1);
+		deleteFile(FormattedOutputFile2);
+		
+		deleteFile(AggregatePaperList);
+		deleteFile(transKeywordFile);
+		deleteFile(transPaperList);
+		
 	}
 }

@@ -2,12 +2,8 @@ package com.paperconnect.util;
 
 import java.util.ArrayList;
 
-import com.paperconnect.client.LookupTableLine;
-import com.paperconnect.client.Paper;
-
 /**
  * Merge sort algorithms for arrays 
- * @author Purv Patel
  */
 public class Merge {
 	private static ArrayList<Object> temp;
